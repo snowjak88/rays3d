@@ -9,7 +9,9 @@ import org.rays3d.geometry.util.Pair;
  */
 public class Point2D extends Pair {
 
-	public Point2D() {
+	public static Point2D from(Pair p) {
+
+		return new Point2D(p.get(0), p.get(1));
 	}
 
 	public Point2D(double x, double y) {

@@ -25,4 +25,60 @@ public class Triplet extends NVector {
 		super(v1, v2, v3);
 	}
 
+	@Override
+	public Triplet negate() {
+
+		return (Triplet) super.negate();
+	}
+
+	@Override
+	public Triplet reciprocal() {
+
+		return (Triplet) super.reciprocal();
+	}
+
+	public Triplet add(Triplet addend) {
+
+		return (Triplet) super.add(addend);
+	}
+
+	@Override
+	public Triplet add(double addend) {
+
+		return (Triplet) super.add(addend);
+	}
+
+	public Triplet subtract(Triplet subtrahend) {
+
+		return (Triplet) super.subtract(subtrahend);
+	}
+
+	@Override
+	public Triplet subtract(double subtrahend) {
+
+		return (Triplet) super.subtract(subtrahend);
+	}
+
+	public Triplet multiply(Triplet multiplicand) {
+
+		return (Triplet) super.multiply(multiplicand);
+	}
+
+	@Override
+	public Triplet multiply(double multiplicand) {
+
+		return (Triplet) super.multiply(multiplicand);
+	}
+
+	public Triplet divide(Triplet divisor) {
+
+		return (Triplet) super.divide(divisor);
+	}
+
+	@Override
+	public Triplet divide(double divisor) {
+
+		return (Triplet) super.divide(divisor);
+	}
+
 }

@@ -24,4 +24,60 @@ public class Pair extends NVector {
 		super(v1, v2);
 	}
 
+	@Override
+	public Pair negate() {
+
+		return (Pair) super.negate();
+	}
+
+	@Override
+	public Pair reciprocal() {
+
+		return (Pair) super.reciprocal();
+	}
+
+	public Pair add(Pair addend) {
+
+		return (Pair) super.add(addend);
+	}
+
+	@Override
+	public Pair add(double addend) {
+
+		return (Pair) super.add(addend);
+	}
+
+	public Pair subtract(Pair subtrahend) {
+
+		return (Pair) super.subtract(subtrahend);
+	}
+
+	@Override
+	public Pair subtract(double subtrahend) {
+
+		return (Pair) super.subtract(subtrahend);
+	}
+
+	public Pair multiply(Pair multiplicand) {
+
+		return (Pair) super.multiply(multiplicand);
+	}
+
+	@Override
+	public Pair multiply(double multiplicand) {
+
+		return (Pair) super.multiply(multiplicand);
+	}
+
+	public Pair divide(Pair divisor) {
+
+		return (Pair) super.divide(divisor);
+	}
+
+	@Override
+	public Pair divide(double divisor) {
+
+		return (Pair) super.divide(divisor);
+	}
+
 }
