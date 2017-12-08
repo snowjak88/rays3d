@@ -15,6 +15,17 @@ public class App {
 		SpringApplication.run(App.class, args);
 	}
 
+	/**
+	 * This Bean is initialized to allow Jackson to correctly serialize certain
+	 * Hibernate objects.
+	 * <p>
+	 * (source: <a href=
+	 * "https://stackoverflow.com/questions/21708339/avoid-jackson-serialization-on-non-fetched-lazy-objects">this
+	 * Stackoverflow question</a>)
+	 * </p>
+	 * 
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	@Bean
 	public Jackson2ObjectMapperBuilder configureObjectMapper() {
