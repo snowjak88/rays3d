@@ -1,5 +1,7 @@
 package org.rays3d.geometry.util;
 
+import java.util.Arrays;
+
 /**
  * Represents a vector of 2 values.
  * 
@@ -22,6 +24,17 @@ public class Pair extends NVector {
 	 */
 	public Pair(double v1, double v2) {
 		super(v1, v2);
+	}
+
+	/**
+	 * Create a new Pair consisting of the first 2 values from the given
+	 * <code>double[]</code> array. If the given array contains fewer than 2
+	 * values, the array is 0-padded to make up a length-2 array.
+	 * 
+	 * @param values
+	 */
+	public Pair(double... values) {
+		super(Arrays.copyOf(values, 2));
 	}
 
 	@Override

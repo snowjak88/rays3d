@@ -50,11 +50,34 @@ public class Ray {
 	 * @param depth
 	 */
 	public Ray(Point3D origin, Vector3D direction, int depth) {
+		this(origin, direction, depth, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+	}
+
+	/**
+	 * Construct a new Ray with the given origin, direction, and "ray-depth",
+	 * also supplying values for ray-<em>t</em> windowing.
+	 * 
+	 * @param origin
+	 * @param direction
+	 * @param depth
+	 * @param windowMinT
+	 * @param windowMaxT
+	 */
+	public Ray(Point3D origin, Vector3D direction, int depth, double windowMinT, double windowMaxT) {
 		this.origin = origin;
 		this.direction = direction;
 		this.depth = depth;
+		this.windowMinT = windowMinT;
+		this.windowMaxT = windowMaxT;
 	}
 
+	/**
+	 * Given a <em>t</em> parameter, calculate the cooresponding point along
+	 * this Ray.
+	 * 
+	 * @param t
+	 * @return
+	 */
 	public Point3D getPointAlong(double t) {
 
 		return Point3D.from(origin.add(direction.multiply(t)));

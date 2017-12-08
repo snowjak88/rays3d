@@ -18,6 +18,17 @@ public class Point2D extends Pair {
 		super(x, y);
 	}
 
+	/**
+	 * Create a new Point2D whose coordinates consist of the first 2 values from
+	 * the given <code>double[]</code> array. If the given array contains fewer
+	 * than 2 values, the array is 0-padded to make up a length-2 array.
+	 * 
+	 * @param values
+	 */
+	public Point2D(double... coordinates) {
+		super(coordinates);
+	}
+
 	public double getX() {
 
 		return get(0);

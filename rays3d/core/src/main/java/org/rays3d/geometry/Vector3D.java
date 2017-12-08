@@ -37,6 +37,17 @@ public class Vector3D extends Triplet {
 	}
 
 	/**
+	 * Create a new Vector3D3D whose coordinates consist of the first 3 values
+	 * from the given <code>double[]</code> array. If the given array contains
+	 * fewer than 3 values, the array is 0-padded to make up a length-3 array.
+	 * 
+	 * @param values
+	 */
+	public Vector3D(double... coordinates) {
+		super(coordinates);
+	}
+
+	/**
 	 * Private constructor for Vector3D, for when we already know magnitude and
 	 * magnitude-squared.
 	 * 

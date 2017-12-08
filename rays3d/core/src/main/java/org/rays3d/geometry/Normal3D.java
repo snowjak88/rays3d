@@ -19,6 +19,17 @@ public class Normal3D extends Triplet {
 		super(x, y, z);
 	}
 
+	/**
+	 * Create a new Normal3D whose coordinates consist of the first 3 values
+	 * from the given <code>double[]</code> array. If the given array contains
+	 * fewer than 3 values, the array is 0-padded to make up a length-3 array.
+	 * 
+	 * @param values
+	 */
+	public Normal3D(double... coordinates) {
+		super(coordinates);
+	}
+
 	public double getX() {
 
 		return get(0);

@@ -339,6 +339,15 @@ public class Matrix {
 	@Override
 	public String toString() {
 
+		//
+		// We want to nicely align everything in the printed form of this
+		// Matrix.
+		//
+		// That includes lining up decimal points.
+		//
+		// So -- figure out the maximum space we need to allocate for the
+		// integer- and fractional-parts of each value in this Matrix.
+		//
 		final int maxIntPartLength = Arrays
 				.stream(values)
 					.flatMap(da -> Arrays.stream(da).mapToObj(d -> d))
@@ -367,6 +376,11 @@ public class Matrix {
 			builder.append(" |\n");
 
 		}
+
+		//
+		// Compile the StringBuilder to a String, but not before deleting the
+		// ultimate character (which is an extra newline).
+		//
 		return builder.deleteCharAt(builder.length() - 1).toString();
 	}
 

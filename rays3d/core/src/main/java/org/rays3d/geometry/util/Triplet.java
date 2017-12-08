@@ -1,5 +1,7 @@
 package org.rays3d.geometry.util;
 
+import java.util.Arrays;
+
 /**
  * Represents a vector of 3 values.
  * 
@@ -23,6 +25,17 @@ public class Triplet extends NVector {
 	 */
 	public Triplet(double v1, double v2, double v3) {
 		super(v1, v2, v3);
+	}
+
+	/**
+	 * Create a new Triplet consisting of the first 2 values from the given
+	 * <code>double[]</code> array. If the given array contains fewer than 2
+	 * values, the array is 0-padded to make up a length-2 array.
+	 * 
+	 * @param values
+	 */
+	public Triplet(double... values) {
+		super(Arrays.copyOf(values, 3));
 	}
 
 	@Override
