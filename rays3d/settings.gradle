@@ -17,6 +17,7 @@ include 'services:webservice'
 
 rootProject.name = 'rays3d'
 
+include ':core'
 include ':render-db'
 include ':render-mq'
 include ':sampler'
