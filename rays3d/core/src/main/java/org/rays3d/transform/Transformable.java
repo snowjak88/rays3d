@@ -7,6 +7,10 @@ import org.rays3d.geometry.Normal3D;
 import org.rays3d.geometry.Point3D;
 import org.rays3d.geometry.Ray;
 import org.rays3d.geometry.Vector3D;
+import org.rays3d.interact.DescribesSurface;
+import org.rays3d.interact.Interactable;
+import org.rays3d.interact.Interaction;
+import org.rays3d.interact.SurfaceDescriptor;
 
 /**
  * Indicates that an object is associated with one or more {@link Transform}s,
@@ -156,6 +160,72 @@ public interface Transformable {
 	public default Normal3D localToWorld(Normal3D normal) {
 
 		Normal3D working = normal;
+		for (Transform t : getLocalToWorldTransforms())
+			working = t.localToWorld(working);
+
+		return working;
+	}
+
+	/**
+	 * Transform the given SurfaceDescriptor from world- to this-object-local
+	 * coordinates.
+	 * 
+	 * @param surfaceDescriptor
+	 * @return
+	 */
+	public default <T extends DescribesSurface> SurfaceDescriptor<T> worldToLocal(
+			SurfaceDescriptor<T> surfaceDescriptor) {
+
+		SurfaceDescriptor<T> working = surfaceDescriptor;
+		for (Transform t : getWorldToLocalTransforms())
+			working = t.worldToLocal(working);
+
+		return working;
+	}
+
+	/**
+	 * Transform the given SurfaceDescriptor from this-object-local to
+	 * world-coordinates.
+	 * 
+	 * @param surfaceDescriptor
+	 * @return
+	 */
+	public default <T extends DescribesSurface> SurfaceDescriptor<T> localToWorld(
+			SurfaceDescriptor<T> surfaceDescriptor) {
+
+		SurfaceDescriptor<T> working = surfaceDescriptor;
+		for (Transform t : getLocalToWorldTransforms())
+			working = t.localToWorld(working);
+
+		return working;
+	}
+
+	/**
+	 * Transform the given Interaction from world- to this-object-local
+	 * coordinates.
+	 * 
+	 * @param interaction
+	 * @return
+	 */
+	public default <T extends Interactable> Interaction<T> worldToLocal(Interaction<T> interaction) {
+
+		Interaction<T> working = interaction;
+		for (Transform t : getWorldToLocalTransforms())
+			working = t.worldToLocal(working);
+
+		return working;
+	}
+
+	/**
+	 * Transform the given Interaction from this-object-local to
+	 * world-coordinates.
+	 * 
+	 * @param interaction
+	 * @return
+	 */
+	public default <T extends Interactable> Interaction<T> localToWorld(Interaction<T> interaction) {
+
+		Interaction<T> working = interaction;
 		for (Transform t : getLocalToWorldTransforms())
 			working = t.localToWorld(working);
 

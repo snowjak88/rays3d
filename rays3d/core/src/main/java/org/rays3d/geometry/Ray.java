@@ -8,6 +8,7 @@ package org.rays3d.geometry;
  * <ul>
  * <li>{@link Point3D} <code>origin</code></li>
  * <li>{@link Vector3D} <code>direction</code></li>
+ * <li>double <code>t</code> (default = 0)</li>
  * <li><code>int depth</code> (default = 0)</li>
  * </ul>
  * There are also "window" fields that serve to communicate an interval along
@@ -25,6 +26,7 @@ public class Ray {
 
 	private final Point3D	origin;
 	private final Vector3D	direction;
+	private final double	t;
 
 	private final int		depth;
 
@@ -32,14 +34,26 @@ public class Ray {
 	private double			windowMaxT	= Double.POSITIVE_INFINITY;
 
 	/**
-	 * Construct a new Ray with the given origin and direction, and default
-	 * "ray-depth" of 0.
+	 * Construct a new Ray with the given origin and direction, and default t of
+	 * 0 and "ray-depth" of 0.
 	 * 
 	 * @param origin
 	 * @param direction
 	 */
 	public Ray(Point3D origin, Vector3D direction) {
-		this(origin, direction, 0);
+		this(origin, direction, 0d, 0);
+	}
+
+	/**
+	 * Construct a new Ray with the given origin, direction, and t, and default
+	 * "ray-depth" of 0.
+	 * 
+	 * @param origin
+	 * @param direction
+	 * @param t
+	 */
+	public Ray(Point3D origin, Vector3D direction, double t) {
+		this(origin, direction, t, 0);
 	}
 
 	/**
@@ -47,10 +61,11 @@ public class Ray {
 	 * 
 	 * @param origin
 	 * @param direction
+	 * @param t
 	 * @param depth
 	 */
-	public Ray(Point3D origin, Vector3D direction, int depth) {
-		this(origin, direction, depth, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+	public Ray(Point3D origin, Vector3D direction, double t, int depth) {
+		this(origin, direction, t, depth, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
 	}
 
 	/**
@@ -59,20 +74,33 @@ public class Ray {
 	 * 
 	 * @param origin
 	 * @param direction
+	 * @param t
 	 * @param depth
 	 * @param windowMinT
 	 * @param windowMaxT
 	 */
-	public Ray(Point3D origin, Vector3D direction, int depth, double windowMinT, double windowMaxT) {
+	public Ray(Point3D origin, Vector3D direction, double t, int depth, double windowMinT, double windowMaxT) {
 		this.origin = origin;
 		this.direction = direction;
+		this.t = t;
 		this.depth = depth;
 		this.windowMinT = windowMinT;
 		this.windowMaxT = windowMaxT;
 	}
 
 	/**
-	 * Given a <em>t</em> parameter, calculate the cooresponding point along
+	 * Given the configured <em>t</em> parameter (see {@link #getT()}),
+	 * calculate the corresponding point along this Ray.
+	 * 
+	 * @return
+	 */
+	public Point3D getPointAlong() {
+
+		return getPointAlong(this.getT());
+	}
+
+	/**
+	 * Given a <em>t</em> parameter, calculate the corresponding point along
 	 * this Ray.
 	 * 
 	 * @param t
@@ -101,6 +129,11 @@ public class Ray {
 	public Vector3D getDirection() {
 
 		return direction;
+	}
+
+	public double getT() {
+
+		return t;
 	}
 
 	public int getDepth() {

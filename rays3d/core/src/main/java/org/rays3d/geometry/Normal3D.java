@@ -12,6 +12,9 @@ public class Normal3D extends Triplet {
 
 	public static Normal3D from(Triplet t) {
 
+		if (Normal3D.class.isAssignableFrom(t.getClass()))
+			return (Normal3D) t;
+
 		return new Normal3D(t.get(0), t.get(1), t.get(2));
 	}
 
@@ -43,6 +46,66 @@ public class Normal3D extends Triplet {
 	public double getZ() {
 
 		return get(2);
+	}
+
+	@Override
+	public Normal3D negate() {
+
+		return Normal3D.from(super.negate());
+	}
+
+	@Override
+	public Normal3D reciprocal() {
+
+		return Normal3D.from(super.reciprocal());
+	}
+
+	@Override
+	public Normal3D add(Triplet addend) {
+
+		return Normal3D.from(super.add(addend));
+	}
+
+	@Override
+	public Normal3D add(double addend) {
+
+		return Normal3D.from(super.add(addend));
+	}
+
+	@Override
+	public Normal3D subtract(Triplet subtrahend) {
+
+		return Normal3D.from(super.subtract(subtrahend));
+	}
+
+	@Override
+	public Normal3D subtract(double subtrahend) {
+
+		return Normal3D.from(super.subtract(subtrahend));
+	}
+
+	@Override
+	public Normal3D multiply(Triplet multiplicand) {
+
+		return Normal3D.from(super.multiply(multiplicand));
+	}
+
+	@Override
+	public Normal3D multiply(double multiplicand) {
+
+		return Normal3D.from(super.multiply(multiplicand));
+	}
+
+	@Override
+	public Normal3D divide(Triplet divisor) {
+
+		return Normal3D.from(super.divide(divisor));
+	}
+
+	@Override
+	public Normal3D divide(double divisor) {
+
+		return Normal3D.from(super.divide(divisor));
 	}
 
 }

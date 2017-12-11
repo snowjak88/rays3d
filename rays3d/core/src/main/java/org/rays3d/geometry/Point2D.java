@@ -11,6 +11,9 @@ public class Point2D extends Pair {
 
 	public static Point2D from(Pair p) {
 
+		if (Point2D.class.isAssignableFrom(p.getClass()))
+			return (Point2D) p;
+
 		return new Point2D(p.get(0), p.get(1));
 	}
 
@@ -37,6 +40,66 @@ public class Point2D extends Pair {
 	public double getY() {
 
 		return get(1);
+	}
+
+	@Override
+	public Point2D negate() {
+
+		return Point2D.from(super.negate());
+	}
+
+	@Override
+	public Point2D reciprocal() {
+
+		return Point2D.from(super.reciprocal());
+	}
+
+	@Override
+	public Point2D add(Pair addend) {
+
+		return Point2D.from(super.add(addend));
+	}
+
+	@Override
+	public Point2D add(double addend) {
+
+		return Point2D.from(super.add(addend));
+	}
+
+	@Override
+	public Point2D subtract(Pair subtrahend) {
+
+		return Point2D.from(super.subtract(subtrahend));
+	}
+
+	@Override
+	public Point2D subtract(double subtrahend) {
+
+		return Point2D.from(super.subtract(subtrahend));
+	}
+
+	@Override
+	public Point2D multiply(Pair multiplicand) {
+
+		return Point2D.from(super.multiply(multiplicand));
+	}
+
+	@Override
+	public Point2D multiply(double multiplicand) {
+
+		return Point2D.from(super.multiply(multiplicand));
+	}
+
+	@Override
+	public Point2D divide(Pair divisor) {
+
+		return Point2D.from(super.divide(divisor));
+	}
+
+	@Override
+	public Point2D divide(double divisor) {
+
+		return Point2D.from(super.divide(divisor));
 	}
 
 }

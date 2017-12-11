@@ -16,6 +16,9 @@ public class Point3D extends Triplet {
 	 */
 	public static Point3D from(Triplet t) {
 
+		if (Point3D.class.isAssignableFrom(t.getClass()))
+			return (Point3D) t;
+
 		return new Point3D(t.get(0), t.get(1), t.get(2));
 	}
 
@@ -51,6 +54,66 @@ public class Point3D extends Triplet {
 	public double getZ() {
 
 		return this.get(2);
+	}
+
+	@Override
+	public Point3D negate() {
+
+		return Point3D.from(super.negate());
+	}
+
+	@Override
+	public Point3D reciprocal() {
+
+		return Point3D.from(super.reciprocal());
+	}
+
+	@Override
+	public Point3D add(Triplet addend) {
+
+		return Point3D.from(super.add(addend));
+	}
+
+	@Override
+	public Point3D add(double addend) {
+
+		return Point3D.from(super.add(addend));
+	}
+
+	@Override
+	public Point3D subtract(Triplet subtrahend) {
+
+		return Point3D.from(super.subtract(subtrahend));
+	}
+
+	@Override
+	public Point3D subtract(double subtrahend) {
+
+		return Point3D.from(super.subtract(subtrahend));
+	}
+
+	@Override
+	public Point3D multiply(Triplet multiplicand) {
+
+		return Point3D.from(super.multiply(multiplicand));
+	}
+
+	@Override
+	public Point3D multiply(double multiplicand) {
+
+		return Point3D.from(super.multiply(multiplicand));
+	}
+
+	@Override
+	public Point3D divide(Triplet divisor) {
+
+		return Point3D.from(super.divide(divisor));
+	}
+
+	@Override
+	public Point3D divide(double divisor) {
+
+		return Point3D.from(super.divide(divisor));
 	}
 
 }

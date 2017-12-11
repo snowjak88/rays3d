@@ -1,20 +1,17 @@
 package org.rays3d.geometry.util;
 
 import java.util.Arrays;
+import java.util.function.BinaryOperator;
+import java.util.function.UnaryOperator;
 
 /**
  * Represents a vector of 2 values.
  * 
  * @author snowjak88
  */
-public class Pair extends NVector {
+public class Pair extends NVector<Pair> {
 
-	/**
-	 * Create a new Pair consisting of two 0-values.
-	 */
-	public Pair() {
-		super(2);
-	}
+	public static final Pair ZERO = new Pair(0, 0);
 
 	/**
 	 * Create a new Pair consisting of 2 values.
@@ -38,59 +35,15 @@ public class Pair extends NVector {
 	}
 
 	@Override
-	public Pair negate() {
+	public Pair apply(UnaryOperator<Double> operator) {
 
-		return (Pair) super.negate();
+		return new Pair(NVector.apply(getAll(), operator));
 	}
 
 	@Override
-	public Pair reciprocal() {
+	public Pair apply(Pair other, BinaryOperator<Double> operator) {
 
-		return (Pair) super.reciprocal();
-	}
-
-	public Pair add(Pair addend) {
-
-		return (Pair) super.add(addend);
-	}
-
-	@Override
-	public Pair add(double addend) {
-
-		return (Pair) super.add(addend);
-	}
-
-	public Pair subtract(Pair subtrahend) {
-
-		return (Pair) super.subtract(subtrahend);
-	}
-
-	@Override
-	public Pair subtract(double subtrahend) {
-
-		return (Pair) super.subtract(subtrahend);
-	}
-
-	public Pair multiply(Pair multiplicand) {
-
-		return (Pair) super.multiply(multiplicand);
-	}
-
-	@Override
-	public Pair multiply(double multiplicand) {
-
-		return (Pair) super.multiply(multiplicand);
-	}
-
-	public Pair divide(Pair divisor) {
-
-		return (Pair) super.divide(divisor);
-	}
-
-	@Override
-	public Pair divide(double divisor) {
-
-		return (Pair) super.divide(divisor);
+		return new Pair(NVector.apply(getAll(), other.getAll(), operator));
 	}
 
 }

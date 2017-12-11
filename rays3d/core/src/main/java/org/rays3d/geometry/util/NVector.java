@@ -9,36 +9,42 @@ import java.util.function.UnaryOperator;
  * 
  * @author snowjak88
  */
-public class NVector {
+public abstract class NVector<T extends NVector<?>> {
 
 	private final double[] values;
 
-	/**
-	 * Create a new NVector composed of <code>n</code> 0-values.
-	 * 
-	 * @param n
-	 */
 	public NVector(int n) {
 		this.values = new double[n];
-		Arrays.setAll(values, i -> 0d);
 	}
 
 	/**
 	 * Create a new NVector with order <code>n</code> implicitly given by the
 	 * length of the given array.
+	 * <p>
+	 * Please note that this constructor will <strong>not</strong> copy the
+	 * given array of values before using it. This means that, if you pass in an
+	 * array reference without first copying it manually, your immutable NVector
+	 * could turn out to be very mutable indeed (when your code starts modifying
+	 * the original array).
+	 * </p>
 	 * 
 	 * @param values
 	 */
 	public NVector(double... values) {
-		this(true, values);
+		this.values = values;
 	}
 
-	private NVector(boolean copyIntoNewArray, double... values) {
+	/**
+	 * Create a new NVector, taking the first <code>n</code> values from the
+	 * given list of <code>values</code>. If <code>n > values.length</code>,
+	 * 0-pad this NVector to make up the length.
+	 * 
+	 * @param n
+	 * @param values
+	 */
+	public NVector(int n, double... values) {
 
-		if (copyIntoNewArray)
-			this.values = Arrays.copyOf(values, values.length);
-		else
-			this.values = values;
+		this.values = Arrays.copyOf(values, n);
 	}
 
 	/**
@@ -47,6 +53,16 @@ public class NVector {
 	public int getN() {
 
 		return this.values.length;
+	}
+
+	/**
+	 * Return a copy of this NVector's values.
+	 * 
+	 * @return
+	 */
+	public double[] getAll() {
+
+		return Arrays.copyOf(values, getN());
 	}
 
 	/**
@@ -65,21 +81,55 @@ public class NVector {
 	}
 
 	/**
+	 * Apply the given {@link UnaryOperator} to the given array, producing a
+	 * second array as a result.
+	 * 
+	 * @param arraySupplier
+	 * @param operand
+	 * @param operator
+	 * @return
+	 */
+	protected static double[] apply(double[] operand, UnaryOperator<Double> operator) {
+
+		final double[] result = new double[operand.length];
+
+		for (int i = 0; i < operand.length; i++)
+			result[i] = operator.apply(operand[i]);
+
+		return result;
+	}
+
+	/**
+	 * Apply the given {@link BinaryOperator} to the given pair of arrays,
+	 * producing a third array as a result.
+	 * 
+	 * @param arraySupplier
+	 * @param operand
+	 * @param operator
+	 * @return
+	 */
+	protected static double[] apply(double[] operand1, double[] operand2, BinaryOperator<Double> operator) {
+
+		final int longerLength = ( operand1.length > operand2.length ) ? operand1.length : operand2.length;
+
+		final double[] op1 = ( operand1.length == longerLength ) ? operand1 : Arrays.copyOf(operand1, longerLength);
+		final double[] op2 = ( operand2.length == longerLength ) ? operand2 : Arrays.copyOf(operand2, longerLength);
+		final double[] result = new double[longerLength];
+
+		for (int i = 0; i < longerLength; i++)
+			result[i] = operator.apply(op1[i], op2[i]);
+
+		return result;
+	}
+
+	/**
 	 * Apply the given {@link UnaryOperator} to this NVector, producing another
 	 * NVector as a result.
 	 * 
 	 * @param operator
 	 * @return
 	 */
-	public NVector apply(UnaryOperator<Double> operator) {
-
-		final double[] result = new double[this.values.length];
-
-		for (int i = 0; i < this.values.length; i++)
-			result[i] = operator.apply(this.values[i]);
-
-		return new NVector(false, result);
-	}
+	public abstract T apply(UnaryOperator<Double> operator);
 
 	/**
 	 * Apply the given {@link BinaryOperator} to this and another NVector,
@@ -108,20 +158,7 @@ public class NVector {
 	 * @param operator
 	 * @return
 	 */
-	public NVector apply(NVector other, BinaryOperator<Double> operator) {
-
-		final int longerLength = ( this.values.length > other.values.length ) ? this.values.length
-				: other.values.length;
-
-		final double[] thisPadded = Arrays.copyOf(this.values, longerLength);
-		final double[] otherPadded = Arrays.copyOf(other.values, longerLength);
-		final double[] result = new double[longerLength];
-
-		for (int i = 0; i < longerLength; i++)
-			result[i] = operator.apply(thisPadded[i], otherPadded[i]);
-
-		return new NVector(false, result);
-	}
+	public abstract T apply(T other, BinaryOperator<Double> operator);
 
 	/**
 	 * Returns the negated form of this NVector.
@@ -133,9 +170,9 @@ public class NVector {
 	 * 
 	 * @return
 	 */
-	public NVector negate() {
+	public T negate() {
 
-		return this.apply((d) -> -d);
+		return this.apply((d) -> 0 - d);
 	}
 
 	/**
@@ -148,7 +185,7 @@ public class NVector {
 	 * 
 	 * @return
 	 */
-	public NVector reciprocal() {
+	public T reciprocal() {
 
 		return this.apply((d) -> 1d / d);
 	}
@@ -163,7 +200,7 @@ public class NVector {
 	 * @param addend
 	 * @return
 	 */
-	public NVector add(NVector addend) {
+	public T add(T addend) {
 
 		return this.apply(addend, (d1, d2) -> d1 + d2);
 	}
@@ -175,7 +212,7 @@ public class NVector {
 	 * @param addend
 	 * @return
 	 */
-	public NVector add(double addend) {
+	public T add(double addend) {
 
 		return this.apply(d -> d + addend);
 	}
@@ -191,7 +228,7 @@ public class NVector {
 	 * @param subtrahend
 	 * @return
 	 */
-	public NVector subtract(NVector subtrahend) {
+	public T subtract(T subtrahend) {
 
 		return this.apply(subtrahend, (d1, d2) -> d1 - d2);
 	}
@@ -203,7 +240,7 @@ public class NVector {
 	 * @param subtrahend
 	 * @return
 	 */
-	public NVector subtract(double subtrahend) {
+	public T subtract(double subtrahend) {
 
 		return this.apply(d -> d - subtrahend);
 	}
@@ -219,7 +256,7 @@ public class NVector {
 	 * @param multiplicand
 	 * @return
 	 */
-	public NVector multiply(NVector multiplicand) {
+	public T multiply(T multiplicand) {
 
 		return this.apply(multiplicand, (d1, d2) -> d1 * d2);
 	}
@@ -231,7 +268,7 @@ public class NVector {
 	 * @param multiplicand
 	 * @return
 	 */
-	public NVector multiply(double multiplicand) {
+	public T multiply(double multiplicand) {
 
 		return this.apply(d -> d * multiplicand);
 	}
@@ -247,7 +284,7 @@ public class NVector {
 	 * @param divisor
 	 * @return
 	 */
-	public NVector divide(NVector divisor) {
+	public T divide(T divisor) {
 
 		return this.apply(divisor, (d1, d2) -> d1 / d2);
 	}
@@ -259,7 +296,7 @@ public class NVector {
 	 * @param divisor
 	 * @return
 	 */
-	public NVector divide(double divisor) {
+	public T divide(double divisor) {
 
 		return this.apply(d -> d / divisor);
 	}

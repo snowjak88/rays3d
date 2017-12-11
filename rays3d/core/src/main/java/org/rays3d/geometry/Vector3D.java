@@ -29,6 +29,9 @@ public class Vector3D extends Triplet {
 	 */
 	public static Vector3D from(Triplet t) {
 
+		if (Vector3D.class.isAssignableFrom(t.getClass()))
+			return (Vector3D) t;
+
 		return new Vector3D(t.get(0), t.get(1), t.get(2));
 	}
 
@@ -70,12 +73,6 @@ public class Vector3D extends Triplet {
 
 		return new Vector3D(getX() / getMagnitude(), getY() / getMagnitude(), getZ() / getMagnitude(), getMagnitude(),
 				getMagnitudeSq());
-	}
-
-	@Override
-	public Vector3D negate() {
-
-		return new Vector3D(-getX(), -getY(), -getZ(), getMagnitude(), getMagnitudeSq());
 	}
 
 	/**
@@ -163,6 +160,66 @@ public class Vector3D extends Triplet {
 		if (magnitudeSq < 0d)
 			magnitudeSq = pow(getX(), 2) + pow(getY(), 2) + pow(getZ(), 2);
 		return magnitudeSq;
+	}
+
+	@Override
+	public Vector3D negate() {
+
+		return new Vector3D(-getX(), -getY(), -getZ(), getMagnitude(), getMagnitudeSq());
+	}
+
+	@Override
+	public Vector3D reciprocal() {
+
+		return Vector3D.from(super.reciprocal());
+	}
+
+	@Override
+	public Vector3D add(Triplet addend) {
+
+		return Vector3D.from(super.add(addend));
+	}
+
+	@Override
+	public Vector3D add(double addend) {
+
+		return Vector3D.from(super.add(addend));
+	}
+
+	@Override
+	public Vector3D subtract(Triplet subtrahend) {
+
+		return Vector3D.from(super.subtract(subtrahend));
+	}
+
+	@Override
+	public Vector3D subtract(double subtrahend) {
+
+		return Vector3D.from(super.subtract(subtrahend));
+	}
+
+	@Override
+	public Vector3D multiply(Triplet multiplicand) {
+
+		return Vector3D.from(super.multiply(multiplicand));
+	}
+
+	@Override
+	public Vector3D multiply(double multiplicand) {
+
+		return Vector3D.from(super.multiply(multiplicand));
+	}
+
+	@Override
+	public Vector3D divide(Triplet divisor) {
+
+		return Vector3D.from(super.divide(divisor));
+	}
+
+	@Override
+	public Vector3D divide(double divisor) {
+
+		return Vector3D.from(super.divide(divisor));
 	}
 
 }

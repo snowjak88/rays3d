@@ -65,15 +65,23 @@ public class ScaleTransform implements Transform {
 	@Override
 	public Ray worldToLocal(Ray ray) {
 
-		return new Ray(worldToLocal(ray.getOrigin()), worldToLocal(ray.getDirection()), ray.getDepth(),
-				ray.getWindowMinT(), ray.getWindowMaxT());
+		final Point3D newOrigin = worldToLocal(ray.getOrigin());
+		final Vector3D newDirection = worldToLocal(ray.getDirection());
+		final double normalizationFactor = 1d / ( newDirection.getMagnitude() );
+
+		return new Ray(newOrigin, newDirection.multiply(normalizationFactor), ray.getT() / normalizationFactor,
+				ray.getDepth(), ray.getWindowMinT(), ray.getWindowMaxT());
 	}
 
 	@Override
 	public Ray localToWorld(Ray ray) {
 
-		return new Ray(localToWorld(ray.getOrigin()), localToWorld(ray.getDirection()), ray.getDepth(),
-				ray.getWindowMinT(), ray.getWindowMaxT());
+		final Point3D newOrigin = localToWorld(ray.getOrigin());
+		final Vector3D newDirection = localToWorld(ray.getDirection());
+		final double newDirectionMagnitude = newDirection.getMagnitude();
+
+		return new Ray(newOrigin, newDirection.multiply(1d / newDirectionMagnitude), ray.getT() * newDirectionMagnitude,
+				ray.getDepth(), ray.getWindowMinT(), ray.getWindowMaxT());
 	}
 
 	@Override

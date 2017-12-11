@@ -1,0 +1,81 @@
+package org.rays3d.interact;
+
+import org.rays3d.geometry.Point2D;
+import org.rays3d.geometry.Point3D;
+import org.rays3d.geometry.Ray;
+import org.rays3d.transform.Transformable;
+
+/**
+ * Denotes that an object can report {@link SurfaceDescriptor}s for various
+ * points on itself.
+ * 
+ * @author snowjak88
+ */
+public interface DescribesSurface extends Transformable {
+
+	/**
+	 * Returns <code>true</code> if the given {@link Ray} at least comes
+	 * <em>close</em> to intersecting with this surface. (This is intended to be
+	 * a fast method of culling Rays which come nowhere near the surface,
+	 * leaving {@link #getSurface(Ray)} to describe intersections more
+	 * accurately, if they exist at all.)
+	 * 
+	 * @param ray
+	 * @return
+	 */
+	public boolean isIntersectableWith(Ray ray);
+
+	/**
+	 * Given a {@link Ray} (considered to be in the global reference-frame),
+	 * determine if the Ray intersects with this surface and, if it does,
+	 * construct the resulting {@link SurfaceDescriptor}. If not, return
+	 * <code>null</code>.
+	 * 
+	 * @param ray
+	 * @return
+	 */
+	public SurfaceDescriptor<?> getSurface(Ray ray);
+
+	/**
+	 * Given a <code>neighbor</code>ing point in 3-space, select the point on
+	 * the surface of this object closest to that neighboring point.
+	 * 
+	 * @param neighbor
+	 * @return
+	 */
+	public SurfaceDescriptor<?> getSurfaceNearestTo(Point3D neighbor);
+
+	/**
+	 * Sample a point from the surface of this object.
+	 * 
+	 * @return
+	 */
+	public SurfaceDescriptor<?> sampleSurface();
+
+	/**
+	 * Sample a point from the surface of this object such that the sampled
+	 * point is "near" the specified <code>neighbor</code>ing point.
+	 * 
+	 * @param neighbor
+	 * @return
+	 */
+	public SurfaceDescriptor<?> sampleSurfaceFacing(Point3D neighbor);
+
+	/**
+	 * Given a neighboring point <code>viewedFrom</code>, compute the
+	 * solid-angle that this object spans as seen from that point.
+	 * 
+	 * @param viewedFrom
+	 * @return
+	 */
+	public double computeSolidAngle(Point3D viewedFrom);
+
+	/**
+	 * Given a 3-D point (in object-local coordinates) on this surface, compute
+	 * the equivalent 2-D surface-parameters.
+	 * 
+	 * @param surface
+	 * @return
+	 */
+	public Point2D getParamFromLocalSurface(Point3D point);
+}

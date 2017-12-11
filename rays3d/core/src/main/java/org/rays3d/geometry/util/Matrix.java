@@ -3,8 +3,6 @@ package org.rays3d.geometry.util;
 import java.util.Arrays;
 
 import org.apache.commons.math3.linear.MatrixUtils;
-import org.rays3d.geometry.Point3D;
-import org.rays3d.geometry.Vector3D;
 
 /**
  * Represents a 4x4 matrix.
@@ -149,32 +147,6 @@ public class Matrix {
 			}
 
 		return new Matrix(newValues);
-	}
-
-	/**
-	 * Multiply this Matrix by a Point3D (treating that as a column-vector with
-	 * a 4th value of 1).
-	 * 
-	 * @param point
-	 * @return
-	 */
-	public Point3D multiply(Point3D point) {
-
-		double[] newVector = this.multiply(new double[] { point.getX(), point.getY(), point.getZ(), 1d });
-		return new Point3D(newVector[0], newVector[1], newVector[2]);
-	}
-
-	/**
-	 * Multiply this Matrix by a Vector3D (treating that as a column-vector with
-	 * a 4th value of 0).
-	 * 
-	 * @param vector
-	 * @return
-	 */
-	public Vector3D multiply(Vector3D vector) {
-
-		double[] newVector = this.multiply(new double[] { vector.getX(), vector.getY(), vector.getZ(), 0d });
-		return new Vector3D(newVector[0], newVector[1], newVector[2]);
 	}
 
 	/**

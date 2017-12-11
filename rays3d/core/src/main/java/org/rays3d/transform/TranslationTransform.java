@@ -70,14 +70,14 @@ public class TranslationTransform implements Transform {
 	@Override
 	public Ray worldToLocal(Ray ray) {
 
-		return new Ray(worldToLocal(ray.getOrigin()), worldToLocal(ray.getDirection()), ray.getDepth(),
+		return new Ray(worldToLocal(ray.getOrigin()), worldToLocal(ray.getDirection()), ray.getT(), ray.getDepth(),
 				ray.getWindowMinT(), ray.getWindowMaxT());
 	}
 
 	@Override
 	public Ray localToWorld(Ray ray) {
 
-		return new Ray(localToWorld(ray.getOrigin()), localToWorld(ray.getDirection()), ray.getDepth(),
+		return new Ray(localToWorld(ray.getOrigin()), localToWorld(ray.getDirection()), ray.getT(), ray.getDepth(),
 				ray.getWindowMinT(), ray.getWindowMaxT());
 	}
 

@@ -1,20 +1,15 @@
 package org.rays3d.geometry.util;
 
 import java.util.Arrays;
+import java.util.function.BinaryOperator;
+import java.util.function.UnaryOperator;
 
 /**
  * Represents a vector of 3 values.
  * 
  * @author snowjak88
  */
-public class Triplet extends NVector {
-
-	/**
-	 * Create a new Triplet consisting of three 0-values.
-	 */
-	public Triplet() {
-		super(3);
-	}
+public class Triplet extends NVector<Triplet> {
 
 	/**
 	 * Create a new Triplet consisting of 3 values.
@@ -39,59 +34,15 @@ public class Triplet extends NVector {
 	}
 
 	@Override
-	public Triplet negate() {
+	public Triplet apply(UnaryOperator<Double> operator) {
 
-		return (Triplet) super.negate();
+		return new Triplet(NVector.apply(getAll(), operator));
 	}
 
 	@Override
-	public Triplet reciprocal() {
+	public Triplet apply(Triplet other, BinaryOperator<Double> operator) {
 
-		return (Triplet) super.reciprocal();
-	}
-
-	public Triplet add(Triplet addend) {
-
-		return (Triplet) super.add(addend);
-	}
-
-	@Override
-	public Triplet add(double addend) {
-
-		return (Triplet) super.add(addend);
-	}
-
-	public Triplet subtract(Triplet subtrahend) {
-
-		return (Triplet) super.subtract(subtrahend);
-	}
-
-	@Override
-	public Triplet subtract(double subtrahend) {
-
-		return (Triplet) super.subtract(subtrahend);
-	}
-
-	public Triplet multiply(Triplet multiplicand) {
-
-		return (Triplet) super.multiply(multiplicand);
-	}
-
-	@Override
-	public Triplet multiply(double multiplicand) {
-
-		return (Triplet) super.multiply(multiplicand);
-	}
-
-	public Triplet divide(Triplet divisor) {
-
-		return (Triplet) super.divide(divisor);
-	}
-
-	@Override
-	public Triplet divide(double divisor) {
-
-		return (Triplet) super.divide(divisor);
+		return new Triplet(NVector.apply(getAll(), other.getAll(), operator));
 	}
 
 }

@@ -5,6 +5,10 @@ import org.rays3d.geometry.Point3D;
 import org.rays3d.geometry.Ray;
 import org.rays3d.geometry.Vector3D;
 import org.rays3d.geometry.util.Matrix;
+import org.rays3d.interact.DescribesSurface;
+import org.rays3d.interact.Interactable;
+import org.rays3d.interact.Interaction;
+import org.rays3d.interact.SurfaceDescriptor;
 
 /**
  * Represents a single transformation in 3-space.
@@ -76,6 +80,54 @@ public interface Transform {
 	 * @return the transformed Normal
 	 */
 	public Normal3D localToWorld(Normal3D normal);
+
+	/**
+	 * Transform the given Interaction into local coordinates.
+	 * 
+	 * @param surface
+	 * @return the transformed Normal
+	 */
+	public default <T extends DescribesSurface> SurfaceDescriptor<T> worldToLocal(SurfaceDescriptor<T> surface) {
+
+		return new SurfaceDescriptor<T>(surface.getDescribed(), worldToLocal(surface.getPoint()),
+				worldToLocal(surface.getNormal()), surface.getParam());
+	}
+
+	/**
+	 * Transform the given Interaction into world coordinates.
+	 * 
+	 * @param surface
+	 * @return the transformed Normal
+	 */
+	public default <T extends DescribesSurface> SurfaceDescriptor<T> localToWorld(SurfaceDescriptor<T> surface) {
+
+		return new SurfaceDescriptor<T>(surface.getDescribed(), localToWorld(surface.getPoint()),
+				localToWorld(surface.getNormal()), surface.getParam());
+	}
+
+	/**
+	 * Transform the given Interaction into local coordinates.
+	 * 
+	 * @param interaction
+	 * @return the transformed Normal
+	 */
+	public default <T extends Interactable> Interaction<T> worldToLocal(Interaction<T> interaction) {
+
+		return new Interaction<T>(interaction.getInteracted(), worldToLocal(interaction.getInteractingRay()),
+				worldToLocal(interaction.getPoint()), worldToLocal(interaction.getNormal()), interaction.getParam());
+	}
+
+	/**
+	 * Transform the given Interaction into world coordinates.
+	 * 
+	 * @param interaction
+	 * @return the transformed Normal
+	 */
+	public default <T extends Interactable> Interaction<T> localToWorld(Interaction<T> interaction) {
+
+		return new Interaction<T>(interaction.getInteracted(), localToWorld(interaction.getInteractingRay()),
+				localToWorld(interaction.getPoint()), localToWorld(interaction.getNormal()), interaction.getParam());
+	}
 
 	/**
 	 * Return the Matrix implementing the world-to-local form of this Transform.
