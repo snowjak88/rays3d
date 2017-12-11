@@ -161,4 +161,11 @@ public class Ray {
 		this.windowMaxT = windowMaxT;
 	}
 
+	@Override
+	public String toString() {
+
+		return "Ray:[origin=" + origin.toString() + ", direction=" + direction.toString() + ", t=" + t + ", depth="
+				+ depth + ", windowMinT=" + windowMinT + ", windowMaxT=" + windowMaxT + "]";
+	}
+
 }

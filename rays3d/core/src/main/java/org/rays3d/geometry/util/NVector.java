@@ -301,4 +301,10 @@ public abstract class NVector<T extends NVector<?>> {
 		return this.apply(d -> d / divisor);
 	}
 
+	@Override
+	public String toString() {
+
+		return getClass().getSimpleName() + ":" + Arrays.toString(values);
+	}
+
 }
