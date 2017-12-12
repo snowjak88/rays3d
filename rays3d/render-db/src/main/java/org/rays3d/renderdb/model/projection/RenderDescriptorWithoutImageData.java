@@ -25,6 +25,10 @@ public interface RenderDescriptorWithoutImageData {
 	public String getSamplerName();
 
 	public int getSamplesPerPixel();
+	
+	public String getIntegratorName();
+	
+	public String getExtraIntegratorConfig();
 
 	public RenderStatus getSamplingStatus();
 

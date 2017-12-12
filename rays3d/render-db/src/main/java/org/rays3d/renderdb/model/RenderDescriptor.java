@@ -3,6 +3,7 @@ package org.rays3d.renderdb.model;
 import java.util.Date;
 
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -46,6 +47,12 @@ public class RenderDescriptor {
 	private String			samplerName;
 	@Basic(optional = false)
 	private int				samplesPerPixel;
+
+	@Basic(optional = false)
+	private String			integratorName;
+	@Basic
+	@Column(length = 2048)
+	private String			extraIntegratorConfig;
 
 	@Enumerated(EnumType.STRING)
 	private RenderStatus	samplingStatus		= RenderStatus.NOT_STARTED;
@@ -141,6 +148,26 @@ public class RenderDescriptor {
 	public void setSamplesPerPixel(int samplesPerPixel) {
 
 		this.samplesPerPixel = samplesPerPixel;
+	}
+
+	public String getIntegratorName() {
+
+		return integratorName;
+	}
+
+	public void setIntegratorName(String integratorName) {
+
+		this.integratorName = integratorName;
+	}
+
+	public String getExtraIntegratorConfig() {
+
+		return extraIntegratorConfig;
+	}
+
+	public void setExtraIntegratorConfig(String extraIntegratorConfig) {
+
+		this.extraIntegratorConfig = extraIntegratorConfig;
 	}
 
 	public RenderStatus getSamplingStatus() {
