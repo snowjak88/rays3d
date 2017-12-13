@@ -2,8 +2,8 @@ package org.rays3d.renderdb.model.projection;
 
 import java.util.Date;
 
+import org.rays3d.message.RenderStatus;
 import org.rays3d.renderdb.model.RenderDescriptor;
-import org.rays3d.renderdb.model.RenderStatus;
 import org.rays3d.renderdb.model.World;
 import org.springframework.data.rest.core.config.Projection;
 
@@ -18,17 +18,19 @@ public interface RenderDescriptorWithoutImageData {
 
 	public World getWorld();
 
-	public int getRenderedImageWidth();
+	public int getFilmWidth();
 
-	public int getRenderedImageHeight();
+	public int getFilmHeight();
 
 	public String getSamplerName();
 
 	public int getSamplesPerPixel();
-	
+
 	public String getIntegratorName();
-	
+
 	public String getExtraIntegratorConfig();
+
+	public RenderStatus getRenderingStatus();
 
 	public RenderStatus getSamplingStatus();
 

@@ -2,39 +2,51 @@ package org.rays3d.message;
 
 public class WorldFileRequest {
 
-	private long	renderId;
+	private long	id;
 
-	private String	worldDescription;
+	private String	name;
 
-	private String	worldFile;
+	private String	description;
 
-	public long getRenderId() {
+	private String	file;
 
-		return renderId;
+	public long getId() {
+
+		return id;
 	}
 
-	public void setRenderId(long renderId) {
+	public void setId(long id) {
 
-		this.renderId = renderId;
+		this.id = id;
 	}
 
-	public String getWorldDescription() {
+	public String getName() {
 
-		return worldDescription;
+		return name;
 	}
 
-	public void setWorldDescription(String worldDescription) {
+	public void setName(String name) {
 
-		this.worldDescription = worldDescription;
+		this.name = name;
 	}
 
-	public String getWorldFile() {
+	public String getDescription() {
 
-		return worldFile;
+		return description;
 	}
 
-	public void setWorldFile(String worldFile) {
+	public void setDescription(String description) {
 
-		this.worldFile = worldFile;
+		this.description = description;
+	}
+
+	public String getFile() {
+
+		return file;
+	}
+
+	public void setFile(String file) {
+
+		this.file = file;
 	}
 }

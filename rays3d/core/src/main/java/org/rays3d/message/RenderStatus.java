@@ -1,4 +1,4 @@
-package org.rays3d.renderdb.model;
+package org.rays3d.message;
 
 /**
  * Allows a process to indicate its status for a particular render.

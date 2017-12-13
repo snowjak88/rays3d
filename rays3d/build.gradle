@@ -18,7 +18,9 @@ subprojects { p ->
 	
 	apply plugin: 'eclipse'
 	apply plugin: 'java'
-	apply plugin: 'org.springframework.boot'
+	
+	if ( p.name != 'core' )
+		apply plugin: 'org.springframework.boot'
 	
 	sourceCompatibility = '1.8'
 	targetCompatibility = '1.8'

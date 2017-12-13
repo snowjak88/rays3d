@@ -15,6 +15,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Version;
 
+import org.rays3d.message.RenderStatus;
 import org.springframework.data.annotation.CreatedDate;
 
 /**
@@ -39,9 +40,9 @@ public class RenderDescriptor {
 	private World			world;
 
 	@Basic(optional = false)
-	private int				renderedImageWidth;
+	private int				filmWidth;
 	@Basic(optional = false)
-	private int				renderedImageHeight;
+	private int				filmHeight;
 
 	@Basic(optional = false)
 	private String			samplerName;
@@ -53,6 +54,9 @@ public class RenderDescriptor {
 	@Basic
 	@Column(length = 2048)
 	private String			extraIntegratorConfig;
+
+	@Enumerated(EnumType.STRING)
+	private RenderStatus	renderingStatus		= RenderStatus.NOT_STARTED;
 
 	@Enumerated(EnumType.STRING)
 	private RenderStatus	samplingStatus		= RenderStatus.NOT_STARTED;
@@ -110,24 +114,24 @@ public class RenderDescriptor {
 		this.world = world;
 	}
 
-	public int getRenderedImageWidth() {
+	public int getFilmWidth() {
 
-		return renderedImageWidth;
+		return filmWidth;
 	}
 
-	public void setRenderedImageWidth(int renderedImageWidth) {
+	public void setFilmWidth(int filmWidth) {
 
-		this.renderedImageWidth = renderedImageWidth;
+		this.filmWidth = filmWidth;
 	}
 
-	public int getRenderedImageHeight() {
+	public int getFilmHeight() {
 
-		return renderedImageHeight;
+		return filmHeight;
 	}
 
-	public void setRenderedImageHeight(int renderedImageHeight) {
+	public void setFilmHeight(int filmHeight) {
 
-		this.renderedImageHeight = renderedImageHeight;
+		this.filmHeight = filmHeight;
 	}
 
 	public String getSamplerName() {
@@ -168,6 +172,16 @@ public class RenderDescriptor {
 	public void setExtraIntegratorConfig(String extraIntegratorConfig) {
 
 		this.extraIntegratorConfig = extraIntegratorConfig;
+	}
+
+	public RenderStatus getRenderingStatus() {
+
+		return renderingStatus;
+	}
+
+	public void setRenderingStatus(RenderStatus renderingStatus) {
+
+		this.renderingStatus = renderingStatus;
 	}
 
 	public RenderStatus getSamplingStatus() {

@@ -1,0 +1,29 @@
+{
+	"properties": [
+		{
+			"name": "rays3d.renderdb.rest.url",
+			"type": "java.lang.String",
+			"description": "The configured :render-db REST URL -- e.g., http://localhost:8080/renderdb"
+		},
+		{
+			"name": "rays3d.renderdb.rest.host",
+			"type": "java.lang.String",
+			"description": "The configured :render-db REST hostname -- e.g., localhost"
+		},
+		{
+			"name": "rays3d.renderdb.rest.port",
+			"type": "java.lang.String",
+			"description": "The configured :render-db REST port -- e.g., 8080"
+		},
+		{
+			"name": "rays3d.renderdb.rest.root",
+			"type": "java.lang.String",
+			"description": "The configured :render-db REST root-path -- e.g., /renderdb"
+		},
+		{
+			"name": "rays3d.renderdb.poll.duration",
+			"type": "java.lang.String",
+			"description": "Polling-interval used when checking for new render-descriptors in the render-db. E.g., '100' (100 milliseconds), '60s' (60 seconds), '5m' (5 minutes)."
+		}
+	]
+}

@@ -2,25 +2,33 @@ package org.rays3d.message;
 
 public class RenderRequest {
 
-	private long	renderId;
+	private long			id;
 
-	private int		filmWidth;
-	private int		filmHeight;
+	private int				filmWidth;
+	private int				filmHeight;
 
-	private String	samplerName;
-	private int		samplesPerPixel;
+	private String			samplerName;
+	private int				samplesPerPixel;
 
-	private String	integratorName;
-	private String	extraIntegratorConfig;
+	private String			integratorName;
+	private String			extraIntegratorConfig;
 
-	public long getRenderId() {
+	private RenderStatus	renderingStatus;
+	private RenderStatus	samplingStatus;
+	private RenderStatus	integrationStatus;
+	private RenderStatus	filmStatus;
 
-		return renderId;
+	private String			imageMimeType;
+	private byte[]			imageData;
+
+	public long getId() {
+
+		return id;
 	}
 
-	public void setRenderId(long renderId) {
+	public void setId(long id) {
 
-		this.renderId = renderId;
+		this.id = id;
 	}
 
 	public int getFilmWidth() {
@@ -81,6 +89,66 @@ public class RenderRequest {
 	public void setExtraIntegratorConfig(String extraIntegratorConfig) {
 
 		this.extraIntegratorConfig = extraIntegratorConfig;
+	}
+
+	public RenderStatus getRenderingStatus() {
+
+		return renderingStatus;
+	}
+
+	public void setRenderingStatus(RenderStatus renderingStatus) {
+
+		this.renderingStatus = renderingStatus;
+	}
+
+	public RenderStatus getSamplingStatus() {
+
+		return samplingStatus;
+	}
+
+	public void setSamplingStatus(RenderStatus samplingStatus) {
+
+		this.samplingStatus = samplingStatus;
+	}
+
+	public RenderStatus getIntegrationStatus() {
+
+		return integrationStatus;
+	}
+
+	public void setIntegrationStatus(RenderStatus integrationStatus) {
+
+		this.integrationStatus = integrationStatus;
+	}
+
+	public RenderStatus getFilmStatus() {
+
+		return filmStatus;
+	}
+
+	public void setFilmStatus(RenderStatus filmStatus) {
+
+		this.filmStatus = filmStatus;
+	}
+
+	public String getImageMimeType() {
+
+		return imageMimeType;
+	}
+
+	public void setImageMimeType(String imageMimeType) {
+
+		this.imageMimeType = imageMimeType;
+	}
+
+	public byte[] getImageData() {
+
+		return imageData;
+	}
+
+	public void setImageData(byte[] imageData) {
+
+		this.imageData = imageData;
 	}
 
 }
