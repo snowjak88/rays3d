@@ -1,12 +1,16 @@
 package org.rays3d.message;
 
-public class FilmRequest {
+import java.io.Serializable;
 
-	private long	renderId;
+public class FilmRequest implements Serializable {
 
-	private int		filmWidth;
-	private int		filmHeight;
-	private int		samplesPerPixel;
+	private static final long	serialVersionUID	= 1980152642044784895L;
+
+	private long				renderId;
+
+	private int					filmWidth;
+	private int					filmHeight;
+	private int					samplesPerPixel;
 
 	public long getRenderId() {
 

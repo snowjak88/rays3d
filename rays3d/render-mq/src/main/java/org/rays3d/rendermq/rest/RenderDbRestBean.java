@@ -2,9 +2,7 @@ package org.rays3d.rendermq.rest;
 
 import java.util.List;
 
-import org.apache.camel.Exchange;
 import org.rays3d.message.RenderRequest;
-import org.rays3d.message.RenderStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -24,36 +22,31 @@ public class RenderDbRestBean {
 	 * 
 	 * @return
 	 */
-	public void getNewRenderRequest(Exchange exchange) {
+	public RenderRequest getNewRenderRequest() {
 
 		EmbeddedListOfRenderRequests response = restTemplate
 				.getForObject("/renderDescriptors/search/findNewDescriptors", EmbeddedListOfRenderRequests.class);
 
 		if (response == null || response.getList() == null || response.getList().getRequests().isEmpty())
-			exchange.getIn().setBody(null);
+			return null;
 		else
-			exchange.getIn().setBody(response.getList().getRequests().get(0), RenderRequest.class);
+			return response.getList().getRequests().get(0);
 	}
 
 	/**
-	 * Mark a given {@link RenderRequest} as in-progress (for overall
-	 * render-status).
+	 * PATCH an existing {@link RenderRequest} back to the Render-DB (updating
+	 * it) and returning the now-current RenderRequest instance.
 	 * 
 	 * @param request
 	 * @return
 	 */
-	public RenderRequest markAsRenderingInProgress(RenderRequest request) {
-
-		if (request == null)
-			return request;
-
-		request.setRenderingStatus(RenderStatus.IN_PROGRESS);
+	public RenderRequest patchRenderRequest(RenderRequest request) {
 
 		return restTemplate.patchForObject("/renderDescriptors/{renderId}", request, RenderRequest.class,
 				request.getId());
 	}
 
-	private static class EmbeddedListOfRenderRequests {
+	public static class EmbeddedListOfRenderRequests {
 
 		@JsonProperty("_embedded")
 		private ListOfRenderRequests list;
@@ -63,13 +56,12 @@ public class RenderDbRestBean {
 			return list;
 		}
 
-		@SuppressWarnings("unused")
 		public void setList(ListOfRenderRequests list) {
 
 			this.list = list;
 		}
 
-		private static class ListOfRenderRequests {
+		public static class ListOfRenderRequests {
 
 			@JsonProperty("renderDescriptors")
 			private List<RenderRequest> requests;
@@ -79,7 +71,6 @@ public class RenderDbRestBean {
 				return requests;
 			}
 
-			@SuppressWarnings("unused")
 			public void setRequests(List<RenderRequest> requests) {
 
 				this.requests = requests;

@@ -1,12 +1,14 @@
 dependencies {
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-activemq'
+	compile group: 'org.apache.camel', name: 'camel-spring-boot-starter', version: '2.20.1'
+	
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-hateoas'
-	
 	compile group: 'org.springframework', name: 'spring-web'
-	
 	compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.4'
 	
-	compile group: 'org.apache.camel', name: 'camel-spring-boot-starter', version: '2.20.1'
+	
+	compile group: 'org.apache.activemq', name: 'activemq-camel', version: '5+'
+	// compile group: 'org.apache.activemq', name: 'activemq-kahadb-store', version: '5+'
 	
 	compile group: 'org.apache.commons', name: 'commons-math3', version: '3+'
 }

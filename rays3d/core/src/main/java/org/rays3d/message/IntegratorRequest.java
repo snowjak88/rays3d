@@ -1,15 +1,19 @@
 package org.rays3d.message;
 
-public class IntegratorRequest {
+import java.io.Serializable;
 
-	private long	renderId;
+public class IntegratorRequest implements Serializable {
 
-	private int		filmWidth;
-	private int		filmHeight;
-	private int		samplesPerPixel;
+	private static final long	serialVersionUID	= 7795015581119478084L;
 
-	private String	integratorName;
-	private String	extraIntegratorConfig;
+	private long				renderId;
+
+	private int					filmWidth;
+	private int					filmHeight;
+	private int					samplesPerPixel;
+
+	private String				integratorName;
+	private String				extraIntegratorConfig;
 
 	public long getRenderId() {
 

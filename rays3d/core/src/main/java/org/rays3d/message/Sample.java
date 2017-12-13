@@ -1,17 +1,21 @@
 package org.rays3d.message;
 
+import java.io.Serializable;
+
 import org.rays3d.geometry.Point2D;
 import org.rays3d.geometry.Ray;
 import org.rays3d.spectrum.Spectrum;
 
-public class Sample {
+public class Sample implements Serializable {
 
-	private long		renderId;
+	private static final long	serialVersionUID	= -7458382323573318480L;
 
-	private Point2D		filmPoint;
-	private Point2D		imagePlanePoint;
-	private Ray			cameraRay;
-	private Spectrum	radiance;
+	private long				renderId;
+
+	private Point2D				filmPoint;
+	private Point2D				imagePlanePoint;
+	private Ray					cameraRay;
+	private Spectrum			radiance;
 
 	public long getRenderId() {
 

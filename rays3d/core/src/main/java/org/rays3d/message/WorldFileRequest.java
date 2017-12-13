@@ -1,14 +1,18 @@
 package org.rays3d.message;
 
-public class WorldFileRequest {
+import java.io.Serializable;
 
-	private long	id;
+public class WorldFileRequest implements Serializable {
 
-	private String	name;
+	private static final long	serialVersionUID	= 8584965443751662009L;
 
-	private String	description;
+	private long				id;
 
-	private String	file;
+	private String				name;
+
+	private String				description;
+
+	private String				file;
 
 	public long getId() {
 

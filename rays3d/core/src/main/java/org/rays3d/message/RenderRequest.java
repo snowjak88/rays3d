@@ -1,25 +1,29 @@
 package org.rays3d.message;
 
-public class RenderRequest {
+import java.io.Serializable;
 
-	private long			id;
+public class RenderRequest implements Serializable {
 
-	private int				filmWidth;
-	private int				filmHeight;
+	private static final long	serialVersionUID	= -7640200357002241967L;
 
-	private String			samplerName;
-	private int				samplesPerPixel;
+	private long				id;
 
-	private String			integratorName;
-	private String			extraIntegratorConfig;
+	private int					filmWidth;
+	private int					filmHeight;
 
-	private RenderStatus	renderingStatus;
-	private RenderStatus	samplingStatus;
-	private RenderStatus	integrationStatus;
-	private RenderStatus	filmStatus;
+	private String				samplerName;
+	private int					samplesPerPixel;
 
-	private String			imageMimeType;
-	private byte[]			imageData;
+	private String				integratorName;
+	private String				extraIntegratorConfig;
+
+	private RenderStatus		renderingStatus;
+	private RenderStatus		samplingStatus;
+	private RenderStatus		integrationStatus;
+	private RenderStatus		filmStatus;
+
+	private String				imageMimeType;
+	private byte[]				imageData;
 
 	public long getId() {
 

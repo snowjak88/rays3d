@@ -1,8 +1,12 @@
 package org.rays3d.renderdb;
 
+import org.rays3d.renderdb.model.RenderDescriptor;
+import org.rays3d.renderdb.model.World;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
+import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
@@ -31,6 +35,21 @@ public class App {
 	public Jackson2ObjectMapperBuilder configureObjectMapper() {
 
 		return new Jackson2ObjectMapperBuilder().modulesToInstall(Hibernate4Module.class);
+	}
+
+	@Bean
+	public RepositoryRestConfigurerAdapter repositoryRestConfigurerAdapter() {
+
+		return new RepositoryRestConfigurerAdapter() {
+
+			@Override
+			public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
+
+				config.exposeIdsFor(RenderDescriptor.class, World.class);
+				super.configureRepositoryRestConfiguration(config);
+			}
+
+		};
 	}
 
 }
