@@ -2,6 +2,9 @@ package org.rays3d.message;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class RenderRequest implements Serializable {
 
 	private static final long	serialVersionUID	= -7640200357002241967L;
@@ -21,9 +24,6 @@ public class RenderRequest implements Serializable {
 	private RenderStatus		samplingStatus;
 	private RenderStatus		integrationStatus;
 	private RenderStatus		filmStatus;
-
-	private String				imageMimeType;
-	private byte[]				imageData;
 
 	public long getId() {
 
@@ -133,26 +133,6 @@ public class RenderRequest implements Serializable {
 	public void setFilmStatus(RenderStatus filmStatus) {
 
 		this.filmStatus = filmStatus;
-	}
-
-	public String getImageMimeType() {
-
-		return imageMimeType;
-	}
-
-	public void setImageMimeType(String imageMimeType) {
-
-		this.imageMimeType = imageMimeType;
-	}
-
-	public byte[] getImageData() {
-
-		return imageData;
-	}
-
-	public void setImageData(byte[] imageData) {
-
-		this.imageData = imageData;
 	}
 
 }

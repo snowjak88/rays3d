@@ -1,6 +1,9 @@
 dependencies {
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
-	compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-rest'
+	
+	compile group: 'org.apache.camel', name: 'camel-spring-boot-starter', version: '2.20.1'
+	compile group: 'org.apache.camel', name: 'camel-jetty', version: '2.20.1'
+	compile group: 'org.apache.camel', name: 'camel-jackson-starter', version: '2.20.1'
 	
 	compile group: 'hsqldb', name: 'hsqldb', version: '1.8.0.10'
 	

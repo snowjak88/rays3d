@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "renderdb.rest.host",
+    "type": "java.lang.String",
+    "description": "Network address on which to listen for incoming REST requests"
+  },
+  {
+    "name": "renderdb.rest.port",
+    "type": "java.lang.String",
+    "description": "Port on which to listen for incoming REST requests"
+  },
+  {
+    "name": "renderdb.rest.context-path",
+    "type": "java.lang.String",
+    "description": "Context-path for all REST requests"
+  }
+]}

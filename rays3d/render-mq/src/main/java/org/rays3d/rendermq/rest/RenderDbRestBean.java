@@ -1,14 +1,13 @@
 package org.rays3d.rendermq.rest;
 
-import java.util.List;
+import java.util.Arrays;
+import java.util.Collection;
 
 import org.rays3d.message.RenderRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Component("renderDbRest")
 public class RenderDbRestBean {
@@ -18,19 +17,13 @@ public class RenderDbRestBean {
 	private RestTemplate restTemplate;
 
 	/**
-	 * GET the first new {@link RenderRequest} found on the Render-DB
+	 * GET all new {@link RenderRequest}s found on the Render-DB
 	 * 
 	 * @return
 	 */
-	public RenderRequest getNewRenderRequest() {
+	public Collection<RenderRequest> getNewRenderRequests() {
 
-		EmbeddedListOfRenderRequests response = restTemplate
-				.getForObject("/renderDescriptors/search/findNewDescriptors", EmbeddedListOfRenderRequests.class);
-
-		if (response == null || response.getList() == null || response.getList().getRequests().isEmpty())
-			return null;
-		else
-			return response.getList().getRequests().get(0);
+		return Arrays.asList(restTemplate.getForEntity("/renders/new", RenderRequest[].class).getBody());
 	}
 
 	/**
@@ -42,40 +35,7 @@ public class RenderDbRestBean {
 	 */
 	public RenderRequest patchRenderRequest(RenderRequest request) {
 
-		return restTemplate.patchForObject("/renderDescriptors/{renderId}", request, RenderRequest.class,
-				request.getId());
-	}
-
-	public static class EmbeddedListOfRenderRequests {
-
-		@JsonProperty("_embedded")
-		private ListOfRenderRequests list;
-
-		public ListOfRenderRequests getList() {
-
-			return list;
-		}
-
-		public void setList(ListOfRenderRequests list) {
-
-			this.list = list;
-		}
-
-		public static class ListOfRenderRequests {
-
-			@JsonProperty("renderDescriptors")
-			private List<RenderRequest> requests;
-
-			public List<RenderRequest> getRequests() {
-
-				return requests;
-			}
-
-			public void setRequests(List<RenderRequest> requests) {
-
-				this.requests = requests;
-			}
-		}
+		return restTemplate.patchForObject("/renders/{renderId}", request, RenderRequest.class, request.getId());
 	}
 
 }

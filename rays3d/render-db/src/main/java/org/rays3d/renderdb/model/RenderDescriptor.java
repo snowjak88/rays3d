@@ -1,8 +1,11 @@
 package org.rays3d.renderdb.model;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedList;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,68 +14,72 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Version;
 
 import org.rays3d.message.RenderStatus;
 import org.springframework.data.annotation.CreatedDate;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * Describes a render that can be picked-up by the system and processed.
  * 
  * @author snowjak88
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 public class RenderDescriptor {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long			id;
+	private long						id;
 
 	@Version
-	private int				version;
+	private int							version;
 
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	@CreatedDate
-	private Date			created;
+	private Date						created;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	private World			world;
-
-	@Basic(optional = false)
-	private int				filmWidth;
-	@Basic(optional = false)
-	private int				filmHeight;
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	private WorldDescriptor				worldDescriptor;
 
 	@Basic(optional = false)
-	private String			samplerName;
+	private int							filmWidth;
 	@Basic(optional = false)
-	private int				samplesPerPixel;
+	private int							filmHeight;
 
 	@Basic(optional = false)
-	private String			integratorName;
+	private String						samplerName;
+	@Basic(optional = false)
+	private int							samplesPerPixel;
+
+	@Basic(optional = false)
+	private String						integratorName;
 	@Basic
 	@Column(length = 2048)
-	private String			extraIntegratorConfig;
+	private String						extraIntegratorConfig;
 
 	@Enumerated(EnumType.STRING)
-	private RenderStatus	renderingStatus		= RenderStatus.NOT_STARTED;
+	private RenderStatus				renderingStatus		= RenderStatus.NOT_STARTED;
 
 	@Enumerated(EnumType.STRING)
-	private RenderStatus	samplingStatus		= RenderStatus.NOT_STARTED;
+	private RenderStatus				samplingStatus		= RenderStatus.NOT_STARTED;
 
 	@Enumerated(EnumType.STRING)
-	private RenderStatus	integrationStatus	= RenderStatus.NOT_STARTED;
+	private RenderStatus				integrationStatus	= RenderStatus.NOT_STARTED;
 
 	@Enumerated(EnumType.STRING)
-	private RenderStatus	filmStatus			= RenderStatus.NOT_STARTED;
+	private RenderStatus				filmStatus			= RenderStatus.NOT_STARTED;
 
-	@Basic
-	private String			imageMimeType;
-
-	@Lob
-	@Basic
-	private byte[]			imageData;
+	@JsonIgnore
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, mappedBy = "renderDescriptor")
+	private Collection<RenderedImage>	renderedImages		= new LinkedList<>();
 
 	public long getId() {
 
@@ -104,14 +111,14 @@ public class RenderDescriptor {
 		this.created = created;
 	}
 
-	public World getWorld() {
+	public WorldDescriptor getWorldDescriptor() {
 
-		return world;
+		return worldDescriptor;
 	}
 
-	public void setWorld(World world) {
+	public void setWorldDescriptor(WorldDescriptor worldDescriptor) {
 
-		this.world = world;
+		this.worldDescriptor = worldDescriptor;
 	}
 
 	public int getFilmWidth() {
@@ -214,24 +221,14 @@ public class RenderDescriptor {
 		this.filmStatus = filmStatus;
 	}
 
-	public String getImageMimeType() {
+	public Collection<RenderedImage> getRenderedImages() {
 
-		return imageMimeType;
+		return renderedImages;
 	}
 
-	public void setImageMimeType(String imageMimeType) {
+	public void setRenderedImages(Collection<RenderedImage> renderedImages) {
 
-		this.imageMimeType = imageMimeType;
-	}
-
-	public byte[] getImageData() {
-
-		return imageData;
-	}
-
-	public void setImageData(byte[] imageData) {
-
-		this.imageData = imageData;
+		this.renderedImages = renderedImages;
 	}
 
 }

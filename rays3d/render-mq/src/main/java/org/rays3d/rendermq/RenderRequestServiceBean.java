@@ -1,6 +1,7 @@
 package org.rays3d.rendermq;
 
-import org.apache.camel.Exchange;
+import java.util.Collection;
+
 import org.rays3d.message.FilmRequest;
 import org.rays3d.message.IntegratorRequest;
 import org.rays3d.message.RenderRequest;
@@ -21,9 +22,9 @@ public class RenderRequestServiceBean {
 	 * 
 	 * @return
 	 */
-	public void getNewRenderRequest(Exchange exchange) {
+	public Collection<RenderRequest> getNewRenderRequests() {
 
-		exchange.getIn().setBody(renderDb.getNewRenderRequest(), RenderRequest.class);
+		return renderDb.getNewRenderRequests();
 
 	}
 

@@ -1,46 +1,58 @@
 package org.rays3d.renderdb.model;
 
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.OneToMany;
 import javax.persistence.Version;
 
 import org.springframework.data.annotation.CreatedDate;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * Holds a single world-definition file, along with supporting metadata.
  * 
  * @author snowjak88
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
-public class World {
+public class WorldDescriptor {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long	id;
+	private long							id;
 
 	@Version
-	private int		version;
+	private int								version;
 
 	@CreatedDate
-	private Date	created;
+	private Date							created;
 
 	@Basic
-	private String	name;
+	private String							name;
 
 	@Basic
 	@Column(length = 1024)
-	private String	description;
+	private String							description;
+
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL }, mappedBy = "worldDescriptor")
+	private Collection<RenderDescriptor>	renderDescriptors;
 
 	@Lob
-	@Basic(optional = false)
-	private String	file;
+	@Basic(fetch = FetchType.LAZY, optional = false)
+	private String							file;
 
 	public long getId() {
 
@@ -90,6 +102,16 @@ public class World {
 	public void setDescription(String description) {
 
 		this.description = description;
+	}
+
+	public Collection<RenderDescriptor> getRenderDescriptors() {
+
+		return renderDescriptors;
+	}
+
+	public void setRenderDescriptors(Collection<RenderDescriptor> renderDescriptors) {
+
+		this.renderDescriptors = renderDescriptors;
 	}
 
 	public String getFile() {

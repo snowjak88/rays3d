@@ -2,7 +2,7 @@ package org.rays3d.message;
 
 import java.io.Serializable;
 
-public class WorldFileRequest implements Serializable {
+public class WorldDescriptorRequest implements Serializable {
 
 	private static final long	serialVersionUID	= 8584965443751662009L;
 
