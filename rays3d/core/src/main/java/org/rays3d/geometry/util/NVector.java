@@ -4,11 +4,15 @@ import java.util.Arrays;
 import java.util.function.BinaryOperator;
 import java.util.function.UnaryOperator;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * Represents a vector of <code>n</code> values.
  * 
  * @author snowjak88
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class NVector<T extends NVector<?>> {
 
 	private final double[] values;
@@ -50,6 +54,7 @@ public abstract class NVector<T extends NVector<?>> {
 	/**
 	 * @return the length of this NVector
 	 */
+	@JsonIgnore
 	public int getN() {
 
 		return this.values.length;
@@ -60,9 +65,10 @@ public abstract class NVector<T extends NVector<?>> {
 	 * 
 	 * @return
 	 */
+	@JsonIgnore
 	public double[] getAll() {
 
-		return Arrays.copyOf(values, getN());
+		return values;
 	}
 
 	/**
@@ -75,6 +81,7 @@ public abstract class NVector<T extends NVector<?>> {
 	 *             if i is not within the bounds of this NVector
 	 * @see #getN()
 	 */
+	@JsonIgnore
 	public double get(int i) {
 
 		return this.values[i];

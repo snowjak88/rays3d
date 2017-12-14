@@ -3,23 +3,30 @@ package org.rays3d.geometry;
 import static org.apache.commons.math3.util.FastMath.pow;
 import static org.apache.commons.math3.util.FastMath.sqrt;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import org.rays3d.geometry.util.Triplet;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Represents a vector in 3-space -- direction plus magnitude.
  * 
  * @author snowjak88
  */
-public class Vector3D extends Triplet {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Vector3D extends Triplet implements Serializable {
 
-	public static final Vector3D	ZERO		= new Vector3D(0, 0, 0);
-	public static final Vector3D	I			= new Vector3D(1, 0, 0);
-	public static final Vector3D	J			= new Vector3D(0, 1, 0);
-	public static final Vector3D	K			= new Vector3D(0, 0, 1);
+	private static final long		serialVersionUID	= -997240497037355891L;
 
-	private double					magnitude	= -1d, magnitudeSq = -1d;
+	public static final Vector3D	ZERO				= new Vector3D(0, 0, 0);
+	public static final Vector3D	I					= new Vector3D(1, 0, 0);
+	public static final Vector3D	J					= new Vector3D(0, 1, 0);
+	public static final Vector3D	K					= new Vector3D(0, 0, 1);
+
+	private double					magnitude			= -1d, magnitudeSq = -1d;
 
 	/**
 	 * Convert the given {@link Triplet} into a Vector3D.
@@ -64,6 +71,13 @@ public class Vector3D extends Triplet {
 		super(x, y, z);
 		this.magnitude = magnitude;
 		this.magnitudeSq = magnitudeSq;
+	}
+
+	/**
+	 * Create an empty Vector3D equivalent to {@link Vector3D#ZERO}
+	 */
+	protected Vector3D() {
+		super(3);
 	}
 
 	/**
@@ -133,21 +147,43 @@ public class Vector3D extends Triplet {
 		return new Vector3D(newX, newY, newZ).normalize();
 	}
 
+	@JsonProperty
 	public double getX() {
 
-		return this.get(0);
+		return get(0);
 	}
 
+	@JsonProperty
+	protected void setX(double x) {
+
+		getAll()[0] = x;
+	}
+
+	@JsonProperty
 	public double getY() {
 
-		return this.get(1);
+		return get(1);
 	}
 
+	@JsonProperty
+	protected void setY(double y) {
+
+		getAll()[1] = y;
+	}
+
+	@JsonProperty
 	public double getZ() {
 
-		return this.get(2);
+		return get(2);
 	}
 
+	@JsonProperty
+	protected void setZ(double z) {
+
+		getAll()[2] = z;
+	}
+
+	@JsonProperty
 	public double getMagnitude() {
 
 		if (magnitude < 0d)
@@ -155,11 +191,24 @@ public class Vector3D extends Triplet {
 		return magnitude;
 	}
 
+	@JsonProperty
+	protected void setMagnitude(double magnitude) {
+
+		this.magnitude = magnitude;
+	}
+
+	@JsonProperty
 	public double getMagnitudeSq() {
 
 		if (magnitudeSq < 0d)
 			magnitudeSq = pow(getX(), 2) + pow(getY(), 2) + pow(getZ(), 2);
 		return magnitudeSq;
+	}
+
+	@JsonProperty
+	protected void setMagnitudeSq(double magnitudeSq) {
+
+		this.magnitudeSq = magnitudeSq;
 	}
 
 	@Override

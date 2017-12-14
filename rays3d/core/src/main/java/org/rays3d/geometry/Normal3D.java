@@ -1,6 +1,11 @@
 package org.rays3d.geometry;
 
+import java.io.Serializable;
+
 import org.rays3d.geometry.util.Triplet;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * A Normal3D is distinct from a {@link Vector3D} in that a Normal3D does not
@@ -8,7 +13,10 @@ import org.rays3d.geometry.util.Triplet;
  * 
  * @author snowjak88
  */
-public class Normal3D extends Triplet {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Normal3D extends Triplet implements Serializable {
+
+	private static final long serialVersionUID = -8278436657012042876L;
 
 	public static Normal3D from(Triplet t) {
 
@@ -33,19 +41,47 @@ public class Normal3D extends Triplet {
 		super(coordinates);
 	}
 
+	/**
+	 * Initialize an empty Normal3D.
+	 */
+	protected Normal3D() {
+		super();
+	}
+
+	@JsonProperty
 	public double getX() {
 
 		return get(0);
 	}
 
+	@JsonProperty
+	protected void setX(double x) {
+
+		getAll()[0] = x;
+	}
+
+	@JsonProperty
 	public double getY() {
 
 		return get(1);
 	}
 
+	@JsonProperty
+	protected void setY(double y) {
+
+		getAll()[1] = y;
+	}
+
+	@JsonProperty
 	public double getZ() {
 
 		return get(2);
+	}
+
+	@JsonProperty
+	protected void setZ(double z) {
+
+		getAll()[2] = z;
 	}
 
 	@Override

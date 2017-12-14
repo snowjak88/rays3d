@@ -2,46 +2,37 @@ package org.rays3d.message;
 
 import java.io.Serializable;
 
+import org.rays3d.geometry.Point2D;
+
 public class SampleRequest implements Serializable {
 
 	private static final long	serialVersionUID	= -5532500614275211500L;
 
-	private long				id;
+	private long				renderId;
 
-	private int					filmWidth;
-	private int					filmHeight;
+	private Point2D				filmPoint;
 
 	private String				samplerName;
 	private int					samplesPerPixel;
 
-	public long getId() {
+	public long getRenderId() {
 
-		return id;
+		return renderId;
 	}
 
 	public void setId(long id) {
 
-		this.id = id;
+		this.renderId = id;
 	}
 
-	public int getFilmWidth() {
+	public Point2D getFilmPoint() {
 
-		return filmWidth;
+		return filmPoint;
 	}
 
-	public void setFilmWidth(int filmWidth) {
+	public void setFilmPoint(Point2D filmPoint) {
 
-		this.filmWidth = filmWidth;
-	}
-
-	public int getFilmHeight() {
-
-		return filmHeight;
-	}
-
-	public void setFilmHeight(int filmHeight) {
-
-		this.filmHeight = filmHeight;
+		this.filmPoint = filmPoint;
 	}
 
 	public String getSamplerName() {

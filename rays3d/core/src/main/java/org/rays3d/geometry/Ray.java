@@ -1,5 +1,11 @@
 package org.rays3d.geometry;
 
+import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * A Ray combines a {@link Point3D} ("origin") and a {@link Vector3D}
  * ("direction") in one object.
@@ -22,16 +28,19 @@ package org.rays3d.geometry;
  * 
  * @author snowjak88
  */
-public class Ray {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Ray implements Serializable {
 
-	private final Point3D	origin;
-	private final Vector3D	direction;
-	private final double	t;
+	private static final long	serialVersionUID	= 8542616504681890448L;
 
-	private final int		depth;
+	private Point3D				origin;
+	private Vector3D			direction;
+	private double				t;
 
-	private double			windowMinT	= Double.NEGATIVE_INFINITY;
-	private double			windowMaxT	= Double.POSITIVE_INFINITY;
+	private int					depth;
+
+	private double				windowMinT			= Double.NEGATIVE_INFINITY;
+	private double				windowMaxT			= Double.POSITIVE_INFINITY;
 
 	/**
 	 * Construct a new Ray with the given origin and direction, and default t of
@@ -88,12 +97,21 @@ public class Ray {
 		this.windowMaxT = windowMaxT;
 	}
 
+	protected Ray() {
+		this.origin = new Point3D();
+		this.direction = new Vector3D();
+		this.t = 0;
+		this.windowMinT = 0;
+		this.windowMaxT = 0;
+	}
+
 	/**
 	 * Given the configured <em>t</em> parameter (see {@link #getT()}),
 	 * calculate the corresponding point along this Ray.
 	 * 
 	 * @return
 	 */
+	@JsonIgnore
 	public Point3D getPointAlong() {
 
 		return getPointAlong(this.getT());
@@ -106,6 +124,7 @@ public class Ray {
 	 * @param t
 	 * @return
 	 */
+	@JsonIgnore
 	public Point3D getPointAlong(double t) {
 
 		return Point3D.from(origin.add(direction.multiply(t)));
@@ -116,46 +135,79 @@ public class Ray {
 	 * @return <code>true</code> if <code>t</code> is within [
 	 *         {@link #getWindowMinT()}, {@link #getWindowMaxT()} ]
 	 */
+	@JsonIgnore
 	public boolean isInWindow(double t) {
 
 		return ( t >= windowMinT ) && ( t <= windowMaxT );
 	}
 
+	@JsonProperty
 	public Point3D getOrigin() {
 
 		return origin;
 	}
 
+	@JsonProperty
+	protected void setOrigin(Point3D origin) {
+
+		this.origin = origin;
+	}
+
+	@JsonProperty
 	public Vector3D getDirection() {
 
 		return direction;
 	}
 
+	@JsonProperty
+	protected void setDirection(Vector3D direction) {
+
+		this.direction = direction;
+	}
+
+	@JsonProperty
 	public double getT() {
 
 		return t;
 	}
 
+	@JsonProperty
+	protected void setT(double t) {
+
+		this.t = t;
+	}
+
+	@JsonProperty
 	public int getDepth() {
 
 		return depth;
 	}
 
+	@JsonProperty
+	protected void setDepth(int depth) {
+
+		this.depth = depth;
+	}
+
+	@JsonProperty
 	public double getWindowMinT() {
 
 		return windowMinT;
 	}
 
+	@JsonProperty
 	public void setWindowMinT(double windowMinT) {
 
 		this.windowMinT = windowMinT;
 	}
 
+	@JsonProperty
 	public double getWindowMaxT() {
 
 		return windowMaxT;
 	}
 
+	@JsonProperty
 	public void setWindowMaxT(double windowMaxT) {
 
 		this.windowMaxT = windowMaxT;

@@ -1,15 +1,23 @@
 package org.rays3d.geometry;
 
+import java.io.Serializable;
+
 import org.rays3d.geometry.util.Triplet;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Semantic repackaging of {@link Triplet}.
  * 
  * @author snowjak88
  */
-public class Point3D extends Triplet {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Point3D extends Triplet implements Serializable {
 
-	public final static Point3D ZERO = new Point3D(0, 0, 0);
+	private static final long	serialVersionUID	= -1065315353543801672L;
+
+	public final static Point3D	ZERO				= new Point3D(0, 0, 0);
 
 	/**
 	 * Convert the given {@link Triplet} into a Point3D.
@@ -20,10 +28,6 @@ public class Point3D extends Triplet {
 			return (Point3D) t;
 
 		return new Point3D(t.get(0), t.get(1), t.get(2));
-	}
-
-	public Point3D() {
-		super();
 	}
 
 	public Point3D(double x, double y, double z) {
@@ -41,19 +45,47 @@ public class Point3D extends Triplet {
 		super(coordinates);
 	}
 
+	/**
+	 * Initialize an empty Point3D
+	 */
+	protected Point3D() {
+		super();
+	}
+
+	@JsonProperty
 	public double getX() {
 
-		return this.get(0);
+		return get(0);
 	}
 
+	@JsonProperty
+	protected void setX(double x) {
+
+		getAll()[0] = x;
+	}
+
+	@JsonProperty
 	public double getY() {
 
-		return this.get(1);
+		return get(1);
 	}
 
+	@JsonProperty
+	protected void setY(double y) {
+
+		getAll()[1] = y;
+	}
+
+	@JsonProperty
 	public double getZ() {
 
-		return this.get(2);
+		return get(2);
+	}
+
+	@JsonProperty
+	protected void setZ(double z) {
+
+		getAll()[2] = z;
 	}
 
 	@Override

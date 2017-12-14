@@ -4,11 +4,14 @@ import java.util.Arrays;
 import java.util.function.BinaryOperator;
 import java.util.function.UnaryOperator;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * Represents a vector of 3 values.
  * 
  * @author snowjak88
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Triplet extends NVector<Triplet> {
 
 	/**
@@ -31,6 +34,13 @@ public class Triplet extends NVector<Triplet> {
 	 */
 	public Triplet(double... values) {
 		super(Arrays.copyOf(values, 3));
+	}
+
+	/**
+	 * Initialize an empty Triplet with 3 0-values
+	 */
+	protected Triplet() {
+		super(3);
 	}
 
 	@Override

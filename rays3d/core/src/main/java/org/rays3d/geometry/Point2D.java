@@ -1,13 +1,19 @@
 package org.rays3d.geometry;
 
+import java.io.Serializable;
+
 import org.rays3d.geometry.util.Pair;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Semantic repackaging of {@link Pair}.
  * 
  * @author snowjak88
  */
-public class Point2D extends Pair {
+public class Point2D extends Pair implements Serializable {
+
+	private static final long serialVersionUID = -7421036355210501663L;
 
 	public static Point2D from(Pair p) {
 
@@ -31,15 +37,37 @@ public class Point2D extends Pair {
 	public Point2D(double... coordinates) {
 		super(coordinates);
 	}
+	
+	/**
+	 * Initialize an empty Point2D.
+	 */
+	protected Point2D() {
+		super();
+	}
 
+	
+	@JsonProperty
 	public double getX() {
 
 		return get(0);
 	}
 
+	@JsonProperty
+	protected void setX(double x) {
+
+		getAll()[0] = x;
+	}
+
+	@JsonProperty
 	public double getY() {
 
 		return get(1);
+	}
+
+	@JsonProperty
+	protected void setY(double y) {
+
+		getAll()[1] = y;
 	}
 
 	@Override

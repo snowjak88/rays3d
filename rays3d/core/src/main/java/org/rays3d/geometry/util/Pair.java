@@ -4,11 +4,14 @@ import java.util.Arrays;
 import java.util.function.BinaryOperator;
 import java.util.function.UnaryOperator;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * Represents a vector of 2 values.
  * 
  * @author snowjak88
  */
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class Pair extends NVector<Pair> {
 
 	public static final Pair ZERO = new Pair(0, 0);
@@ -32,6 +35,13 @@ public class Pair extends NVector<Pair> {
 	 */
 	public Pair(double... values) {
 		super(Arrays.copyOf(values, 2));
+	}
+	
+	/**
+	 * Create an empty Pair with 2 0-values
+	 */
+	protected Pair() {
+		super(2);
 	}
 
 	@Override
