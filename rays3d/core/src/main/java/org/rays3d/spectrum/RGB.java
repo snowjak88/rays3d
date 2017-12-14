@@ -1,8 +1,13 @@
 package org.rays3d.spectrum;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 import org.apache.commons.math3.util.FastMath;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Simple holder for a trio of RGB values.
@@ -13,30 +18,33 @@ import org.apache.commons.math3.util.FastMath;
  * 
  * @author snowjak88
  */
-public class RGB {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class RGB implements Serializable {
+
+	private static final long	serialVersionUID	= 9081734196618975104L;
 
 	/**
 	 * <code>RGB(0,0,0)</code>
 	 */
-	public static final RGB	BLACK	= new RGB(0d, 0d, 0d);
+	public static final RGB		BLACK				= new RGB(0d, 0d, 0d);
 	/**
 	 * <code>RGB(1,0,0)</code>
 	 */
-	public static final RGB	RED		= new RGB(1d, 0d, 0d);
+	public static final RGB		RED					= new RGB(1d, 0d, 0d);
 	/**
 	 * <code>RGB(0,1,0)</code>
 	 */
-	public static final RGB	GREEN	= new RGB(0d, 1d, 0d);
+	public static final RGB		GREEN				= new RGB(0d, 1d, 0d);
 	/**
 	 * <code>RGB(0,0,1)</code>
 	 */
-	public static final RGB	BLUE	= new RGB(0d, 0d, 1d);
+	public static final RGB		BLUE				= new RGB(0d, 0d, 1d);
 	/**
 	 * <code>RGB(1,1,1)</code>
 	 */
-	public static final RGB	WHITE	= new RGB(1d, 1d, 1d);
+	public static final RGB		WHITE				= new RGB(1d, 1d, 1d);
 
-	private double[]		rgb;
+	private double[]			rgb;
 
 	/**
 	 * Construct a new RGB trio from an HSL trio.
@@ -141,19 +149,40 @@ public class RGB {
 		return new RGB(clampFraction(rgb[0]), clampFraction(rgb[1]), clampFraction(rgb[2]));
 	}
 
+	@JsonProperty
 	public double getRed() {
 
 		return rgb[0];
 	}
 
+	@JsonProperty
+	protected void setRed(double red) {
+
+		rgb[0] = red;
+	}
+
+	@JsonProperty
 	public double getGreen() {
 
 		return rgb[1];
 	}
 
+	@JsonProperty
+	protected void setGreen(double green) {
+
+		rgb[1] = green;
+	}
+
+	@JsonProperty
 	public double getBlue() {
 
 		return rgb[2];
+	}
+
+	@JsonProperty
+	protected void setBlue(double blue) {
+
+		rgb[2] = blue;
 	}
 
 	/**
@@ -164,6 +193,7 @@ public class RGB {
 	 * @return an array of 3 <code>double</code>s:
 	 *         <code>{ red, green, blue }</code>
 	 */
+	@JsonIgnore
 	public double[] getComponents() {
 
 		return rgb;

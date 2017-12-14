@@ -2,6 +2,8 @@ package org.rays3d.spectrum;
 
 import static org.apache.commons.math3.util.FastMath.*;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Represents a {@link Spectrum} using a simple RGB trio.
  * 
@@ -9,17 +11,19 @@ import static org.apache.commons.math3.util.FastMath.*;
  */
 public class RGBSpectrum implements Spectrum {
 
+	private static final long		serialVersionUID	= -4926041992553421158L;
+
 	/**
 	 * Represents a 0-energy Spectrum.
 	 */
-	public static final RGBSpectrum	BLACK		= new RGBSpectrum(RGB.BLACK);
+	public static final RGBSpectrum	BLACK				= new RGBSpectrum(RGB.BLACK);
 	/**
 	 * Represents a 1.0-energy Spectrum. (i.e., equivalent to {@link RGB#WHITE})
 	 */
-	public static final RGBSpectrum	WHITE		= new RGBSpectrum(RGB.WHITE);
+	public static final RGBSpectrum	WHITE				= new RGBSpectrum(RGB.WHITE);
 
-	private final RGB				rgb;
-	private double					amplitude	= -1d;
+	private RGB						rgb;
+	private double					amplitude			= -1d;
 
 	/**
 	 * Construct a new {@link RGBSpectrum} instance encapsulating
@@ -31,6 +35,18 @@ public class RGBSpectrum implements Spectrum {
 
 	public RGBSpectrum(RGB rgb) {
 		this.rgb = rgb;
+	}
+
+	@JsonProperty
+	protected void setRGB(RGB rgb) {
+
+		this.rgb = rgb;
+	}
+
+	@JsonProperty
+	protected RGB getRGB() {
+
+		return this.rgb;
 	}
 
 	@Override
