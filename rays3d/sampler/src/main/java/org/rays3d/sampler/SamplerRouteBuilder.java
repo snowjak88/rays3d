@@ -23,16 +23,15 @@ public class SamplerRouteBuilder extends RouteBuilder {
 		//
 		from("activemq:rays3d.samples.samplerRequest")
 			.log(LoggingLevel.DEBUG, "Received new sampler request! (for render id ${body.renderId}: ${body.samplerName})")
-			.split()
-				.method(samplesRequestServiceBean,"splitSamplerRequest")
-				.stopOnException()
+			.split(method(samplesRequestServiceBean,"splitSamplerRequest"))
+				//.stopOnException()
 				.to("activemq:rays3d.samples.sampleRequest")
 			.end();
 		
 		from("activemq:rays3d.samples.sampleRequest")
-			.split()
-				.method(samplesRequestServiceBean, "splitSampleRequestIntoSamples")
-				.stopOnException()
+			.split(method(samplesRequestServiceBean, "splitSampleRequestIntoSamples"))
+				//.stopOnException()
+				.log(LoggingLevel.TRACE,"Generated a sample for [${body.filmPoint.x},${body.filmPoint.y}]")
 				.to("activemq:rays3d.samples.sample")
 			.end();
 		//

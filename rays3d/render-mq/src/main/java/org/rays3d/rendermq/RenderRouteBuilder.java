@@ -1,6 +1,7 @@
 package org.rays3d.rendermq;
 
 import org.apache.camel.ExchangePattern;
+import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.rays3d.message.RenderRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,32 +29,40 @@ public class RenderRouteBuilder extends RouteBuilder {
 			.bean(renderRequestService, "getNewRenderRequests")
 			.setExchangePattern(ExchangePattern.InOnly)
 			.split(body())
-			.to("direct:rays3d.render.new");
+			.to("activemq:rays3d.render.new");
 		
 		//
 		// Transform new RenderRequests into Sampler, Integrator, and Film Requests,
 		// and drop them into the appropriate queues.
-		from("direct:rays3d.render.new")
+		from("activemq:rays3d.render.new")
 			.inputType(RenderRequest.class)
+			.setExchangePattern(ExchangePattern.InOnly)
+			.log(LoggingLevel.INFO, "Received new rendering request (ID: ${body.id})")
 			.bean(renderRequestService, "markAsRenderingInProgress")
 			.multicast()
-				.to("direct:rays3d.transform.toSamplerRequest",
-					"direct:rays3d.transform.toIntegratorRequest",
-					"direct:rays3d.transform.toFilmRequest");
+				.to("activemq:rays3d.transform.toSamplerRequest",
+					"activemq:rays3d.transform.toIntegratorRequest",
+					"activemq:rays3d.transform.toFilmRequest");
 		
-		from("direct:rays3d.transform.toSamplerRequest")
+		from("activemq:rays3d.transform.toSamplerRequest")
+			.setExchangePattern(ExchangePattern.InOnly)
 			.bean(renderRequestService, "markAsSamplingInProgress")
 			.bean(renderRequestService, "toSamplerRequest")
+			.log(LoggingLevel.DEBUG,"Dispatched sampler-request for render-ID ${body.renderId}")
 			.to("activemq:rays3d.samples.samplerRequest");
 		
-		from("direct:rays3d.transform.toIntegratorRequest")
+		from("activemq:rays3d.transform.toIntegratorRequest")
+			.setExchangePattern(ExchangePattern.InOnly)
 			.bean(renderRequestService, "markAsIntegrationInProgress")
 			.bean(renderRequestService, "toIntegratorRequest")
+			.log(LoggingLevel.DEBUG,"Dispatched integrator-request for render-ID ${body.renderId}")
 			.to("activemq:rays3d.integrator.integratorRequest");
 		
-		from("direct:rays3d.transform.toFilmRequest")
+		from("activemq:rays3d.transform.toFilmRequest")
+			.setExchangePattern(ExchangePattern.InOnly)
 			.bean(renderRequestService, "markAsFilmInProgress")
 			.bean(renderRequestService, "toFilmRequest")
+			.log(LoggingLevel.DEBUG, "Dispatched film-request for render-ID ${body.renderId}")
 			.to("activemq:rays3d.film.filmRequest");
 		//
 		//@formatter:on

@@ -1,12 +1,15 @@
 package org.rays3d.rendermq;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.jms.ConnectionFactory;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.broker.BrokerService;
 import org.apache.activemq.camel.component.ActiveMQComponent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,6 +27,12 @@ public class App {
 	public static void main(String[] args) {
 
 		SpringApplication.run(App.class, args);
+	}
+
+	@Bean
+	public Logger camelDefaultLogger() {
+
+		return LoggerFactory.getLogger("org.rays3d.rendermq");
 	}
 
 	@Bean
@@ -67,11 +76,13 @@ public class App {
 	@Bean
 	public ActiveMQConnectionFactory activeMQConnectionFactory(@Value("${spring.activemq.broker-url}") String brokerURL,
 			@Value("${spring.activemq.user}") String brokerUserName,
-			@Value("${spring.activemq.password}") String brokerPassword) {
+			@Value("${spring.activemq.password}") String brokerPassword,
+			@Value("${spring.activemq.packages.trusted}") List<String> trustedPackages) {
 
 		final ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(brokerURL);
 		connectionFactory.setUserName(brokerUserName);
 		connectionFactory.setPassword(brokerPassword);
+		connectionFactory.setTrustedPackages(trustedPackages);
 
 		return connectionFactory;
 	}
