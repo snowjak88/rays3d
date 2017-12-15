@@ -47,39 +47,39 @@ public class RenderDescriptor {
 
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
-	private WorldDescriptor				worldDescriptor;
+	private WorldDescriptor				worldDescriptor			= null;
 
 	@Basic(optional = false)
-	private int							filmWidth;
+	private int							filmWidth				= 0;
 	@Basic(optional = false)
-	private int							filmHeight;
+	private int							filmHeight				= 0;
 
 	@Basic(optional = false)
-	private String						samplerName;
+	private String						samplerName				= null;
 	@Basic(optional = false)
-	private int							samplesPerPixel;
+	private int							samplesPerPixel			= 0;
 
 	@Basic(optional = false)
-	private String						integratorName;
+	private String						integratorName			= null;
 	@Basic
 	@Column(length = 2048)
-	private String						extraIntegratorConfig;
+	private String						extraIntegratorConfig	= null;
 
 	@Enumerated(EnumType.STRING)
-	private RenderStatus				renderingStatus		= RenderStatus.NOT_STARTED;
+	private RenderStatus				renderingStatus			= RenderStatus.NOT_STARTED;
 
 	@Enumerated(EnumType.STRING)
-	private RenderStatus				samplingStatus		= RenderStatus.NOT_STARTED;
+	private RenderStatus				samplingStatus			= RenderStatus.NOT_STARTED;
 
 	@Enumerated(EnumType.STRING)
-	private RenderStatus				integrationStatus	= RenderStatus.NOT_STARTED;
+	private RenderStatus				integrationStatus		= RenderStatus.NOT_STARTED;
 
 	@Enumerated(EnumType.STRING)
-	private RenderStatus				filmStatus			= RenderStatus.NOT_STARTED;
+	private RenderStatus				filmStatus				= RenderStatus.NOT_STARTED;
 
 	@JsonIgnore
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, mappedBy = "renderDescriptor")
-	private Collection<RenderedImage>	renderedImages		= new LinkedList<>();
+	private Collection<RenderedImage>	renderedImages			= new LinkedList<>();
 
 	public long getId() {
 

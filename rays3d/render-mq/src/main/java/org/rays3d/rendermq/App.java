@@ -1,13 +1,19 @@
 package org.rays3d.rendermq;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.jms.ConnectionFactory;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.broker.BrokerPlugin;
 import org.apache.activemq.broker.BrokerService;
 import org.apache.activemq.camel.component.ActiveMQComponent;
+import org.apache.activemq.security.SimpleAuthenticationPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -62,13 +68,30 @@ public class App {
 	@ConditionalOnProperty(name = { "rays3d.rendermq.use-embedded-broker" }, havingValue = "true")
 	@Bean(initMethod = "start", destroyMethod = "stop")
 	public BrokerService brokerService(
-			@Value("${rays3d.rendermq.embedded-broker-connectors}") Collection<String> connectorURLs) throws Exception {
+			@Value("${rays3d.rendermq.embedded-broker-connectors}") Collection<String> connectorURLs,
+			@Value("${rays3d.rendermq.embedded-username}") String username,
+			@Value("${rays3d.rendermq.embedded-password}") String password) throws Exception {
 
 		final BrokerService broker = new BrokerService();
 		for (String connectorURL : connectorURLs)
 			broker.addConnector(connectorURL);
 
 		broker.setPersistent(false);
+
+		final Map<String, String> userPasswords = new HashMap<>();
+		userPasswords.put(username, password);
+
+		final SimpleAuthenticationPlugin auth = new SimpleAuthenticationPlugin();
+		auth.setUserPasswords(userPasswords);
+
+		BrokerPlugin[] existingPlugins = broker.getPlugins();
+		final List<BrokerPlugin> plugins = new ArrayList<>();
+
+		if (existingPlugins != null)
+			plugins.addAll(Arrays.asList(existingPlugins));
+
+		plugins.add(auth);
+		broker.setPlugins(plugins.toArray(new BrokerPlugin[0]));
 
 		return broker;
 	}

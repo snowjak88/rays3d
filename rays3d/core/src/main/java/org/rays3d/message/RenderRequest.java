@@ -10,6 +10,7 @@ public class RenderRequest implements Serializable {
 	private static final long	serialVersionUID	= -7640200357002241967L;
 
 	private long				id;
+	private int					version;
 
 	private int					filmWidth;
 	private int					filmHeight;
@@ -33,6 +34,16 @@ public class RenderRequest implements Serializable {
 	public void setId(long id) {
 
 		this.id = id;
+	}
+
+	public int getVersion() {
+
+		return version;
+	}
+
+	public void setVersion(int version) {
+
+		this.version = version;
 	}
 
 	public int getFilmWidth() {

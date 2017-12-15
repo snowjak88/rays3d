@@ -39,28 +39,29 @@ public class RenderRouteBuilder extends RouteBuilder {
 			.setExchangePattern(ExchangePattern.InOnly)
 			.log(LoggingLevel.INFO, "Received new rendering request (ID: ${body.id})")
 			.bean(renderRequestService, "markAsRenderingInProgress")
+			.log(LoggingLevel.TRACE, "Marked rendering-request as in-progress (ID: ${body.id})")
 			.multicast()
 				.to("activemq:rays3d.transform.toSamplerRequest",
 					"activemq:rays3d.transform.toIntegratorRequest",
 					"activemq:rays3d.transform.toFilmRequest");
 		
 		from("activemq:rays3d.transform.toSamplerRequest")
-			.setExchangePattern(ExchangePattern.InOnly)
 			.bean(renderRequestService, "markAsSamplingInProgress")
+			.log(LoggingLevel.TRACE, "Marked sampling-request as in-progress (ID: ${body.id})")
 			.bean(renderRequestService, "toSamplerRequest")
 			.log(LoggingLevel.DEBUG,"Dispatched sampler-request for render-ID ${body.renderId}")
 			.to("activemq:rays3d.samples.samplerRequest");
 		
 		from("activemq:rays3d.transform.toIntegratorRequest")
-			.setExchangePattern(ExchangePattern.InOnly)
 			.bean(renderRequestService, "markAsIntegrationInProgress")
+			.log(LoggingLevel.TRACE, "Marked integration-request as in-progress (ID: ${body.id})")
 			.bean(renderRequestService, "toIntegratorRequest")
 			.log(LoggingLevel.DEBUG,"Dispatched integrator-request for render-ID ${body.renderId}")
 			.to("activemq:rays3d.integrator.integratorRequest");
 		
 		from("activemq:rays3d.transform.toFilmRequest")
-			.setExchangePattern(ExchangePattern.InOnly)
 			.bean(renderRequestService, "markAsFilmInProgress")
+			.log(LoggingLevel.TRACE, "Marked film-request as in-progress (ID: ${body.id})")
 			.bean(renderRequestService, "toFilmRequest")
 			.log(LoggingLevel.DEBUG, "Dispatched film-request for render-ID ${body.renderId}")
 			.to("activemq:rays3d.film.filmRequest");

@@ -22,17 +22,18 @@ public class SamplerRouteBuilder extends RouteBuilder {
 		//@formatter:off
 		//
 		from("activemq:rays3d.samples.samplerRequest")
-			.log(LoggingLevel.DEBUG, "Received new sampler request! (for render id ${body.renderId}: ${body.samplerName})")
-			.split(method(samplesRequestServiceBean,"splitSamplerRequest"))
-				//.stopOnException()
+			.log(LoggingLevel.DEBUG, "Received new sampler request! (for render id ${body.renderId}: ${body.samplerName} [${body.filmWidth}x${body.filmHeight}])")
+			.split().method(samplesRequestServiceBean,"splitSamplerRequest")
+				.streaming()
 				.to("activemq:rays3d.samples.sampleRequest")
 			.end();
 		
 		from("activemq:rays3d.samples.sampleRequest")
-			.split(method(samplesRequestServiceBean, "splitSampleRequestIntoSamples"))
-				//.stopOnException()
+			.log(LoggingLevel.TRACE, "Received new sample-request for [${body.filmPoint.x},${body.filmPoint.y}] (for render id ${body.renderId}, \"${body.samplerName}\")")
+			.split().method(samplesRequestServiceBean, "splitSampleRequestIntoSamples")
+				.streaming()
 				.log(LoggingLevel.TRACE,"Generated a sample for [${body.filmPoint.x},${body.filmPoint.y}]")
-				.to("activemq:rays3d.samples.sample")
+				.to("activemq:rays3d.samples")
 			.end();
 		//
 		//@formatter:on

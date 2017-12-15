@@ -1,5 +1,6 @@
 package org.rays3d.geometry.util;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.function.BinaryOperator;
 import java.util.function.UnaryOperator;
@@ -12,7 +13,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * @author snowjak88
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Triplet extends NVector<Triplet> {
+public class Triplet extends NVector<Triplet> implements Serializable {
+
+	private static final long serialVersionUID = 709936070558428071L;
 
 	/**
 	 * Create a new Triplet consisting of 3 values.

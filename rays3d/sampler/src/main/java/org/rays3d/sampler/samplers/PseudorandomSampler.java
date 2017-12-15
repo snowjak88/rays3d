@@ -25,7 +25,7 @@ public class PseudorandomSampler extends Sampler {
 
 		currentSample++;
 
-		if (currentSample >= getSamplesToGenerate())
+		if (currentSample > getSamplesToGenerate())
 			throw new RuntimeException("This PseudorandomSampler has no more Samples in this domain!");
 
 		final Sample sample = new Sample();

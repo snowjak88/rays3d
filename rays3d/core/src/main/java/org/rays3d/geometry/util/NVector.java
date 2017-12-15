@@ -1,5 +1,6 @@
 package org.rays3d.geometry.util;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.function.BinaryOperator;
 import java.util.function.UnaryOperator;
@@ -13,9 +14,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * @author snowjak88
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public abstract class NVector<T extends NVector<?>> {
+public abstract class NVector<T extends NVector<?>> implements Serializable {
 
-	private final double[] values;
+	private static final long	serialVersionUID	= 2663668375502365368L;
+
+	private final double[]		values;
 
 	public NVector(int n) {
 		this.values = new double[n];

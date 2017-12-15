@@ -2,7 +2,10 @@ package org.rays3d.renderdb.service;
 
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
+import org.rays3d.message.RenderStatus;
 import org.rays3d.renderdb.model.RenderDescriptor;
 import org.rays3d.renderdb.model.RenderedImage;
 import org.rays3d.renderdb.repository.RenderDescriptorRepository;
@@ -14,7 +17,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class RenderDescriptorUpdateService {
 
-	private static final Logger			LOG	= LoggerFactory.getLogger(RenderDescriptorUpdateService.class);
+	private final Lock					renderDescriptorUpdateLock	= new ReentrantLock();
+
+	private static final Logger			LOG							= LoggerFactory
+			.getLogger(RenderDescriptorUpdateService.class);
 
 	@Autowired
 	private RenderDescriptorRepository	renderDescriptorRepository;
@@ -31,7 +37,10 @@ public class RenderDescriptorUpdateService {
 	 */
 	public RenderDescriptor updateRenderDescriptor(RenderDescriptor renderDescriptor) {
 
-		LOG.debug("Updating a RenderDescriptor (given ID = " + renderDescriptor.getId() + ")");
+		LOG.debug("Updating a RenderDescriptor (given ID = " + renderDescriptor.getId() + ", version = "
+				+ renderDescriptor.getVersion() + ")");
+
+		renderDescriptorUpdateLock.lock();
 
 		final RenderDescriptor current = renderDescriptorRepository.findOne(renderDescriptor.getId());
 
@@ -80,23 +89,26 @@ public class RenderDescriptorUpdateService {
 			current.setExtraIntegratorConfig(renderDescriptor.getExtraIntegratorConfig());
 		}
 
-		if (renderDescriptor.getRenderingStatus() != null) {
+		if (renderDescriptor.getRenderingStatus() != null
+				&& renderDescriptor.getRenderingStatus() != RenderStatus.NOT_STARTED) {
 			LOG.trace("Updating RenderDescriptor.renderingStatus = " + renderDescriptor.getRenderingStatus().name());
 			current.setRenderingStatus(renderDescriptor.getRenderingStatus());
 		}
 
-		if (renderDescriptor.getSamplingStatus() != null) {
+		if (renderDescriptor.getSamplingStatus() != null
+				&& renderDescriptor.getSamplingStatus() != RenderStatus.NOT_STARTED) {
 			LOG.trace("Updating RenderDescriptor.samplingStatus = " + renderDescriptor.getSamplingStatus().name());
 			current.setSamplingStatus(renderDescriptor.getSamplingStatus());
 		}
 
-		if (renderDescriptor.getIntegrationStatus() != null) {
+		if (renderDescriptor.getIntegrationStatus() != null
+				&& renderDescriptor.getIntegrationStatus() != RenderStatus.NOT_STARTED) {
 			LOG.trace(
 					"Updating RenderDescriptor.integrationStatus = " + renderDescriptor.getIntegrationStatus().name());
 			current.setIntegrationStatus(renderDescriptor.getIntegrationStatus());
 		}
 
-		if (renderDescriptor.getFilmStatus() != null) {
+		if (renderDescriptor.getFilmStatus() != null && renderDescriptor.getFilmStatus() != RenderStatus.NOT_STARTED) {
 			LOG.trace("Updating RenderDescriptor.filmStatus = " + renderDescriptor.getFilmStatus().name());
 			current.setFilmStatus(renderDescriptor.getFilmStatus());
 		}
@@ -114,7 +126,11 @@ public class RenderDescriptorUpdateService {
 		}
 
 		LOG.trace("Saving the updated RenderDescriptor ...");
-		return renderDescriptorRepository.save(current);
+		final RenderDescriptor result = renderDescriptorRepository.save(current);
+
+		renderDescriptorUpdateLock.unlock();
+
+		return result;
 	}
 
 }

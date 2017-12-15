@@ -33,5 +33,15 @@
     "name": "rays3d.rendermq.embedded-broker-connectors",
     "type": "java.lang.String",
     "description": "A comma-separated list of connector-URLs to bind the embedded ActiveMQ broker to."
+  },
+  {
+    "name": "rays3d.rendermq.embedded-username",
+    "type": "java.lang.String",
+    "description": "If you are using the embedded ActiveMQ broker, this configures that broker's username."
+  },
+  {
+    "name": "rays3d.rendermq.embedded-password",
+    "type": "java.lang.String",
+    "description": "If you are using the embedded ActiveMQ broker, this configures that broker's password."
   }
 ]}

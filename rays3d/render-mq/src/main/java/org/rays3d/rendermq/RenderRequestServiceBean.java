@@ -96,9 +96,12 @@ public class RenderRequestServiceBean {
 	 */
 	public RenderRequest markAsRenderingInProgress(RenderRequest request) {
 
-		request.setRenderingStatus(RenderStatus.IN_PROGRESS);
+		final RenderRequest updateRequest = new RenderRequest();
+		updateRequest.setId(request.getId());
+		updateRequest.setVersion(request.getVersion());
+		updateRequest.setRenderingStatus(RenderStatus.IN_PROGRESS);
 
-		return renderDb.patchRenderRequest(request);
+		return renderDb.patchRenderRequest(updateRequest);
 	}
 
 	/**
@@ -109,9 +112,12 @@ public class RenderRequestServiceBean {
 	 */
 	public RenderRequest markAsSamplingInProgress(RenderRequest request) {
 
-		request.setSamplingStatus(RenderStatus.IN_PROGRESS);
+		final RenderRequest updateRequest = new RenderRequest();
+		updateRequest.setId(request.getId());
+		updateRequest.setVersion(request.getVersion());
+		updateRequest.setSamplingStatus(RenderStatus.IN_PROGRESS);
 
-		return renderDb.patchRenderRequest(request);
+		return renderDb.patchRenderRequest(updateRequest);
 	}
 
 	/**
@@ -122,9 +128,12 @@ public class RenderRequestServiceBean {
 	 */
 	public RenderRequest markAsIntegrationInProgress(RenderRequest request) {
 
-		request.setIntegrationStatus(RenderStatus.IN_PROGRESS);
+		final RenderRequest updateRequest = new RenderRequest();
+		updateRequest.setId(request.getId());
+		updateRequest.setVersion(request.getVersion());
+		updateRequest.setIntegrationStatus(RenderStatus.IN_PROGRESS);
 
-		return renderDb.patchRenderRequest(request);
+		return renderDb.patchRenderRequest(updateRequest);
 	}
 
 	/**
@@ -135,9 +144,12 @@ public class RenderRequestServiceBean {
 	 */
 	public RenderRequest markAsFilmInProgress(RenderRequest request) {
 
-		request.setFilmStatus(RenderStatus.IN_PROGRESS);
+		final RenderRequest updateRequest = new RenderRequest();
+		updateRequest.setId(request.getId());
+		updateRequest.setVersion(request.getVersion());
+		updateRequest.setFilmStatus(RenderStatus.IN_PROGRESS);
 
-		return renderDb.patchRenderRequest(request);
+		return renderDb.patchRenderRequest(updateRequest);
 	}
 
 }

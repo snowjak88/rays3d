@@ -23,6 +23,8 @@ public abstract class Sampler implements Iterator<Sample> {
 		this.filmX = (int) sampleRequest.getFilmPoint().getX();
 		this.filmY = (int) sampleRequest.getFilmPoint().getY();
 		this.samplesToGenerate = sampleRequest.getSamplesPerPixel();
+
+		System.out.println("Constructing new Sampler [" + filmX + "," + filmY + "/" + samplesToGenerate + "]");
 	}
 
 	public long getRenderId() {

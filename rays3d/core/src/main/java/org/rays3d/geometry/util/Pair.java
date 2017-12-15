@@ -1,5 +1,6 @@
 package org.rays3d.geometry.util;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.function.BinaryOperator;
 import java.util.function.UnaryOperator;
@@ -11,10 +12,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * 
  * @author snowjak88
  */
-@JsonIgnoreProperties(ignoreUnknown=true)
-public class Pair extends NVector<Pair> {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Pair extends NVector<Pair> implements Serializable {
 
-	public static final Pair ZERO = new Pair(0, 0);
+	private static final long	serialVersionUID	= 8826976880964290469L;
+
+	public static final Pair	ZERO				= new Pair(0, 0);
 
 	/**
 	 * Create a new Pair consisting of 2 values.
@@ -36,7 +39,7 @@ public class Pair extends NVector<Pair> {
 	public Pair(double... values) {
 		super(Arrays.copyOf(values, 2));
 	}
-	
+
 	/**
 	 * Create an empty Pair with 2 0-values
 	 */

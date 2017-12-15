@@ -8,14 +8,19 @@ import org.rays3d.message.Sample;
 import org.rays3d.message.SampleRequest;
 import org.rays3d.message.SamplerRequest;
 import org.rays3d.sampler.samplers.NamedSamplerHolder;
+import org.rays3d.sampler.samplers.Sampler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component("samplesRequestService")
 public class SamplesRequestServiceBean {
 
+	private static final Logger	LOG	= LoggerFactory.getLogger(SamplesRequestServiceBean.class);
+
 	@Autowired
-	private NamedSamplerHolder namedSamplerHolder;
+	private NamedSamplerHolder	namedSamplerHolder;
 
 	/**
 	 * Split a single {@link SamplerRequest} into a whole bunch of
@@ -38,7 +43,11 @@ public class SamplesRequestServiceBean {
 	 */
 	public Iterator<Sample> splitSampleRequestIntoSamples(SampleRequest request) {
 
-		return namedSamplerHolder.getSamplerByName(request.getSamplerName(), request);
+		final Sampler sampler = namedSamplerHolder.getSamplerByName(request.getSamplerName(), request);
+
+		LOG.trace("Found named logger \"" + request.getSamplerName() + "\": [" + sampler.getClass().getName() + "].");
+
+		return sampler;
 
 	}
 
@@ -88,6 +97,7 @@ public class SamplesRequestServiceBean {
 
 			sample.setId(samplerRequest.getRenderId());
 			sample.setSamplerName(samplerRequest.getSamplerName());
+			sample.setSamplesPerPixel(samplerRequest.getSamplesPerPixel());
 			sample.setFilmPoint(new Point2D(currentX, currentY));
 
 			return sample;
