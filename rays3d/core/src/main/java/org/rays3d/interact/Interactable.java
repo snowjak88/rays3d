@@ -11,11 +11,14 @@ import org.rays3d.transform.Transformable;
  */
 public interface Interactable extends Transformable, DescribesSurface {
 
-	public boolean isInteractable(Ray ray);
-
-	public boolean isLocalInteractable(Ray localRay);
-
+	/**
+	 * Given a {@link Ray} (considered to be in the global reference-frame),
+	 * determine if the Ray intersects with this surface and, if it does,
+	 * construct the resulting {@link Interaction}. If not, return
+	 * <code>null</code>.
+	 * 
+	 * @param ray
+	 * @return
+	 */
 	public <T extends Interactable> Interaction<T> getInteraction(Ray ray);
-
-	public <T extends Interactable> Interaction<T> getLocalInteraction(Ray localRay);
 }

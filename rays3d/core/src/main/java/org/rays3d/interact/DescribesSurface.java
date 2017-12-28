@@ -34,7 +34,7 @@ public interface DescribesSurface extends Transformable {
 	 * @param ray
 	 * @return
 	 */
-	public SurfaceDescriptor<?> getSurface(Ray ray);
+	public <T extends DescribesSurface> SurfaceDescriptor<T> getSurface(Ray ray);
 
 	/**
 	 * Given a <code>neighbor</code>ing point in 3-space, select the point on
@@ -43,14 +43,14 @@ public interface DescribesSurface extends Transformable {
 	 * @param neighbor
 	 * @return
 	 */
-	public SurfaceDescriptor<?> getSurfaceNearestTo(Point3D neighbor);
+	public <T extends DescribesSurface> SurfaceDescriptor<T> getSurfaceNearestTo(Point3D neighbor);
 
 	/**
 	 * Sample a point from the surface of this object.
 	 * 
 	 * @return
 	 */
-	public SurfaceDescriptor<?> sampleSurface();
+	public <T extends DescribesSurface> SurfaceDescriptor<T> sampleSurface();
 
 	/**
 	 * Sample a point from the surface of this object such that the sampled
@@ -59,7 +59,7 @@ public interface DescribesSurface extends Transformable {
 	 * @param neighbor
 	 * @return
 	 */
-	public SurfaceDescriptor<?> sampleSurfaceFacing(Point3D neighbor);
+	public <T extends DescribesSurface> SurfaceDescriptor<T> sampleSurfaceFacing(Point3D neighbor);
 
 	/**
 	 * Given a neighboring point <code>viewedFrom</code>, compute the

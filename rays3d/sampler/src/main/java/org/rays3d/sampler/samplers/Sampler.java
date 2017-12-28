@@ -2,8 +2,10 @@ package org.rays3d.sampler.samplers;
 
 import java.util.Iterator;
 
-import org.rays3d.message.Sample;
-import org.rays3d.message.SampleRequest;
+import org.rays3d.message.sample.Sample;
+import org.rays3d.message.sample.SampleRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A Sampler is an object that can generate {@link Sample}s for a single
@@ -13,9 +15,11 @@ import org.rays3d.message.SampleRequest;
  */
 public abstract class Sampler implements Iterator<Sample> {
 
-	private final long	renderId;
-	private final int	filmX, filmY;
-	private final int	samplesToGenerate;
+	private static final Logger	LOG	= LoggerFactory.getLogger(Sampler.class);
+
+	private final long			renderId;
+	private final int			filmX, filmY;
+	private final int			samplesToGenerate;
 
 	public Sampler(SampleRequest sampleRequest) {
 
@@ -24,7 +28,7 @@ public abstract class Sampler implements Iterator<Sample> {
 		this.filmY = (int) sampleRequest.getFilmPoint().getY();
 		this.samplesToGenerate = sampleRequest.getSamplesPerPixel();
 
-		System.out.println("Constructing new Sampler [" + filmX + "," + filmY + "/" + samplesToGenerate + "]");
+		LOG.trace("Constructing new Sample generator [{},{}/{}]", filmX, filmY, samplesToGenerate);
 	}
 
 	public long getRenderId() {
@@ -46,4 +50,5 @@ public abstract class Sampler implements Iterator<Sample> {
 
 		return samplesToGenerate;
 	}
+
 }

@@ -131,6 +131,20 @@ public class Ray implements Serializable {
 	}
 
 	/**
+	 * Construct a new {@link Ray} as a copy of this Ray, using a different
+	 * value for <em>t</em>.
+	 * 
+	 * @param t
+	 * @return
+	 */
+	@JsonIgnore
+	public Ray forT(double t) {
+
+		return new Ray(this.getOrigin(), this.getDirection(), t, this.getDepth(), this.getWindowMinT(),
+				this.getWindowMaxT());
+	}
+
+	/**
 	 * @param t
 	 * @return <code>true</code> if <code>t</code> is within [
 	 *         {@link #getWindowMinT()}, {@link #getWindowMaxT()} ]

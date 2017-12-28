@@ -85,8 +85,7 @@ public class Vector3D extends Triplet implements Serializable {
 	 */
 	public Vector3D normalize() {
 
-		return new Vector3D(getX() / getMagnitude(), getY() / getMagnitude(), getZ() / getMagnitude(), getMagnitude(),
-				getMagnitudeSq());
+		return new Vector3D(getX() / getMagnitude(), getY() / getMagnitude(), getZ() / getMagnitude(), 1.0, 1.0);
 	}
 
 	/**

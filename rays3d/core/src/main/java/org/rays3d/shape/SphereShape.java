@@ -47,6 +47,7 @@ public class SphereShape extends Shape {
 		return aabb.isIntersecting(worldToLocal(ray));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public SurfaceDescriptor<SphereShape> getSurface(Ray ray) {
 
@@ -115,12 +116,14 @@ public class SphereShape extends Shape {
 			return t1;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public SurfaceDescriptor<SphereShape> getSurfaceNearestTo(Point3D neighbor) {
 
 		return getSurface(new Ray(neighbor, Vector3D.from(getObjectZero().subtract(neighbor))));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public SurfaceDescriptor<SphereShape> sampleSurface() {
 
@@ -141,6 +144,7 @@ public class SphereShape extends Shape {
 				getParamFromLocalSurface(Point3D.from(samplePoint_local))));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public SurfaceDescriptor<SphereShape> sampleSurfaceFacing(Point3D neighbor) {
 

@@ -4,6 +4,7 @@ import org.rays3d.geometry.Normal3D;
 import org.rays3d.geometry.Point2D;
 import org.rays3d.geometry.Point3D;
 import org.rays3d.geometry.Ray;
+import org.rays3d.geometry.Vector3D;
 
 /**
  * An Interaction defines how and where a {@link Ray} interacts with a
@@ -13,7 +14,23 @@ import org.rays3d.geometry.Ray;
  */
 public class Interaction<T extends Interactable> extends SurfaceDescriptor<T> {
 
-	private final Ray interactingRay;
+	private final Ray		interactingRay;
+
+	private final Vector3D	w_e;
+
+	/**
+	 * Create a new Interaction at the defined surface point (described by the
+	 * given {@link SurfaceDescriptor}). This Interaction is defined as taking
+	 * place along the given <code>interactingRay</code> between
+	 * <code>mintT</code> and <code>maxT</code>.
+	 * 
+	 * @param point
+	 * @param normal
+	 * @param param
+	 */
+	public Interaction(T interacted, Ray interactingRay, SurfaceDescriptor<? extends DescribesSurface> surface) {
+		this(interacted, interactingRay, surface.getPoint(), surface.getNormal(), surface.getParam());
+	}
 
 	/**
 	 * Create a new Interaction at the defined <code>point</code>, with the
@@ -31,6 +48,7 @@ public class Interaction<T extends Interactable> extends SurfaceDescriptor<T> {
 		super(interacted, point, normal, param);
 
 		this.interactingRay = interactingRay;
+		this.w_e = interactingRay.getDirection().negate().normalize();
 	}
 
 	/**
@@ -49,6 +67,15 @@ public class Interaction<T extends Interactable> extends SurfaceDescriptor<T> {
 	public Ray getInteractingRay() {
 
 		return interactingRay;
+	}
+
+	/**
+	 * @return the {@link Vector3D} directed from the point of interaction
+	 *         toward the "eye" (i.e., the interacting ray's origin)
+	 */
+	public Vector3D getW_e() {
+
+		return w_e;
 	}
 
 }

@@ -14,6 +14,7 @@ public class Vector3DTest {
 		assertEquals("Normalized-X not as expected!", 0.424264, v.getX(), 0.00001);
 		assertEquals("Normalized-Y not as expected!", 0.565685, v.getY(), 0.00001);
 		assertEquals("Normalized-Z not as expected!", 0.707107, v.getZ(), 0.00001);
+		assertEquals("Normalized magnitude not as expected!", 1.0, v.getMagnitude(), 0.00001);
 	}
 
 	@Test

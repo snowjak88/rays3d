@@ -4,9 +4,9 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import org.rays3d.geometry.Point2D;
-import org.rays3d.message.Sample;
-import org.rays3d.message.SampleRequest;
 import org.rays3d.message.SamplerRequest;
+import org.rays3d.message.sample.Sample;
+import org.rays3d.message.sample.SampleRequest;
 import org.rays3d.sampler.samplers.NamedSamplerHolder;
 import org.rays3d.sampler.samplers.Sampler;
 import org.slf4j.Logger;
@@ -41,11 +41,11 @@ public class SamplesRequestServiceBean {
 	 * 
 	 * @param request
 	 */
-	public Iterator<Sample> splitSampleRequestIntoSamples(SampleRequest request) {
+	public Iterator<Sample> splitSampleRequestIntoSamples(SamplerRequest request) {
 
 		final Sampler sampler = namedSamplerHolder.getSamplerByName(request.getSamplerName(), request);
 
-		LOG.trace("Found named logger \"" + request.getSamplerName() + "\": [" + sampler.getClass().getName() + "].");
+		LOG.trace("Found named sampler \"{}\": [{}].", request.getSamplerName(), sampler.getClass().getName());
 
 		return sampler;
 

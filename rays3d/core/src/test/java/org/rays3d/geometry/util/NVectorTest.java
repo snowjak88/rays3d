@@ -12,6 +12,8 @@ public class NVectorTest {
 
 	public static class NVectorImpl extends NVector<NVectorImpl> {
 
+		private static final long serialVersionUID = -2601655708396984774L;
+
 		public NVectorImpl(double... values) {
 			super(values);
 		}

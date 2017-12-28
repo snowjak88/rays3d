@@ -1,4 +1,4 @@
-package org.rays3d.message;
+package org.rays3d.message.sample;
 
 import java.io.Serializable;
 
