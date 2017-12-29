@@ -3,7 +3,7 @@ package org.rays3d.spectrum;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import org.apache.commons.math3.util.FastMath;
+import static org.apache.commons.math3.util.FastMath.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -59,11 +59,11 @@ public class RGB implements Serializable {
 	 */
 	public static RGB fromHSL(double hue, double saturation, double lightness) {
 
-		final double chroma = ( 1d - FastMath.abs(2d * lightness - 1) ) * saturation;
+		final double chroma = ( 1d - abs(2d * lightness - 1) ) * saturation;
 
 		final double h_prime = hue / 60d;
 
-		final double x = chroma * ( 1d - FastMath.abs(( h_prime % 2 ) - 1) );
+		final double x = chroma * ( 1d - abs(( h_prime % 2 ) - 1) );
 
 		final double r1, g1, b1;
 		if (h_prime >= 0d && h_prime <= 1d) {
@@ -99,6 +99,53 @@ public class RGB implements Serializable {
 		final double m = lightness - chroma / 2d;
 
 		return new RGB(r1 + m, g1 + m, b1 + m);
+	}
+
+	/**
+	 * Given an integer containing a packed ARGB quadruple, unpack it into an
+	 * RGB instance.
+	 * 
+	 * @param packedRGB
+	 * @return
+	 */
+	public static RGB fromPacked(int packedRGB) {
+
+		final int b = packedRGB & 255;
+
+		packedRGB = packedRGB >> 8;
+		final int g = packedRGB & 255;
+
+		packedRGB = packedRGB >> 8;
+		final int r = packedRGB & 255;
+
+		return new RGB((double) r / 256d, (double) g / 256d, (double) b / 256d);
+	}
+
+	/**
+	 * Given an RGB instance, transform it to a packed ARGB quadruple.
+	 * 
+	 * @param rgb
+	 * @return
+	 * @see #toPacked()
+	 */
+	public static int toPacked(RGB rgb) {
+
+		final double r = max(min(rgb.getRed(), 1d), 0d);
+		final double g = max(min(rgb.getGreen(), 1d), 0d);
+		final double b = max(min(rgb.getBlue(), 1d), 0d);
+
+		return ( (int) ( r * 255d ) ) << 16 | ( (int) ( g * 255d ) ) << 8 | ( (int) ( b * 255d ) );
+	}
+
+	/**
+	 * Pack this RGB instance into an ARGB quadruple.
+	 * 
+	 * @return
+	 * @see #toPacked(RGB)
+	 */
+	public int toPacked() {
+
+		return RGB.toPacked(this);
 	}
 
 	public RGB() {
@@ -201,7 +248,7 @@ public class RGB implements Serializable {
 
 	private double clampFraction(double v) {
 
-		return FastMath.max(FastMath.min(v, 1d), 0d);
+		return max(min(v, 1d), 0d);
 	}
 
 	@Override
