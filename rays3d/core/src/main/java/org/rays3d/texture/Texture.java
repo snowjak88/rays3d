@@ -5,6 +5,8 @@ import org.rays3d.interact.SurfaceDescriptor;
 import org.rays3d.spectrum.Spectrum;
 import org.rays3d.texture.mapping.TextureMapping;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Represents a texture.
  * 
@@ -12,6 +14,7 @@ import org.rays3d.texture.mapping.TextureMapping;
  */
 public abstract class Texture {
 
+	@JsonProperty
 	private TextureMapping textureMapping;
 
 	/**
@@ -39,5 +42,10 @@ public abstract class Texture {
 	public TextureMapping getTextureMapping() {
 
 		return textureMapping;
+	}
+
+	protected void setTextureMapping(TextureMapping textureMapping) {
+
+		this.textureMapping = textureMapping;
 	}
 }

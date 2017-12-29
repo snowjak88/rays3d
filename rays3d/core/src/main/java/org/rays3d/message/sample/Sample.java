@@ -22,9 +22,9 @@ public class Sample implements Serializable {
 	private long				renderId;
 
 	private Point2D				filmPoint;
-	private Point2D				imagePlanePoint;
-	private Ray					cameraRay;
-	private Spectrum			radiance;
+	private Point2D				lensUV						= new Point2D(0.5, 0.5);
+	private Ray					cameraRay					= null;
+	private Spectrum			radiance					= null;
 
 	private List<Double>		additional1DSamples			= new LinkedList<>();
 	private List<Point2D>		additional2DSamples			= new LinkedList<>();
@@ -38,11 +38,11 @@ public class Sample implements Serializable {
 	@JsonIgnore
 	private Iterator<Point2D>	next2DSample				= null;
 
-	public Sample(long renderId, Point2D filmPoint, Point2D imagePlanePoint, Ray cameraRay, Spectrum radiance) {
+	public Sample(long renderId, Point2D filmPoint, Point2D lensUV, Ray cameraRay, Spectrum radiance) {
 
 		this.renderId = renderId;
 		this.filmPoint = filmPoint;
-		this.imagePlanePoint = imagePlanePoint;
+		this.lensUV = lensUV;
 		this.cameraRay = cameraRay;
 		this.radiance = radiance;
 	}
@@ -70,14 +70,14 @@ public class Sample implements Serializable {
 		this.filmPoint = filmPoint;
 	}
 
-	public Point2D getImagePlanePoint() {
+	public Point2D getLensUV() {
 
-		return imagePlanePoint;
+		return lensUV;
 	}
 
-	public void setImagePlanePoint(Point2D imagePlanePoint) {
+	public void setLensUV(Point2D lensUV) {
 
-		this.imagePlanePoint = imagePlanePoint;
+		this.lensUV = lensUV;
 	}
 
 	public Ray getCameraRay() {

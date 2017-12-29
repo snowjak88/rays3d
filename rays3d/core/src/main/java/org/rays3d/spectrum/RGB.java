@@ -1,9 +1,11 @@
 package org.rays3d.spectrum;
 
+import static org.apache.commons.math3.util.FastMath.abs;
+import static org.apache.commons.math3.util.FastMath.max;
+import static org.apache.commons.math3.util.FastMath.min;
+
 import java.io.Serializable;
 import java.util.Arrays;
-
-import static org.apache.commons.math3.util.FastMath.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -196,7 +198,6 @@ public class RGB implements Serializable {
 		return new RGB(clampFraction(rgb[0]), clampFraction(rgb[1]), clampFraction(rgb[2]));
 	}
 
-	@JsonProperty
 	public double getRed() {
 
 		return rgb[0];

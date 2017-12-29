@@ -6,6 +6,9 @@ import org.rays3d.geometry.Ray;
 import org.rays3d.geometry.Vector3D;
 import org.rays3d.geometry.util.Matrix;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Represents a scaling Transform in 3-space.
  * 
@@ -13,8 +16,21 @@ import org.rays3d.geometry.util.Matrix;
  */
 public class ScaleTransform implements Transform {
 
-	private Matrix	worldToLocal	= null, worldToLocal_inverseTranspose = null;
-	private Matrix	localToWorld	= null, localToWorld_inverseTranspose = null;
+	@JsonProperty
+	private double	sx;
+	@JsonProperty
+	private double	sy;
+	@JsonProperty
+	private double	sz;
+
+	@JsonIgnore
+	private Matrix	worldToLocal					= null;
+	@JsonIgnore
+	private Matrix	worldToLocal_inverseTranspose	= null;
+	@JsonIgnore
+	private Matrix	localToWorld					= null;
+	@JsonIgnore
+	private Matrix	localToWorld_inverseTranspose	= null;
 
 	/**
 	 * Create a new ScaleTransform, with the specified
@@ -25,6 +41,13 @@ public class ScaleTransform implements Transform {
 	 * @param sz
 	 */
 	public ScaleTransform(double sx, double sy, double sz) {
+
+		this.sx = sx;
+		this.sy = sy;
+		this.sz = sz;
+	}
+
+	private void initializeMatrices() {
 
 		//@formatter:off
 		this.localToWorld = new Matrix(new double[][] {	{ sx,    0d,    0d,    0d },
@@ -41,11 +64,17 @@ public class ScaleTransform implements Transform {
 	@Override
 	public Point3D worldToLocal(Point3D point) {
 
+		if (worldToLocal == null)
+			initializeMatrices();
+
 		return new Point3D(apply(worldToLocal, point.getX(), point.getY(), point.getZ(), 1d));
 	}
 
 	@Override
 	public Point3D localToWorld(Point3D point) {
+
+		if (localToWorld == null)
+			initializeMatrices();
 
 		return new Point3D(apply(localToWorld, point.getX(), point.getY(), point.getZ(), 1d));
 	}
@@ -53,11 +82,17 @@ public class ScaleTransform implements Transform {
 	@Override
 	public Vector3D worldToLocal(Vector3D vector) {
 
+		if (worldToLocal == null)
+			initializeMatrices();
+
 		return new Vector3D(apply(worldToLocal, vector.getX(), vector.getY(), vector.getZ(), 1d));
 	}
 
 	@Override
 	public Vector3D localToWorld(Vector3D vector) {
+
+		if (localToWorld == null)
+			initializeMatrices();
 
 		return new Vector3D(apply(localToWorld, vector.getX(), vector.getY(), vector.getZ(), 1d));
 	}
@@ -87,6 +122,9 @@ public class ScaleTransform implements Transform {
 	@Override
 	public Normal3D worldToLocal(Normal3D normal) {
 
+		if (worldToLocal == null)
+			initializeMatrices();
+
 		if (worldToLocal_inverseTranspose == null)
 			worldToLocal_inverseTranspose = worldToLocal.inverse().transpose();
 
@@ -95,6 +133,9 @@ public class ScaleTransform implements Transform {
 
 	@Override
 	public Normal3D localToWorld(Normal3D normal) {
+
+		if (localToWorld == null)
+			initializeMatrices();
 
 		if (localToWorld_inverseTranspose == null)
 			localToWorld_inverseTranspose = localToWorld.inverse().transpose();
@@ -117,6 +158,36 @@ public class ScaleTransform implements Transform {
 	public Matrix getLocalToWorld() {
 
 		return localToWorld;
+	}
+
+	protected double getSx() {
+
+		return sx;
+	}
+
+	protected void setSx(double sx) {
+
+		this.sx = sx;
+	}
+
+	protected double getSy() {
+
+		return sy;
+	}
+
+	protected void setSy(double sy) {
+
+		this.sy = sy;
+	}
+
+	protected double getSz() {
+
+		return sz;
+	}
+
+	protected void setSz(double sz) {
+
+		this.sz = sz;
 	}
 
 }

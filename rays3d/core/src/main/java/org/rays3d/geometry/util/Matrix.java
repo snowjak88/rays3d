@@ -3,6 +3,10 @@ package org.rays3d.geometry.util;
 import java.util.Arrays;
 
 import org.apache.commons.math3.linear.MatrixUtils;
+import org.rays3d.Global;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Represents a 4x4 matrix.
@@ -14,15 +18,19 @@ public class Matrix {
 	//
 	// Computing the determinant is an expensive operation.
 	// We will compute it only once, and cache it here.
+	@JsonIgnore
 	private double				determinant;
+	@JsonIgnore
 	private boolean				determinantSet	= false;
 
 	//
 	// Ditto for the matrix's transpose.
+	@JsonIgnore
 	private Matrix				transpose		= null;
 
 	//
 	// Ditto for the matrix's inverse.
+	@JsonIgnore
 	private Matrix				inverse			= null;
 
 	//@formatter:off
@@ -54,7 +62,8 @@ public class Matrix {
 																			{ 0d, 0d, 0d, 1d } });
 	//@formatter:on
 
-	private final double[][]	values;
+	@JsonProperty
+	private double[][]			values;
 
 	/**
 	 * Initialize a new 4x4 matrix with the given 4x4 array of values.
@@ -147,6 +156,24 @@ public class Matrix {
 			}
 
 		return new Matrix(newValues);
+	}
+
+	/**
+	 * Multiply this Matrix by a {@link Triplet}, considered as a 1x4 column
+	 * vector (with the 4th value given by <code>w</code>).
+	 * 
+	 * @param triplet
+	 * @param w
+	 * @return
+	 */
+	public Triplet multiply(Triplet triplet, double w) {
+
+		double[] result = this.multiply(triplet.get(0), triplet.get(1), triplet.get(2), w);
+
+		if (Global.isNear(result[3], 0d))
+			return new Triplet(result[0], result[1], result[2]);
+		else
+			return new Triplet(result[0] / result[3], result[1] / result[3], result[2] / result[3]);
 	}
 
 	/**
@@ -354,6 +381,16 @@ public class Matrix {
 		// ultimate character (which is an extra newline).
 		//
 		return builder.deleteCharAt(builder.length() - 1).toString();
+	}
+
+	protected double[][] getValues() {
+
+		return values;
+	}
+
+	protected void setValues(double[][] values) {
+
+		this.values = values;
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package org.rays3d.spectrum;
 
 import static org.apache.commons.math3.util.FastMath.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -22,7 +23,9 @@ public class RGBSpectrum implements Spectrum {
 	 */
 	public static final RGBSpectrum	WHITE				= new RGBSpectrum(RGB.WHITE);
 
+	@JsonProperty
 	private RGB						rgb;
+	@JsonIgnore
 	private double					amplitude			= -1d;
 
 	/**
@@ -37,13 +40,11 @@ public class RGBSpectrum implements Spectrum {
 		this.rgb = rgb;
 	}
 
-	@JsonProperty
 	protected void setRGB(RGB rgb) {
 
 		this.rgb = rgb;
 	}
 
-	@JsonProperty
 	protected RGB getRGB() {
 
 		return this.rgb;

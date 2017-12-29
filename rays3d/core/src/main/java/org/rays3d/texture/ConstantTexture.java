@@ -5,6 +5,8 @@ import org.rays3d.interact.SurfaceDescriptor;
 import org.rays3d.spectrum.Spectrum;
 import org.rays3d.texture.mapping.LinearTextureMapping;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * A "constant" texture is simply one color, all the time.
  * 
@@ -12,6 +14,7 @@ import org.rays3d.texture.mapping.LinearTextureMapping;
  */
 public class ConstantTexture extends Texture {
 
+	@JsonProperty
 	private Spectrum constant;
 
 	public ConstantTexture(Spectrum constant) {
@@ -24,6 +27,16 @@ public class ConstantTexture extends Texture {
 	public <T extends DescribesSurface> Spectrum evaluate(SurfaceDescriptor<T> surface) {
 
 		return constant;
+	}
+
+	protected Spectrum getConstant() {
+
+		return constant;
+	}
+
+	protected void setConstant(Spectrum constant) {
+
+		this.constant = constant;
 	}
 
 }

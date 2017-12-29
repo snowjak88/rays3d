@@ -11,6 +11,8 @@ import org.rays3d.geometry.Point3D;
 import org.rays3d.geometry.Ray;
 import org.rays3d.transform.Transform;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * An <strong>A</strong>xis-<strong>A</strong>ligned <strong>B</strong>ounding
  * <strong>B</strong>ox is an "acceleration structure" used to help speed up the
@@ -179,13 +181,28 @@ public class AABB {
 		return true;
 	}
 
+	@JsonProperty
 	public Point3D getMinExtent() {
 
 		return minExtent;
 	}
 
+	@JsonProperty
+	protected void setMinExtent(Point3D minExtent) {
+
+		this.minExtent = minExtent;
+	}
+
+	@JsonProperty
 	public Point3D getMaxExtent() {
 
 		return maxExtent;
 	}
+
+	@JsonProperty
+	protected void setMaxExtent(Point3D maxExtent) {
+
+		this.maxExtent = maxExtent;
+	}
+
 }

@@ -6,6 +6,9 @@ import org.rays3d.geometry.Ray;
 import org.rays3d.geometry.Vector3D;
 import org.rays3d.geometry.util.Matrix;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Represents a translating Transform in 3-space.
  * 
@@ -13,7 +16,17 @@ import org.rays3d.geometry.util.Matrix;
  */
 public class TranslationTransform implements Transform {
 
-	private Matrix worldToLocal, localToWorld;
+	@JsonProperty
+	private double	dx;
+	@JsonProperty
+	private double	dy;
+	@JsonProperty
+	private double	dz;
+
+	@JsonIgnore
+	private Matrix	worldToLocal;
+	@JsonIgnore
+	private Matrix	localToWorld;
 
 	/**
 	 * Create a new TranslationTransform, with the specified
@@ -24,6 +37,13 @@ public class TranslationTransform implements Transform {
 	 * @param dz
 	 */
 	public TranslationTransform(double dx, double dy, double dz) {
+
+		this.dx = dx;
+		this.dy = dy;
+		this.dz = dz;
+	}
+
+	private void initializeMatrices() {
 
 		//@formatter:off
 		this.worldToLocal = new Matrix(new double[][] {	{ 1d, 0d, 0d, -dx },
@@ -40,11 +60,17 @@ public class TranslationTransform implements Transform {
 	@Override
 	public Point3D worldToLocal(Point3D point) {
 
+		if (worldToLocal == null)
+			initializeMatrices();
+
 		return new Point3D(apply(worldToLocal, point.getX(), point.getY(), point.getZ(), 1d));
 	}
 
 	@Override
 	public Point3D localToWorld(Point3D point) {
+
+		if (localToWorld == null)
+			initializeMatrices();
 
 		return new Point3D(apply(localToWorld, point.getX(), point.getY(), point.getZ(), 1d));
 	}

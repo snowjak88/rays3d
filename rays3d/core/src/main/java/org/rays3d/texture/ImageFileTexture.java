@@ -14,6 +14,9 @@ import org.rays3d.spectrum.RGBSpectrum;
 import org.rays3d.spectrum.Spectrum;
 import org.rays3d.texture.mapping.TextureMapping;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * A {@link Texture} implementation backed by an image-file.
  * 
@@ -21,8 +24,10 @@ import org.rays3d.texture.mapping.TextureMapping;
  */
 public class ImageFileTexture extends Texture {
 
-	private final File			imageFile;
-	private final BufferedImage	image;
+	@JsonProperty
+	private File			imageFile;
+	@JsonIgnore
+	private BufferedImage	image;
 
 	/**
 	 * Construct a new ImageFileTexture, using the given <code>imageFile</code>
@@ -40,11 +45,7 @@ public class ImageFileTexture extends Texture {
 			throws IOException, UnknownImageFileTypeException {
 		super(textureMapping);
 
-		this.imageFile = imageFile;
-
-		this.image = ImageIO.read(imageFile);
-		if (image == null)
-			throw new UnknownImageFileTypeException();
+		this.setImageFile(imageFile);
 	}
 
 	@Override
@@ -52,8 +53,8 @@ public class ImageFileTexture extends Texture {
 
 		final Point2D textureUV = getTextureMapping().map(surface.getParam());
 
-		final int textureX = (int) ((double) image.getWidth() * textureUV.getX());
-		final int textureY = (int) ((double) image.getHeight() * textureUV.getY());
+		final int textureX = (int) ( (double) image.getWidth() * textureUV.getX() );
+		final int textureY = (int) ( (double) image.getHeight() * textureUV.getY() );
 		final int imagePackedRgb = image.getRGB(textureX, textureY);
 		return new RGBSpectrum(RGB.fromPacked(imagePackedRgb));
 	}
@@ -61,6 +62,15 @@ public class ImageFileTexture extends Texture {
 	public File getImageFile() {
 
 		return imageFile;
+	}
+
+	protected void setImageFile(File imageFile) throws IOException, UnknownImageFileTypeException {
+
+		this.imageFile = imageFile;
+
+		this.image = ImageIO.read(imageFile);
+		if (image == null)
+			throw new UnknownImageFileTypeException();
 	}
 
 	/**

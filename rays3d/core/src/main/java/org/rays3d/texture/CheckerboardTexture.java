@@ -11,6 +11,8 @@ import org.rays3d.spectrum.Spectrum;
 import org.rays3d.texture.mapping.LinearTextureMapping;
 import org.rays3d.texture.mapping.TextureMapping;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Defines a checkerboard {@link Texture} -- i.e., a division of texture-space
  * into squares, and the allocation of one {@link Texture} or another to each of
@@ -29,7 +31,8 @@ import org.rays3d.texture.mapping.TextureMapping;
  */
 public class CheckerboardTexture extends Texture {
 
-	private final Texture[] textures;
+	@JsonProperty
+	private Texture[] textures;
 
 	/**
 	 * Construct a new CheckerboardTexture using the two specified
@@ -84,6 +87,16 @@ public class CheckerboardTexture extends Texture {
 
 		return (int) ( ( (long) FastMath.round(FastMath.abs(textureParam.getX()))
 				+ (long) FastMath.round(FastMath.abs(textureParam.getY())) ) % (long) textures.length );
+	}
+
+	public Texture[] getTextures() {
+
+		return textures;
+	}
+
+	protected void setTextures(Texture[] textures) {
+
+		this.textures = textures;
 	}
 
 }

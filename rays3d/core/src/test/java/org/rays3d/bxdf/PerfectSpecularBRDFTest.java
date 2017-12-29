@@ -30,7 +30,7 @@ public class PerfectSpecularBRDFTest {
 				new Ray(new Point3D(-1, 1, 0), new Vector3D(1, -1, 0)), new Point3D(0, 0, 0), Normal3D.from(Vector3D.J),
 				new Point2D(1, 1));
 
-		final Sample sample = new Sample(0, new Point2D(), new Point2D(), new Ray(new Point3D(), new Vector3D()),
+		final Sample sample = new Sample(0, new Point2D(0, 0), new Point2D(0.5, 0.5), new Ray(new Point3D(), new Vector3D()),
 				new RGBSpectrum());
 		sample.setAdditional1DSamples(Arrays.asList(0.5));
 		sample.setAdditional2DSamples(Arrays.asList(new Point2D(0.5, 0.5)));
@@ -70,7 +70,7 @@ public class PerfectSpecularBRDFTest {
 		final Interaction<Primitive> interaction = new Interaction<Primitive>(null,
 				new Ray(new Point3D(-1, 1, 0), new Vector3D(1, -1, 0)), new Point3D(0, 0, 0), Normal3D.from(Vector3D.J),
 				new Point2D(1, 1));
-		final Sample sample = new Sample(1, new Point2D(8, 8), new Point2D(8, 8), null, null);
+		final Sample sample = new Sample(1, new Point2D(8, 8), new Point2D(0.5, 0.5), null, null);
 
 		final Vector3D w_i_perfect = new Vector3D(1, 1, 0).normalize();
 		final Vector3D w_i_imperfect = new Vector3D(1, 0.333, 0).normalize();
