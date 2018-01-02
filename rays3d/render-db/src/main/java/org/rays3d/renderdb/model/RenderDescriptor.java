@@ -78,8 +78,8 @@ public class RenderDescriptor {
 	private RenderStatus				filmStatus				= RenderStatus.NOT_STARTED;
 
 	@JsonIgnore
-	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, mappedBy = "renderDescriptor")
-	private Collection<RenderedImage>	renderedImages			= new LinkedList<>();
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+	private Collection<Resource>	renderedImages			= new LinkedList<>();
 
 	public long getId() {
 
@@ -221,12 +221,12 @@ public class RenderDescriptor {
 		this.filmStatus = filmStatus;
 	}
 
-	public Collection<RenderedImage> getRenderedImages() {
+	public Collection<Resource> getRenderedImages() {
 
 		return renderedImages;
 	}
 
-	public void setRenderedImages(Collection<RenderedImage> renderedImages) {
+	public void setRenderedImages(Collection<Resource> renderedImages) {
 
 		this.renderedImages = renderedImages;
 	}

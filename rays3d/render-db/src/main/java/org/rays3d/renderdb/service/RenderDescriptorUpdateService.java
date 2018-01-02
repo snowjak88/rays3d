@@ -7,7 +7,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.rays3d.message.RenderStatus;
 import org.rays3d.renderdb.model.RenderDescriptor;
-import org.rays3d.renderdb.model.RenderedImage;
+import org.rays3d.renderdb.model.Resource;
 import org.rays3d.renderdb.repository.RenderDescriptorRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -114,15 +114,15 @@ public class RenderDescriptorUpdateService {
 		}
 
 		if (renderDescriptor.getRenderedImages() != null && !renderDescriptor.getRenderedImages().isEmpty()) {
-			final Set<RenderedImage> renderedImages = new TreeSet<>((i1, i2) -> Long.compare(i1.getId(), i2.getId()));
+			final Set<Resource> resources = new TreeSet<>((i1, i2) -> Long.compare(i1.getId(), i2.getId()));
 
 			if (current.getRenderedImages() != null)
-				renderedImages.addAll(current.getRenderedImages());
+				resources.addAll(current.getRenderedImages());
 
-			renderedImages.addAll(renderDescriptor.getRenderedImages());
+			resources.addAll(renderDescriptor.getRenderedImages());
 
-			LOG.trace("Updating RenderDescriptor.renderedImages <-- " + renderedImages.size() + " entries");
-			current.setRenderedImages(renderedImages);
+			LOG.trace("Updating RenderDescriptor.renderedImages <-- " + resources.size() + " entries");
+			current.setRenderedImages(resources);
 		}
 
 		LOG.trace("Saving the updated RenderDescriptor ...");

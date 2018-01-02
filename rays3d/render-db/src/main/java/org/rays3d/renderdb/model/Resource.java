@@ -9,43 +9,37 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
 import javax.persistence.Version;
 
 import org.springframework.data.annotation.CreatedDate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
- * Holds the image produced by operating on a {@link RenderDescriptor}.
+ * Allows binary resources to be stored in the database.
  * 
  * @author snowjak88
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
-public class RenderedImage {
+public class Resource {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long				id;
+	private long	id;
 
 	@Version
-	private int					version;
+	private int		version;
 
 	@CreatedDate
-	private Date				created;
-
-	@JsonIgnore
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
-	private RenderDescriptor	renderDescriptor;
+	private Date	created;
 
 	@Basic
-	private String				imageMimeType;
+	private String	mimeType;
 
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
-	private byte[]				imageData;
+	private byte[]	data;
 
 	public long getId() {
 
@@ -77,34 +71,24 @@ public class RenderedImage {
 		this.created = created;
 	}
 
-	public RenderDescriptor getRenderDescriptor() {
+	public String getMimeType() {
 
-		return renderDescriptor;
+		return mimeType;
 	}
 
-	public void setRenderDescriptor(RenderDescriptor renderDescriptor) {
+	public void setMimeType(String mimeType) {
 
-		this.renderDescriptor = renderDescriptor;
+		this.mimeType = mimeType;
 	}
 
-	public String getImageMimeType() {
+	public byte[] getData() {
 
-		return imageMimeType;
+		return data;
 	}
 
-	public void setImageMimeType(String imageMimeType) {
+	public void setData(byte[] data) {
 
-		this.imageMimeType = imageMimeType;
-	}
-
-	public byte[] getImageData() {
-
-		return imageData;
-	}
-
-	public void setImageData(byte[] imageData) {
-
-		this.imageData = imageData;
+		this.data = data;
 	}
 
 }

@@ -4,7 +4,7 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.rays3d.renderdb.model.RenderDescriptor;
 import org.rays3d.renderdb.repository.RenderDescriptorRepository;
-import org.rays3d.renderdb.repository.RenderedImageRepository;
+import org.rays3d.renderdb.repository.ResourceRepository;
 import org.rays3d.renderdb.repository.WorldDescriptorRepository;
 import org.rays3d.renderdb.service.RenderDescriptorUpdateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class RenderDbRouteBuilder extends RouteBuilder {
 	private WorldDescriptorRepository		worldDescriptorRepository;
 
 	@Autowired
-	private RenderedImageRepository			renderedImageRepository;
+	private ResourceRepository			resourceRepository;
 
 	@Autowired
 	private RenderDescriptorUpdateService	renderDescriptorUpdateService;
@@ -69,7 +69,7 @@ public class RenderDbRouteBuilder extends RouteBuilder {
 				.description("Get a RenderDescriptor's associated WorldDescriptor")
 				.to("direct:get.renders.byId.world")
 			.get("/images")
-				.description("Get a RenderDescriptor's associated RenderedImage collection")
+				.description("Get a RenderDescriptor's associated Resource collection")
 				.to("direct:get.renders.byId.images");
 		
 		from("direct:get.renders.all")
@@ -86,7 +86,7 @@ public class RenderDbRouteBuilder extends RouteBuilder {
 		
 		from("direct:get.renders.byId.images")
 			.process(e -> e.getIn().setBody(e.getIn().getHeader("renderId"), Long.class))
-			.bean(renderedImageRepository, "findByRenderDescriptorId");
+			.bean(resourceRepository, "findByRenderDescriptorId");
 		
 		from("direct:patch.render")
 			.filter(simple("${body.id} == ${header.renderId}"))

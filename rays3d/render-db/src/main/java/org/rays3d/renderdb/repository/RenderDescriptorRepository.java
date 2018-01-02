@@ -1,8 +1,10 @@
 package org.rays3d.renderdb.repository;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.rays3d.renderdb.model.RenderDescriptor;
+import org.rays3d.renderdb.model.Resource;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -15,4 +17,7 @@ public interface RenderDescriptorRepository extends CrudRepository<RenderDescrip
 
 	@Query("select d from RenderDescriptor d where renderingStatus = 'NOT_STARTED'")
 	public Collection<RenderDescriptor> findNewDescriptors();
+	
+	@Query("select r from Resource r where r.id in ( select d.renderedImages from RenderDescriptor d where d.id = ?1 ) order by r.created desc")
+	public List<Resource> getRenderedImages(Long id);
 }

@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface WorldDescriptorRepository extends CrudRepository<WorldDescriptor, Long> {
 
 	public WorldDescriptor findByRenderDescriptorsId(Long id);
+
 }
