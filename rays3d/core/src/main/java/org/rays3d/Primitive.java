@@ -14,10 +14,17 @@ import org.rays3d.shape.Shape;
 import org.rays3d.transform.Transform;
 import org.rays3d.transform.Transformable;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Primitive implements Interactable, Transformable {
 
-	private final Shape	shape;
-	private final BSDF	bsdf;
+	@JsonProperty
+	private Shape	shape;
+	@JsonProperty
+	private BSDF	bsdf;
+
+	public Primitive() {
+	}
 
 	public Primitive(Shape shape, BSDF bsdf) {
 		this.shape = shape;
@@ -108,8 +115,18 @@ public class Primitive implements Interactable, Transformable {
 		return shape;
 	}
 
+	protected void setShape(Shape shape) {
+
+		this.shape = shape;
+	}
+
 	public BSDF getBsdf() {
 
 		return bsdf;
+	}
+
+	protected void setBsdf(BSDF bsdf) {
+
+		this.bsdf = bsdf;
 	}
 }
