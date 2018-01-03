@@ -29,7 +29,7 @@ public class ConstantTexture extends Texture {
 		return constant;
 	}
 
-	protected Spectrum getConstant() {
+	public Spectrum getConstant() {
 
 		return constant;
 	}

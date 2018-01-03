@@ -45,7 +45,7 @@ public class RGBSpectrum implements Spectrum {
 		this.rgb = rgb;
 	}
 
-	protected RGB getRGB() {
+	public RGB getRGB() {
 
 		return this.rgb;
 	}
