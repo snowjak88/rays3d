@@ -30,8 +30,8 @@ public class PerfectSpecularBRDFTest {
 				new Ray(new Point3D(-1, 1, 0), new Vector3D(1, -1, 0)), new Point3D(0, 0, 0), Normal3D.from(Vector3D.J),
 				new Point2D(1, 1));
 
-		final Sample sample = new Sample(0, new Point2D(0, 0), new Point2D(0.5, 0.5), new Ray(new Point3D(), new Vector3D()),
-				new RGBSpectrum());
+		final Sample sample = new Sample(0, new Point2D(0, 0), new Point2D(0.5, 0.5),
+				new Ray(new Point3D(), new Vector3D()), new RGBSpectrum());
 		sample.setAdditional1DSamples(Arrays.asList(0.5));
 		sample.setAdditional2DSamples(Arrays.asList(new Point2D(0.5, 0.5)));
 

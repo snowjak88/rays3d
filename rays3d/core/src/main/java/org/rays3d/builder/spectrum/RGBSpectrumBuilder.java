@@ -7,8 +7,7 @@ import org.rays3d.spectrum.RGBSpectrum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class RGBSpectrumBuilder<P extends AbstractBuilder<?, ?>>
-		extends SpectrumBuilder<RGBSpectrum, P> {
+public class RGBSpectrumBuilder<P extends AbstractBuilder<?, ?>> extends SpectrumBuilder<RGBSpectrum, P> {
 
 	private static final Logger					LOG			= LoggerFactory.getLogger(RGBSpectrumBuilder.class);
 

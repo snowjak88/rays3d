@@ -46,7 +46,7 @@ public class SphereShapeTest {
 		assertEquals("Hit point distance not as expected", 2d,
 				Vector3D.from(hit.getPoint().subtract(ray.getOrigin())).getMagnitude(), 0.00001);
 	}
-	
+
 	@Test
 	public void testGetSurface_miss() {
 

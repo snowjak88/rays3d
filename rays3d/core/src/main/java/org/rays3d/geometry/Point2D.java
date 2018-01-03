@@ -37,7 +37,7 @@ public class Point2D extends Pair implements Serializable {
 	public Point2D(double... coordinates) {
 		super(coordinates);
 	}
-	
+
 	/**
 	 * Initialize an empty Point2D.
 	 */
@@ -45,7 +45,6 @@ public class Point2D extends Pair implements Serializable {
 		super();
 	}
 
-	
 	@JsonProperty
 	public double getX() {
 

@@ -11,7 +11,7 @@ public class SampleRequest implements Serializable {
 	private long				renderId;
 
 	private Point2D				filmPoint;
-	
+
 	private String				samplerName;
 	private int					samplesPerPixel;
 

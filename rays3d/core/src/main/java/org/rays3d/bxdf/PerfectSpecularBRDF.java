@@ -20,8 +20,7 @@ import org.rays3d.texture.Texture;
  */
 public class PerfectSpecularBRDF extends BSDF {
 
-	private final Texture	texture;
-	private final Texture	emissive;
+	private final Texture tint;
 
 	/**
 	 * Create a new PerfectSpecularBRDF with no tinting applied to reflected
@@ -35,38 +34,20 @@ public class PerfectSpecularBRDF extends BSDF {
 	 * Create a new PerfectSpecularBRDF, specifying a {@link Texture} for
 	 * reflection-tinting.
 	 * 
-	 * @param texture
+	 * @param tint
 	 *            {@link Texture} defining this mirror's "reflectivity-fraction"
 	 *            at various wavelengths
 	 */
-	public PerfectSpecularBRDF(Texture texture) {
-		this(texture, null);
-	}
-
-	/**
-	 * Create a new PerfectSpecularBRDF, specifying {@link Texture}s for both
-	 * reflection-tinting and outright emission.
-	 * 
-	 * @param texture
-	 *            {@link Texture} defining this mirror's "reflectivity-fraction"
-	 *            at various wavelengths
-	 * @param emissive
-	 *            <code>null</code> if no emission should take place
-	 */
-	public PerfectSpecularBRDF(Texture texture, Texture emissive) {
+	public PerfectSpecularBRDF(Texture tint) {
 		super(new HashSet<>(Arrays.asList(Property.REFLECT_SPECULAR)));
 
-		this.texture = texture;
-		this.emissive = emissive;
+		this.tint = tint;
 	}
 
 	@Override
 	public <T extends Interactable> Spectrum sampleL_e(Interaction<T> interaction, Sample sample) {
 
-		if (emissive == null)
-			return RGBSpectrum.BLACK;
-
-		return emissive.evaluate(interaction);
+		return RGBSpectrum.BLACK;
 	}
 
 	@Override
@@ -95,7 +76,7 @@ public class PerfectSpecularBRDF extends BSDF {
 		//
 		//
 		if (isPerfectReflection(interaction, sample, w_i))
-			return texture.evaluate(interaction);
+			return tint.evaluate(interaction);
 		else
 			return RGBSpectrum.BLACK;
 	}
@@ -121,6 +102,11 @@ public class PerfectSpecularBRDF extends BSDF {
 	public Spectrum getTotalEmissivePower() {
 
 		return RGBSpectrum.BLACK;
+	}
+
+	public Texture getTint() {
+
+		return tint;
 	}
 
 }

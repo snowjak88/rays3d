@@ -43,8 +43,9 @@ public class Point3DBuilder<P extends AbstractBuilder<?, ?>> implements Abstract
 		this.z = z;
 		return this;
 	}
-	
+
 	public Point3DBuilder<P> point(Point3D point) {
+
 		this.x = point.getX();
 		this.y = point.getY();
 		this.z = point.getZ();
