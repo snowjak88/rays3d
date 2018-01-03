@@ -160,33 +160,39 @@ public class ScaleTransform implements Transform {
 		return localToWorld;
 	}
 
-	protected double getSx() {
+	public double getSx() {
 
 		return sx;
 	}
 
 	protected void setSx(double sx) {
 
+		worldToLocal = null;
+		localToWorld = null;
 		this.sx = sx;
 	}
 
-	protected double getSy() {
+	public double getSy() {
 
 		return sy;
 	}
 
 	protected void setSy(double sy) {
 
+		worldToLocal = null;
+		localToWorld = null;
 		this.sy = sy;
 	}
 
-	protected double getSz() {
+	public double getSz() {
 
 		return sz;
 	}
 
 	protected void setSz(double sz) {
 
+		worldToLocal = null;
+		localToWorld = null;
 		this.sz = sz;
 	}
 

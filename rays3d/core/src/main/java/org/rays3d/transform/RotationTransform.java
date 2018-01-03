@@ -156,23 +156,27 @@ public class RotationTransform implements Transform {
 		return localToWorld;
 	}
 
-	protected Vector3D getAxis() {
+	public Vector3D getAxis() {
 
 		return axis;
 	}
 
 	protected void setAxis(Vector3D axis) {
 
+		worldToLocal = null;
+		localToWorld = null;
 		this.axis = axis;
 	}
 
-	protected double getDegreesOfRotation() {
+	public double getDegreesOfRotation() {
 
 		return degreesOfRotation;
 	}
 
 	protected void setDegreesOfRotation(double degreesOfRotation) {
 
+		worldToLocal = null;
+		localToWorld = null;
 		this.degreesOfRotation = degreesOfRotation;
 	}
 

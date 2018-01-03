@@ -24,9 +24,9 @@ public class TranslationTransform implements Transform {
 	private double	dz;
 
 	@JsonIgnore
-	private Matrix	worldToLocal;
+	private Matrix	worldToLocal	= null;
 	@JsonIgnore
-	private Matrix	localToWorld;
+	private Matrix	localToWorld	= null;
 
 	/**
 	 * Create a new TranslationTransform, with the specified
@@ -140,6 +140,42 @@ public class TranslationTransform implements Transform {
 	public Matrix getLocalToWorld() {
 
 		return localToWorld;
+	}
+
+	public double getDx() {
+
+		return dx;
+	}
+
+	protected void setDx(double dx) {
+
+		worldToLocal = null;
+		localToWorld = null;
+		this.dx = dx;
+	}
+
+	public double getDy() {
+
+		return dy;
+	}
+
+	protected void setDy(double dy) {
+
+		worldToLocal = null;
+		localToWorld = null;
+		this.dy = dy;
+	}
+
+	public double getDz() {
+
+		return dz;
+	}
+
+	protected void setDz(double dz) {
+
+		worldToLocal = null;
+		localToWorld = null;
+		this.dz = dz;
 	}
 
 }

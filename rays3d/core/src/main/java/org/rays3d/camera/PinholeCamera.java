@@ -4,6 +4,9 @@ import org.rays3d.geometry.Point3D;
 import org.rays3d.geometry.Ray;
 import org.rays3d.geometry.Vector3D;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Implements a simple Pinhole Camera -- i.e., a camera with a lens of
  * 0-diameter.
@@ -12,12 +15,27 @@ import org.rays3d.geometry.Vector3D;
  */
 public class PinholeCamera extends Camera {
 
-	private Point3D focusPoint;
+	@JsonProperty
+	private double	focalLength;
+
+	@JsonIgnore
+	private Point3D	focusPoint;
 
 	public PinholeCamera(double filmSizeX, double filmSizeY, double imagePlaneSizeX, double imagePlaneSizeY,
 			Point3D eyePoint, Point3D lookAt, Vector3D up, double focalLength) {
 		super(filmSizeX, filmSizeY, imagePlaneSizeX, imagePlaneSizeY, eyePoint, lookAt, up);
 
+		setFocalLength(focalLength);
+	}
+
+	public double getFocalLength() {
+
+		return focalLength;
+	}
+
+	public void setFocalLength(double focalLength) {
+
+		this.focalLength = focalLength;
 		this.focusPoint = new Point3D(0d, 0d, -focalLength);
 	}
 

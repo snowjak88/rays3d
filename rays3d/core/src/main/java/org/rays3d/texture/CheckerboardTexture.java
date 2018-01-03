@@ -46,6 +46,16 @@ public class CheckerboardTexture extends Texture {
 	}
 
 	/**
+	 * Construct a new CheckerboardTexture using the specified {@link Texture}s,
+	 * and the default {@link LinearTextureMapping}.
+	 * 
+	 * @param textures
+	 */
+	public CheckerboardTexture(Texture[] textures) {
+		this(textures, new LinearTextureMapping());
+	}
+
+	/**
 	 * Construct a new CheckerboardTexture using the two specified
 	 * {@link Texture}s, and the given {@link TextureMapping}.
 	 * 
@@ -55,8 +65,19 @@ public class CheckerboardTexture extends Texture {
 	 */
 	public CheckerboardTexture(Texture texture1, Texture texture2, TextureMapping textureMapping) {
 
+		this(new Texture[] { texture1, texture2 }, textureMapping);
+	}
+
+	/**
+	 * Construct a new CheckerboardTexture using the specified {@link Texture}s,
+	 * and the given {@link TextureMapping}.
+	 * 
+	 * @param textures
+	 * @param textureMapping
+	 */
+	public CheckerboardTexture(Texture[] textures, TextureMapping textureMapping) {
 		super(textureMapping);
-		this.textures = new Texture[] { texture1, texture2 };
+		this.textures = textures;
 	}
 
 	@Override
@@ -89,11 +110,13 @@ public class CheckerboardTexture extends Texture {
 				+ (long) FastMath.round(FastMath.abs(textureParam.getY())) ) % (long) textures.length );
 	}
 
+	@JsonProperty
 	public Texture[] getTextures() {
 
 		return textures;
 	}
 
+	@JsonProperty
 	protected void setTextures(Texture[] textures) {
 
 		this.textures = textures;

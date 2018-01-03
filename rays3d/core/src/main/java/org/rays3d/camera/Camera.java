@@ -6,6 +6,9 @@ import org.rays3d.geometry.Vector3D;
 import org.rays3d.geometry.util.Matrix;
 import org.rays3d.message.sample.Sample;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Represents a model for a camera and its associated system of lenses.
  * <p>
@@ -19,11 +22,26 @@ import org.rays3d.message.sample.Sample;
  */
 public abstract class Camera {
 
-	private final Point3D	eyePoint;
+	@JsonProperty
+	private Point3D		eyePoint;
 
-	private final Matrix	cameraTwist, cameraTranslate;
-	private final double	imagePlaneSizeX, imagePlaneSizeY;
-	private final double	filmSizeX, filmSizeY;
+	@JsonProperty
+	private Point3D		lookAt;
+	@JsonProperty
+	private Vector3D	up;
+
+	@JsonProperty
+	private double		imagePlaneSizeX;
+	@JsonProperty
+	private double		imagePlaneSizeY;
+	@JsonProperty
+	private double		filmSizeX;
+	@JsonProperty
+	private double		filmSizeY;
+
+	@JsonIgnore
+	private Matrix		cameraTwist		= null;
+	private Matrix		cameraTranslate	= null;
 
 	/**
 	 * Construct a new Camera located at the given <code>eyePoint</code>,
@@ -54,6 +72,11 @@ public abstract class Camera {
 		this.imagePlaneSizeY = imagePlaneSizeY;
 
 		this.eyePoint = eyePoint;
+		this.lookAt = lookAt;
+		this.up = up;
+	}
+
+	private void initializeMatrices() {
 
 		final Vector3D eyeVect = Vector3D.from(eyePoint), lookAtVect = Vector3D.from(lookAt);
 
@@ -132,20 +155,49 @@ public abstract class Camera {
 		Point3D origin = ray.getOrigin();
 		Vector3D direction = ray.getDirection();
 
+		if (cameraTranslate == null || cameraTwist == null)
+			initializeMatrices();
+
 		origin = Point3D.from(cameraTranslate.multiply(cameraTwist).multiply(origin, 0));
 		direction = Vector3D.from(cameraTwist.multiply(direction, 1));
 
 		return new Ray(origin, direction);
 	}
 
-	public double getFilmSizeX() {
+	public Point3D getEyePoint() {
 
-		return filmSizeX;
+		return eyePoint;
 	}
 
-	public double getFilmSizeY() {
+	public void setEyePoint(Point3D eyePoint) {
 
-		return filmSizeY;
+		cameraTwist = null;
+		cameraTranslate = null;
+		this.eyePoint = eyePoint;
+	}
+
+	public Point3D getLookAt() {
+
+		return lookAt;
+	}
+
+	public void setLookAt(Point3D lookAt) {
+
+		cameraTwist = null;
+		cameraTranslate = null;
+		this.lookAt = lookAt;
+	}
+
+	public Vector3D getUp() {
+
+		return up;
+	}
+
+	public void setUp(Vector3D up) {
+
+		cameraTwist = null;
+		cameraTranslate = null;
+		this.up = up;
 	}
 
 	public double getImagePlaneSizeX() {
@@ -153,14 +205,39 @@ public abstract class Camera {
 		return imagePlaneSizeX;
 	}
 
+	public void setImagePlaneSizeX(double imagePlaneSizeX) {
+
+		this.imagePlaneSizeX = imagePlaneSizeX;
+	}
+
 	public double getImagePlaneSizeY() {
 
 		return imagePlaneSizeY;
 	}
 
-	public Point3D getEyePoint() {
+	public void setImagePlaneSizeY(double imagePlaneSizeY) {
 
-		return eyePoint;
+		this.imagePlaneSizeY = imagePlaneSizeY;
+	}
+
+	public double getFilmSizeX() {
+
+		return filmSizeX;
+	}
+
+	public void setFilmSizeX(double filmSizeX) {
+
+		this.filmSizeX = filmSizeX;
+	}
+
+	public double getFilmSizeY() {
+
+		return filmSizeY;
+	}
+
+	public void setFilmSizeY(double filmSizeY) {
+
+		this.filmSizeY = filmSizeY;
 	}
 
 	@Override
