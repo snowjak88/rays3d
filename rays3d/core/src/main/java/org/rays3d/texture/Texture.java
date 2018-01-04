@@ -3,6 +3,7 @@ package org.rays3d.texture;
 import org.rays3d.interact.DescribesSurface;
 import org.rays3d.interact.SurfaceDescriptor;
 import org.rays3d.spectrum.Spectrum;
+import org.rays3d.texture.mapping.LinearTextureMapping;
 import org.rays3d.texture.mapping.TextureMapping;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,8 +15,21 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public abstract class Texture {
 
+	public static final TextureMapping	DEFAULT_MAPPING	= new LinearTextureMapping();
+
 	@JsonProperty
-	private TextureMapping textureMapping;
+	private TextureMapping				textureMapping;
+
+	/**
+	 * Construct this Texture using the default {@link TextureMapping} to
+	 * translate to/from surface-parameterization coordinates. (see
+	 * {@link #DEFAULT_MAPPING})
+	 * 
+	 * @param textureMapping
+	 */
+	public Texture() {
+		this(DEFAULT_MAPPING);
+	}
 
 	/**
 	 * Construct this Texture using the specified {@link TextureMapping} to

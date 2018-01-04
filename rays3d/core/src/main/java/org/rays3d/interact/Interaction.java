@@ -24,7 +24,7 @@ public class Interaction<T extends Interactable> extends SurfaceDescriptor<T> {
 	 * place along the given <code>interactingRay</code> between
 	 * <code>mintT</code> and <code>maxT</code>.
 	 * 
-	 * @param point
+	 * @param vector
 	 * @param normal
 	 * @param param
 	 */

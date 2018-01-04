@@ -43,6 +43,7 @@ public class RGBSpectrum implements Spectrum {
 	protected void setRGB(RGB rgb) {
 
 		this.rgb = rgb;
+		this.amplitude = -1d;
 	}
 
 	public RGB getRGB() {
