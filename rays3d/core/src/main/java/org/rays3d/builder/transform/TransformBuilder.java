@@ -17,7 +17,7 @@ public abstract class TransformBuilder<T extends Transform, P extends AbstractBu
 	}
 
 	@Override
-	public P getParentBuilder() {
+	public P end() {
 
 		return parentBuilder;
 	}

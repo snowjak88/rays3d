@@ -84,7 +84,7 @@ public class ImageFileTextureBuilder<P extends AbstractBuilder<?, ?>>
 	}
 
 	@Override
-	public P getParentBuilder() {
+	public P end() {
 
 		return parentBuilder;
 	}

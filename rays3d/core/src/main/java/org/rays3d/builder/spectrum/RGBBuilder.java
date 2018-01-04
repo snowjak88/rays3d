@@ -86,7 +86,7 @@ public class RGBBuilder<P extends AbstractBuilder<?, ?>> implements AbstractBuil
 	}
 
 	@Override
-	public P getParentBuilder() {
+	public P end() {
 
 		return parentBuilder;
 	}

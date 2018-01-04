@@ -1,10 +1,10 @@
 package org.rays3d.world;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedList;
 
+import org.rays3d.Primitive;
 import org.rays3d.camera.Camera;
-import org.rays3d.interact.Interactable;
 import org.rays3d.message.WorldDescriptorRequest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -23,19 +23,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class World {
 
 	@JsonProperty
-	private Collection<Interactable>	interactables	= new HashSet<>();
+	private Collection<Primitive>	primitives	= new LinkedList<>();
 
 	@JsonProperty
-	private Camera						camera;
+	private Camera					camera;
 
-	public Collection<Interactable> getInteractables() {
+	public Collection<Primitive> getPrimitives() {
 
-		return interactables;
+		return primitives;
 	}
 
-	protected void setInteractables(Collection<Interactable> interactables) {
+	protected void setPrimitives(Collection<Primitive> primitives) {
 
-		this.interactables = interactables;
+		this.primitives = primitives;
 	}
 
 	public Camera getCamera() {

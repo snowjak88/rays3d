@@ -29,6 +29,7 @@ subprojects { p ->
 	dependencies {
 		compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
 		
+		compile 'org.codehaus.groovy:groovy-all:2.4.10'
 
 		if ( p.name != 'core' )
 			compile project(':core')

@@ -30,7 +30,7 @@ public abstract class ShapeBuilder<S extends Shape, SB extends ShapeBuilder<S, S
 	}
 
 	@Override
-	public P getParentBuilder() {
+	public P end() {
 
 		return parentBuilder;
 	}

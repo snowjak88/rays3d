@@ -51,7 +51,7 @@ public class Point2DBuilder<P extends AbstractBuilder<?, ?>> implements Abstract
 	}
 
 	@Override
-	public P getParentBuilder() {
+	public P end() {
 
 		return parentBuilder;
 	}

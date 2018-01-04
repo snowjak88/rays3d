@@ -32,6 +32,17 @@ public class RGBSpectrumBuilder<P extends AbstractBuilder<?, ?>> extends Spectru
 		return this.rgbBuilder;
 	}
 
+	/**
+	 * Configure an {@link RGB} trio for this {@link RGBSpectrum}.
+	 * 
+	 * @return
+	 */
+	public RGBSpectrumBuilder<P> rgb(RGB rgb) {
+
+		this.rgbBuilder = new RGBBuilder<>(this).copy(rgb);
+		return this;
+	}
+
 	@Override
 	public RGBSpectrum build() throws BuilderException {
 

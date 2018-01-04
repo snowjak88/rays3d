@@ -70,7 +70,7 @@ public class PrimitiveBuilder<P extends AbstractBuilder<?, ?>> implements Abstra
 	}
 
 	@Override
-	public P getParentBuilder() {
+	public P end() {
 
 		return parentBuilder;
 	}

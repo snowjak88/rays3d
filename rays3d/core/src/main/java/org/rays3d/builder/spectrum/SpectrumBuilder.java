@@ -17,7 +17,7 @@ public abstract class SpectrumBuilder<S extends Spectrum, P extends AbstractBuil
 	}
 
 	@Override
-	public P getParentBuilder() {
+	public P end() {
 
 		return parentBuilder;
 	}

@@ -72,7 +72,7 @@ public class LinearTextureMappingBuilder<P extends AbstractBuilder<?, ?>>
 	}
 
 	@Override
-	public P getParentBuilder() {
+	public P end() {
 
 		return parentBuilder;
 	}

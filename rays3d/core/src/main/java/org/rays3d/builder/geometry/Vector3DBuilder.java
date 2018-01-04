@@ -61,7 +61,7 @@ public class Vector3DBuilder<P extends AbstractBuilder<?, ?>> implements Abstrac
 	}
 
 	@Override
-	public P getParentBuilder() {
+	public P end() {
 
 		return parentBuilder;
 	}

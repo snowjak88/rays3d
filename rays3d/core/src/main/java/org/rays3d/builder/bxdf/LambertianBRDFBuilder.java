@@ -109,7 +109,7 @@ public class LambertianBRDFBuilder<P extends AbstractBuilder<?, ?>> implements B
 	}
 
 	@Override
-	public P getParentBuilder() {
+	public P end() {
 
 		return parentBuilder;
 	}
