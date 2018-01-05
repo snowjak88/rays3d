@@ -22,12 +22,12 @@ class LinearTextureMappingSpec {
 		this.maxV = maxV
 	}
 
-	public min(double u, double v) {
+	public minUV(double u, double v) {
 		this.minU = u
 		this.minV = v
 	}
 
-	public max(double u, double v) {
+	public maxUV(double u, double v) {
 		this.maxU = u
 		this.maxV = v
 	}

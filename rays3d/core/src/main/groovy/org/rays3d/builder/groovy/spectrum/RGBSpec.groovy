@@ -10,6 +10,8 @@ class RGBSpec {
 
 	private double r, g, b
 	
+	public static RGB = org.rays3d.spectrum.RGB
+	
 	public r(double red) {
 		this.r = red
 	}

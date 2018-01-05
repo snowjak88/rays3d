@@ -1,11 +1,15 @@
 package org.rays3d.builder.groovy.spectrum
 
+import org.rays3d.builder.groovy.WorldBuilder.Spec
 import org.rays3d.spectrum.RGB
 import org.rays3d.spectrum.RGBSpectrum
 
 class RGBSpectrumSpec {
-	
+
 	private double r, g, b
+
+	public static Spec = new Spec()
+	public static RGB = org.rays3d.spectrum.RGB
 
 	public rgb(@DelegatesTo(RGBSpec) Closure cl) {
 		def spec = new RGBSpec()
