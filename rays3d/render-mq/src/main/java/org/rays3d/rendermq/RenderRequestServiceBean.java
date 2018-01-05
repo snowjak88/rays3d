@@ -18,6 +18,16 @@ public class RenderRequestServiceBean {
 	private RenderDbRestBean renderDb;
 
 	/**
+	 * GET a single {@link RenderRequest} by ID.
+	 * @param id
+	 * @return
+	 */
+	public RenderRequest getByID(Long id) {
+		
+		return renderDb.getById(id);
+	}
+	
+	/**
 	 * GET the first new {@link RenderRequest} found on the Render-DB
 	 * 
 	 * @return

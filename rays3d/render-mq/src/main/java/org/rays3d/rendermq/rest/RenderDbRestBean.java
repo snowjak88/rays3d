@@ -17,6 +17,17 @@ public class RenderDbRestBean {
 	private RestTemplate restTemplate;
 
 	/**
+	 * GET a single {@link RenderRequest} by ID.
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public RenderRequest getById(Long id) {
+
+		return restTemplate.getForObject("/renders/{renderId}", RenderRequest.class, id);
+	}
+
+	/**
 	 * GET all new {@link RenderRequest}s found on the Render-DB
 	 * 
 	 * @return

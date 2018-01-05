@@ -76,6 +76,7 @@ public class RenderDbRouteBuilder extends RouteBuilder {
 			.bean(renderDescriptorRepository, "findAllDescriptors");
 		from("direct:get.renders.new")
 			.bean(renderDescriptorRepository, "findNewDescriptors");
+		
 		from("direct:get.renders.byId")
 			.process(e -> e.getIn().setBody(e.getIn().getHeader("renderId"), Long.class))
 			.bean(renderDescriptorRepository, "findOne");

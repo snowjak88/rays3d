@@ -28,6 +28,7 @@ public class RenderRouteBuilder extends RouteBuilder {
 		from("timer:checkForNewRenders?period=" + renderDbPollInterval)
 			.bean(renderRequestService, "getNewRenderRequests")
 			.setExchangePattern(ExchangePattern.InOnly)
+			.log(LoggingLevel.INFO, "Found ${body.size()} new rendering request(s).")
 			.split(body())
 			.to("activemq:rays3d.render.new");
 		
@@ -42,7 +43,7 @@ public class RenderRouteBuilder extends RouteBuilder {
 			.log(LoggingLevel.TRACE, "Marked rendering-request as in-progress (ID: ${body.id})")
 			.multicast()
 				.to("activemq:rays3d.transform.toSamplerRequest",
-					"activemq:rays3d.transform.toIntegratorRequest",
+					//"activemq:rays3d.transform.toIntegratorRequest",
 					"activemq:rays3d.transform.toFilmRequest");
 		
 		from("activemq:rays3d.transform.toSamplerRequest")
@@ -65,6 +66,23 @@ public class RenderRouteBuilder extends RouteBuilder {
 			.bean(renderRequestService, "toFilmRequest")
 			.log(LoggingLevel.DEBUG, "Dispatched film-request for render-ID ${body.renderId}")
 			.to("activemq:rays3d.film.filmRequest");
+		
+		//
+		// Upon request, grab a complete RenderDescriptor from the Render-DB, by ID.
+		//
+		from("activemq:rays3d.render.byID")
+			.setExchangePattern(ExchangePattern.InOut)
+			.bean(renderRequestService, "getByID");
+		
+		//
+		// Upon request, grab a complete IntegratorDescriptor, by ID
+		//
+		from("activemq:rays3d.render.byID.asIntegratorRequest")
+			.setExchangePattern(ExchangePattern.InOnly)
+			.log(LoggingLevel.DEBUG, "Received request to refresh IntegratorRequest for render-id ${body}")
+			.bean(renderRequestService, "getByID")
+			.to("activemq:rays3d.transform.toIntegratorRequest");
+		
 		//
 		//@formatter:on
 		//
