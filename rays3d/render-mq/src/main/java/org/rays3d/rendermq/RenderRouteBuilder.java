@@ -43,7 +43,7 @@ public class RenderRouteBuilder extends RouteBuilder {
 			.log(LoggingLevel.TRACE, "Marked rendering-request as in-progress (ID: ${body.id})")
 			.multicast()
 				.to("activemq:rays3d.transform.toSamplerRequest",
-					//"activemq:rays3d.transform.toIntegratorRequest",
+					"activemq:rays3d.transform.toIntegratorRequest",
 					"activemq:rays3d.transform.toFilmRequest");
 		
 		from("activemq:rays3d.transform.toSamplerRequest")
