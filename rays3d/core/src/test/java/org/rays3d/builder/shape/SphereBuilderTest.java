@@ -3,8 +3,8 @@ package org.rays3d.builder.shape;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+import org.rays3d.builder.java.shape.SphereBuilder;
 import org.rays3d.geometry.Vector3D;
-import org.rays3d.javabuilder.shape.SphereBuilder;
 import org.rays3d.shape.SphereShape;
 
 public class SphereBuilderTest {

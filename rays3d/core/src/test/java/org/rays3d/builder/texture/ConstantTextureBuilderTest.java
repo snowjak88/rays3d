@@ -3,9 +3,9 @@ package org.rays3d.builder.texture;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.rays3d.javabuilder.spectrum.RGBSpectrumBuilder;
-import org.rays3d.javabuilder.texture.ConstantTextureBuilder;
-import org.rays3d.javabuilder.texture.mapping.LinearTextureMappingBuilder;
+import org.rays3d.builder.java.spectrum.RGBSpectrumBuilder;
+import org.rays3d.builder.java.texture.ConstantTextureBuilder;
+import org.rays3d.builder.java.texture.mapping.LinearTextureMappingBuilder;
 import org.rays3d.spectrum.RGB;
 import org.rays3d.texture.ConstantTexture;
 import org.rays3d.texture.mapping.LinearTextureMapping;

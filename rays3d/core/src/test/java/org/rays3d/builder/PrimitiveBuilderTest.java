@@ -4,10 +4,10 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.rays3d.Primitive;
+import org.rays3d.builder.java.PrimitiveBuilder;
+import org.rays3d.builder.java.bxdf.PerfectSpecularBRDFBuilder;
+import org.rays3d.builder.java.shape.SphereBuilder;
 import org.rays3d.bxdf.PerfectSpecularBRDF;
-import org.rays3d.javabuilder.PrimitiveBuilder;
-import org.rays3d.javabuilder.bxdf.PerfectSpecularBRDFBuilder;
-import org.rays3d.javabuilder.shape.SphereBuilder;
 import org.rays3d.shape.SphereShape;
 
 public class PrimitiveBuilderTest {

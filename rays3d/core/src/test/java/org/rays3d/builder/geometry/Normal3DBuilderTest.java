@@ -3,8 +3,8 @@ package org.rays3d.builder.geometry;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+import org.rays3d.builder.java.geometry.Normal3DBuilder;
 import org.rays3d.geometry.Normal3D;
-import org.rays3d.javabuilder.geometry.Normal3DBuilder;
 
 public class Normal3DBuilderTest {
 

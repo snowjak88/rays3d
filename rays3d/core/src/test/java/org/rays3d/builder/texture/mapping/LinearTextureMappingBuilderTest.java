@@ -3,7 +3,7 @@ package org.rays3d.builder.texture.mapping;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.rays3d.javabuilder.texture.mapping.LinearTextureMappingBuilder;
+import org.rays3d.builder.java.texture.mapping.LinearTextureMappingBuilder;
 import org.rays3d.texture.mapping.LinearTextureMapping;
 
 public class LinearTextureMappingBuilderTest {

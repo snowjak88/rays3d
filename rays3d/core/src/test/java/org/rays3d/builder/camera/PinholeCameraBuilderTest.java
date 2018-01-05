@@ -3,9 +3,9 @@ package org.rays3d.builder.camera;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+import org.rays3d.builder.java.camera.PinholeCameraBuilder;
 import org.rays3d.camera.PinholeCamera;
 import org.rays3d.geometry.Vector3D;
-import org.rays3d.javabuilder.camera.PinholeCameraBuilder;
 
 public class PinholeCameraBuilderTest {
 

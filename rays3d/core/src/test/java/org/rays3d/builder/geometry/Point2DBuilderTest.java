@@ -3,8 +3,8 @@ package org.rays3d.builder.geometry;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+import org.rays3d.builder.java.geometry.Point2DBuilder;
 import org.rays3d.geometry.Point2D;
-import org.rays3d.javabuilder.geometry.Point2DBuilder;
 
 public class Point2DBuilderTest {
 
