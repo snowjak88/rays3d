@@ -41,7 +41,7 @@ public class SamplesRequestServiceBean {
 	 * 
 	 * @param request
 	 */
-	public Iterator<Sample> splitSampleRequestIntoSamples(SamplerRequest request) {
+	public Iterator<Sample> splitSampleRequestIntoSamples(SampleRequest request) {
 
 		final Sampler sampler = namedSamplerHolder.getSamplerByName(request.getSamplerName(), request);
 
