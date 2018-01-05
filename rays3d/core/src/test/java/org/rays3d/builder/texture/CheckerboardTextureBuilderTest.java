@@ -3,9 +3,9 @@ package org.rays3d.builder.texture;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.rays3d.builder.spectrum.RGBSpectrumBuilder;
-import org.rays3d.builder.texture.CheckerboardTextureBuilder;
-import org.rays3d.builder.texture.ConstantTextureBuilder;
+import org.rays3d.javabuilder.spectrum.RGBSpectrumBuilder;
+import org.rays3d.javabuilder.texture.CheckerboardTextureBuilder;
+import org.rays3d.javabuilder.texture.ConstantTextureBuilder;
 import org.rays3d.spectrum.RGB;
 import org.rays3d.texture.CheckerboardTexture;
 

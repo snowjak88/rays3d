@@ -3,7 +3,7 @@ package org.rays3d.builder.transform;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.rays3d.builder.transform.ScaleTransformBuilder;
+import org.rays3d.javabuilder.transform.ScaleTransformBuilder;
 import org.rays3d.transform.ScaleTransform;
 
 public class ScaleTransformBuilderTest {

@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import java.io.File;
 
 import org.junit.Test;
-import org.rays3d.builder.texture.ImageFileTextureBuilder;
+import org.rays3d.javabuilder.texture.ImageFileTextureBuilder;
 import org.rays3d.texture.ImageFileTexture;
 
 public class ImageFileTextureBuilderTest {

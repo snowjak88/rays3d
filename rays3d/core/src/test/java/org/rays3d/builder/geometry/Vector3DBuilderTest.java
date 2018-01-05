@@ -3,8 +3,8 @@ package org.rays3d.builder.geometry;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.rays3d.builder.geometry.Vector3DBuilder;
 import org.rays3d.geometry.Vector3D;
+import org.rays3d.javabuilder.geometry.Vector3DBuilder;
 
 public class Vector3DBuilderTest {
 

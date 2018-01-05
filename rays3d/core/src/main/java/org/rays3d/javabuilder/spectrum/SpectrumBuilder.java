@@ -1,0 +1,25 @@
+package org.rays3d.javabuilder.spectrum;
+
+import org.rays3d.javabuilder.AbstractBuilder;
+import org.rays3d.spectrum.Spectrum;
+
+public abstract class SpectrumBuilder<S extends Spectrum, P extends AbstractBuilder<?, ?>>
+		implements AbstractBuilder<S, P> {
+
+	private P parentBuilder;
+
+	public SpectrumBuilder() {
+		this(null);
+	}
+
+	public SpectrumBuilder(P parentBuilder) {
+		this.parentBuilder = parentBuilder;
+	}
+
+	@Override
+	public P end() {
+
+		return parentBuilder;
+	}
+
+}

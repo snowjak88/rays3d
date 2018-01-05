@@ -3,7 +3,7 @@ package org.rays3d.builder.transform;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.rays3d.builder.transform.TranslationTransformBuilder;
+import org.rays3d.javabuilder.transform.TranslationTransformBuilder;
 import org.rays3d.transform.TranslationTransform;
 
 public class TranslationTransformBuilderTest {

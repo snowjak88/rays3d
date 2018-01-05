@@ -3,8 +3,8 @@ package org.rays3d.builder.geometry;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.rays3d.builder.geometry.Point3DBuilder;
 import org.rays3d.geometry.Point3D;
+import org.rays3d.javabuilder.geometry.Point3DBuilder;
 
 public class Point3DBuilderTest {
 

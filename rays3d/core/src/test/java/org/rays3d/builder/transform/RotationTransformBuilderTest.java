@@ -3,8 +3,8 @@ package org.rays3d.builder.transform;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.rays3d.builder.transform.RotationTransformBuilder;
 import org.rays3d.geometry.Vector3D;
+import org.rays3d.javabuilder.transform.RotationTransformBuilder;
 import org.rays3d.transform.RotationTransform;
 
 public class RotationTransformBuilderTest {

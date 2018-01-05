@@ -3,7 +3,7 @@ package org.rays3d.builder.spectrum;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.rays3d.builder.spectrum.RGBSpectrumBuilder;
+import org.rays3d.javabuilder.spectrum.RGBSpectrumBuilder;
 import org.rays3d.spectrum.RGB;
 import org.rays3d.spectrum.RGBSpectrum;
 

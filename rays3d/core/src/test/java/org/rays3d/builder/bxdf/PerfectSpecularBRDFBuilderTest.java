@@ -5,9 +5,10 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
-import org.rays3d.builder.spectrum.RGBSpectrumBuilder;
-import org.rays3d.builder.texture.ConstantTextureBuilder;
 import org.rays3d.bxdf.PerfectSpecularBRDF;
+import org.rays3d.javabuilder.bxdf.PerfectSpecularBRDFBuilder;
+import org.rays3d.javabuilder.spectrum.RGBSpectrumBuilder;
+import org.rays3d.javabuilder.texture.ConstantTextureBuilder;
 import org.rays3d.spectrum.RGB;
 import org.rays3d.texture.ConstantTexture;
 
