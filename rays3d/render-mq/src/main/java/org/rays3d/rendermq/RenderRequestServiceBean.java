@@ -7,6 +7,7 @@ import org.rays3d.message.IntegratorRequest;
 import org.rays3d.message.RenderRequest;
 import org.rays3d.message.RenderStatus;
 import org.rays3d.message.SamplerRequest;
+import org.rays3d.message.WorldDescriptorRequest;
 import org.rays3d.rendermq.rest.RenderDbRestBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,14 +20,26 @@ public class RenderRequestServiceBean {
 
 	/**
 	 * GET a single {@link RenderRequest} by ID.
+	 * 
 	 * @param id
 	 * @return
 	 */
 	public RenderRequest getByID(Long id) {
-		
+
 		return renderDb.getById(id);
 	}
-	
+
+	/**
+	 * GET a single world-descriptor by render-ID
+	 * 
+	 * @param renderId
+	 * @return
+	 */
+	public WorldDescriptorRequest getByRenderID(Long renderId) {
+
+		return renderDb.getWorldDescriptorByRenderId(renderId);
+	}
+
 	/**
 	 * GET the first new {@link RenderRequest} found on the Render-DB
 	 * 

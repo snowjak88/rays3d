@@ -75,13 +75,25 @@ public class RenderRouteBuilder extends RouteBuilder {
 			.bean(renderRequestService, "getByID");
 		
 		//
-		// Upon request, grab a complete IntegratorDescriptor, by ID
+		// Upon request, grab a complete IntegratorRequest, by render-ID
 		//
 		from("activemq:rays3d.render.byID.asIntegratorRequest")
 			.setExchangePattern(ExchangePattern.InOnly)
 			.log(LoggingLevel.DEBUG, "Received request to refresh IntegratorRequest for render-id ${body}")
+			.setHeader("renderId", simple("${body}"))
 			.bean(renderRequestService, "getByID")
-			.to("activemq:rays3d.transform.toIntegratorRequest");
+			.bean(renderRequestService, "toIntegratorRequest")
+			.toD("activemq:${header.replyQ}");
+		
+		//
+		// Upon request, grab a complete WorldDescriptor, by render-ID
+		//
+		from("activemq:rays3d.render.byID.worldDescriptor")
+			.setExchangePattern(ExchangePattern.InOnly)
+			.log(LoggingLevel.DEBUG, "Received request to refresh WorldDescriptor for render-id ${body}")
+			.setHeader("renderId", simple("${body}"))
+			.bean(renderRequestService, "getByRenderID")
+			.toD("activemq:${header.replyQ}");
 		
 		//
 		//@formatter:on

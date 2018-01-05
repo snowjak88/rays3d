@@ -7,7 +7,7 @@ import org.rays3d.geometry.Point2D;
 import org.rays3d.message.SamplerRequest;
 import org.rays3d.message.sample.Sample;
 import org.rays3d.message.sample.SampleRequest;
-import org.rays3d.sampler.samplers.NamedSamplerHolder;
+import org.rays3d.sampler.samplers.NamedSamplerScanner;
 import org.rays3d.sampler.samplers.Sampler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,7 @@ public class SamplesRequestServiceBean {
 	private static final Logger	LOG	= LoggerFactory.getLogger(SamplesRequestServiceBean.class);
 
 	@Autowired
-	private NamedSamplerHolder	namedSamplerHolder;
+	private NamedSamplerScanner	namedSamplerScanner;
 
 	/**
 	 * Split a single {@link SamplerRequest} into a whole bunch of
@@ -43,7 +43,7 @@ public class SamplesRequestServiceBean {
 	 */
 	public Iterator<Sample> splitSampleRequestIntoSamples(SampleRequest request) {
 
-		final Sampler sampler = namedSamplerHolder.getSamplerByName(request.getSamplerName(), request);
+		final Sampler sampler = namedSamplerScanner.getSamplerByName(request.getSamplerName(), request);
 
 		LOG.trace("Found named sampler \"{}\": [{}].", request.getSamplerName(), sampler.getClass().getName());
 

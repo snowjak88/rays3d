@@ -21,10 +21,10 @@ import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class NamedSamplerHolder implements ApplicationListener<ApplicationReadyEvent> {
+public class NamedSamplerScanner implements ApplicationListener<ApplicationReadyEvent> {
 
 	private static final Logger						LOG					= LoggerFactory
-			.getLogger(NamedSamplerHolder.class);
+			.getLogger(NamedSamplerScanner.class);
 
 	@Autowired
 	private ApplicationContext						context;

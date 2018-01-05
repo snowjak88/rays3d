@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.rays3d.message.RenderRequest;
+import org.rays3d.message.WorldDescriptorRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -25,6 +26,17 @@ public class RenderDbRestBean {
 	public RenderRequest getById(Long id) {
 
 		return restTemplate.getForObject("/renders/{renderId}", RenderRequest.class, id);
+	}
+
+	/**
+	 * GET the WorldDescriptorRequest associated with a render (by ID).
+	 * 
+	 * @param renderId
+	 * @return
+	 */
+	public WorldDescriptorRequest getWorldDescriptorByRenderId(Long renderId) {
+
+		return restTemplate.getForObject("/renders/{renderId}/world", WorldDescriptorRequest.class, renderId);
 	}
 
 	/**
