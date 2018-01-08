@@ -110,6 +110,14 @@ public class IntegratorCachingHolder {
 				final World world = WorldBuilder.parse(worldDescriptor.getText());
 				LOG.info("Inflated World instance for incoming Sample (render-ID {}).", renderId);
 
+				final IntegratorRequest integratorRequest = cache.get(renderId).getIntegratorRequest();
+				
+				LOG.debug("Inserting supplementary properties into inflated World ...");
+				LOG.trace("Inserting film-size ({}x{})", integratorRequest.getFilmWidth(),
+						integratorRequest.getFilmHeight());
+				world.getCamera().setFilmSizeX(integratorRequest.getFilmWidth());
+				world.getCamera().setFilmSizeY(integratorRequest.getFilmHeight());
+
 				LOG.trace("Storing World in the cache ...");
 				cache.get(renderId).setWorld(world);
 			}
