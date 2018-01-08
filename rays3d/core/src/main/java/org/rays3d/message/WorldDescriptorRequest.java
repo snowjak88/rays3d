@@ -12,7 +12,7 @@ public class WorldDescriptorRequest implements Serializable {
 
 	private String				description;
 
-	private String				file;
+	private String				text;
 
 	public long getId() {
 
@@ -44,13 +44,13 @@ public class WorldDescriptorRequest implements Serializable {
 		this.description = description;
 	}
 
-	public String getFile() {
+	public String getText() {
 
-		return file;
+		return text;
 	}
 
-	public void setFile(String file) {
+	public void setText(String text) {
 
-		this.file = file;
+		this.text = text;
 	}
 }

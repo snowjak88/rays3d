@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
- * Holds a single world-definition file, along with supporting metadata.
+ * Holds a single world-definition text, along with supporting metadata.
  * 
  * @author snowjak88
  */
@@ -52,7 +52,7 @@ public class WorldDescriptor {
 
 	@Lob
 	@Basic(fetch = FetchType.LAZY, optional = false)
-	private String							file;
+	private String							text;
 
 	public long getId() {
 
@@ -114,13 +114,13 @@ public class WorldDescriptor {
 		this.renderDescriptors = renderDescriptors;
 	}
 
-	public String getFile() {
+	public String getText() {
 
-		return file;
+		return text;
 	}
 
-	public void setFile(String file) {
+	public void setText(String text) {
 
-		this.file = file;
+		this.text = text;
 	}
 }

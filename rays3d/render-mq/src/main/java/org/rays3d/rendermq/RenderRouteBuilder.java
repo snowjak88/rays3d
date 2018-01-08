@@ -43,7 +43,6 @@ public class RenderRouteBuilder extends RouteBuilder {
 			.log(LoggingLevel.TRACE, "Marked rendering-request as in-progress (ID: ${body.id})")
 			.multicast()
 				.to("activemq:rays3d.transform.toSamplerRequest",
-					"activemq:rays3d.transform.toIntegratorRequest",
 					"activemq:rays3d.transform.toFilmRequest");
 		
 		from("activemq:rays3d.transform.toSamplerRequest")
@@ -52,13 +51,6 @@ public class RenderRouteBuilder extends RouteBuilder {
 			.bean(renderRequestService, "toSamplerRequest")
 			.log(LoggingLevel.DEBUG,"Dispatched sampler-request for render-ID ${body.renderId}")
 			.to("activemq:rays3d.samples.samplerRequest");
-		
-		from("activemq:rays3d.transform.toIntegratorRequest")
-			.bean(renderRequestService, "markAsIntegrationInProgress")
-			.log(LoggingLevel.TRACE, "Marked integration-request as in-progress (ID: ${body.id})")
-			.bean(renderRequestService, "toIntegratorRequest")
-			.log(LoggingLevel.DEBUG,"Dispatched integrator-request for render-ID ${body.renderId}")
-			.to("activemq:rays3d.integrator.integratorRequest");
 		
 		from("activemq:rays3d.transform.toFilmRequest")
 			.bean(renderRequestService, "markAsFilmInProgress")
@@ -77,23 +69,20 @@ public class RenderRouteBuilder extends RouteBuilder {
 		//
 		// Upon request, grab a complete IntegratorRequest, by render-ID
 		//
-		from("activemq:rays3d.render.byID.asIntegratorRequest")
-			.setExchangePattern(ExchangePattern.InOnly)
+		from("activemq:rays3d.render.forID.integratorRequest")
+			.setExchangePattern(ExchangePattern.InOut)
 			.log(LoggingLevel.DEBUG, "Received request to refresh IntegratorRequest for render-id ${body}")
-			.setHeader("renderId", simple("${body}"))
 			.bean(renderRequestService, "getByID")
-			.bean(renderRequestService, "toIntegratorRequest")
-			.toD("activemq:${header.replyQ}");
+			.bean(renderRequestService, "toIntegratorRequest");
 		
 		//
 		// Upon request, grab a complete WorldDescriptor, by render-ID
 		//
-		from("activemq:rays3d.render.byID.worldDescriptor")
-			.setExchangePattern(ExchangePattern.InOnly)
+		from("activemq:rays3d.render.forID.worldDescriptor")
+			.setExchangePattern(ExchangePattern.InOut)
 			.log(LoggingLevel.DEBUG, "Received request to refresh WorldDescriptor for render-id ${body}")
-			.setHeader("renderId", simple("${body}"))
-			.bean(renderRequestService, "getByRenderID")
-			.toD("activemq:${header.replyQ}");
+			.bean(renderRequestService, "getByID")
+			.bean(renderRequestService, "toWorldDescriptor");
 		
 		//
 		//@formatter:on

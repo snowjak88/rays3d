@@ -30,17 +30,6 @@ public class RenderRequestServiceBean {
 	}
 
 	/**
-	 * GET a single world-descriptor by render-ID
-	 * 
-	 * @param renderId
-	 * @return
-	 */
-	public WorldDescriptorRequest getByRenderID(Long renderId) {
-
-		return renderDb.getWorldDescriptorByRenderId(renderId);
-	}
-
-	/**
 	 * GET the first new {@link RenderRequest} found on the Render-DB
 	 * 
 	 * @return
@@ -109,6 +98,19 @@ public class RenderRequestServiceBean {
 		film.setSamplesPerPixel(render.getSamplesPerPixel());
 
 		return film;
+	}
+
+	/**
+	 * Get the {@link WorldDescriptorRequest} corresponding to the given
+	 * {@link RenderRequest}.
+	 * 
+	 * @param render
+	 * @return
+	 */
+	public WorldDescriptorRequest toWorldDescriptor(RenderRequest render) {
+
+		return renderDb.getWorldDescriptorByRenderId(render.getId());
+
 	}
 
 	/**

@@ -2,13 +2,19 @@ package org.rays3d.integrator.holder;
 
 import java.util.Map;
 
+import org.apache.camel.EndpointInject;
+import org.apache.camel.ProducerTemplate;
+import org.rays3d.builder.groovy.WorldBuilder;
 import org.rays3d.integrator.integrators.AbstractIntegrator;
+import org.rays3d.integrator.integrators.NamedIntegratorScanner;
 import org.rays3d.message.IntegratorRequest;
 import org.rays3d.message.WorldDescriptorRequest;
+import org.rays3d.message.sample.Sample;
 import org.rays3d.util.LRUCache;
 import org.rays3d.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -23,11 +29,113 @@ public class IntegratorCachingHolder {
 
 	private static final Logger			LOG	= LoggerFactory.getLogger(IntegratorCachingHolder.class);
 
+	@EndpointInject(uri = "activemq:rays3d.render.forID.integratorRequest")
+	private ProducerTemplate			integratorRequestQueue;
+
+	@EndpointInject(uri = "activemq:rays3d.render.forID.worldDescriptor")
+	private ProducerTemplate			worldDescriptorRequestQueue;
+
+	@Autowired
+	private NamedIntegratorScanner		integratorScanner;
+
 	private Map<Long, IntegratorEntry>	cache;
 
 	public IntegratorCachingHolder(@Value("${org.rays3d.integrator.maximumCacheSize}") int maximumCacheSize) {
 
 		cache = new LRUCache<>(maximumCacheSize);
+	}
+
+	/**
+	 * Given an incoming {@link Sample}, check that this IntegratorCachingHolder
+	 * has all that Sample's prerequisites:
+	 * <ul>
+	 * <li>{@link IntegratorRequest}</li>
+	 * <li>{@link WorldDescriptorRequest}</li>
+	 * <li>{@link World}</li>
+	 * <li>{@link AbstractIntegrator} implementation</li>
+	 * </ul>
+	 * If any of these prerequisites are missing, this method will
+	 * <strong>block</strong> until such time as those prerequisites are
+	 * fulfilled.
+	 * 
+	 * @param sample
+	 */
+	public void getSamplePrerequisites(Sample sample) {
+
+		synchronized (cache) {
+			final long renderId = sample.getRenderId();
+
+			LOG.trace("Checking prerequisites for incoming Sample (render-ID {})", renderId);
+
+			if (!cache.containsKey(renderId)) {
+				LOG.trace("Creating new cache-entry for this incoming Sample.");
+				cache.putIfAbsent(sample.getRenderId(), new IntegratorEntry());
+			}
+
+			LOG.trace("Checking for cache-miss on IntegratorRequest ...");
+			if (cache.get(renderId).getIntegratorRequest() == null) {
+				LOG.info("Cache miss for IntegratorRequest for incoming Sample (render-ID {}). Retrieving ...",
+						renderId);
+
+				final IntegratorRequest integratorRequest = integratorRequestQueue.requestBody(renderId,
+						IntegratorRequest.class);
+				LOG.info("Retrieved IntegratorRequest (integrator \"{}\") for incoming Sample (render-ID {}).",
+						integratorRequest.getIntegratorName(), renderId);
+
+				LOG.trace("Storing IntegratorRequest in the cache ...");
+				cache.get(renderId).setIntegratorRequest(integratorRequest);
+			}
+
+			LOG.trace("Checking for cache-miss on WorldDescriptorRequest ...");
+			if (cache.get(renderId).getWorldDescriptor() == null) {
+				LOG.info("Cache miss for WorldDescriptorRequest for incoming Sample (render-ID {}). Retrieving ...",
+						renderId);
+
+				final WorldDescriptorRequest worldDescriptor = worldDescriptorRequestQueue.requestBody(renderId,
+						WorldDescriptorRequest.class);
+				LOG.info("Retrieved WorldDescriptorRequest (ID {}) for incoming Sample (render-ID {}).",
+						worldDescriptor.getId(), renderId);
+
+				LOG.trace("Storing WorldDescriptorRequest in the cache ...");
+				cache.get(renderId).setWorldDescriptor(worldDescriptor);
+			}
+
+			LOG.trace("Checking for cache-miss on World ...");
+			if (cache.get(renderId).getWorld() == null) {
+				LOG.info(
+						"Cache miss for World for incoming Sample (render-ID {}). Inflating from WorldDescriptorRequest ...",
+						renderId);
+
+				final WorldDescriptorRequest worldDescriptor = getWorldDescriptor(renderId);
+				final World world = WorldBuilder.parse(worldDescriptor.getText());
+				LOG.info("Inflated World instance for incoming Sample (render-ID {}).", renderId);
+
+				LOG.trace("Storing World in the cache ...");
+				cache.get(renderId).setWorld(world);
+			}
+
+			LOG.trace("Checking for cache-miss on AbstractIntegrator implementation ...");
+			if (cache.get(renderId).getIntegrator() == null) {
+
+				final String integratorName = getIntegratorRequest(renderId).getIntegratorName();
+				final String extraConfiguration = getIntegratorRequest(renderId).getExtraIntegratorConfig();
+				final World world = getWorld(renderId);
+
+				LOG.info(
+						"Cache miss for AbstractIntegrator implementation \"{}\" for incoming Sample (render-ID {}). Instantiating ...",
+						integratorName, renderId);
+
+				final AbstractIntegrator integrator = integratorScanner.getIntegratorByRenderId(integratorName, world,
+						extraConfiguration);
+				LOG.info("Instantiated AbstractIntegrator \"{}\" [{}] for incoming Sample (render-ID {}).",
+						integratorName, integrator.getClass().getName(), renderId);
+
+				LOG.trace("Storing AbstractIntegrator implementation in the cache.");
+				cache.get(renderId).setIntegrator(integrator);
+			}
+
+			LOG.trace("Finished checking prerequisites for incoming Sample (render-ID {}).", renderId);
+		}
 	}
 
 	/**
