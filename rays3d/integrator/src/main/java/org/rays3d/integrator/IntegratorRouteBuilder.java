@@ -1,6 +1,7 @@
 package org.rays3d.integrator;
 
 import org.apache.camel.CamelContext;
+import org.apache.camel.ExchangePattern;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.rays3d.integrator.holder.IntegratorCachingHolder;
@@ -22,21 +23,15 @@ public class IntegratorRouteBuilder extends RouteBuilder {
 
 		//@formatter:off
 		//
-		from("activemq:rays3d.integrator.integratorRequest")
-			.log(LoggingLevel.DEBUG, "Received new integrator request! (for render-ID ${body.renderId}: ${body.integratorName} [${body.extraIntegratorConfig}])")
-			.bean(integratorCachingHolder, "put(${header.renderId}, ${body})");
-		
-		from("activemq:rays3d.integrator.worldDescriptor")
-			.log(LoggingLevel.DEBUG, "Received new world-descriptor! (for render-ID ${header.renderId}, world-ID ${body.id})")
-			.bean(integratorCachingHolder, "put(${header.renderId}, ${body})");
-		
-		//
-		// Receive incoming Samples ...
+		// Receive incoming Samples, render them, and pass them to the film-queue
 		from("activemq:rays3d.samples")
+			.setExchangePattern(ExchangePattern.InOnly)
 			.log(LoggingLevel.TRACE, "Checking pre-requisites for incoming sample (for render-ID ${body.renderId})")
 			.bean(integratorCachingHolder, "getSamplePrerequisites")
-			.log(LoggingLevel.TRACE, "Received new sample (for render-ID ${body.renderId}, at [${body.filmPoint.x},${body.filmPoint.y}])")
-			.end();
+			.log(LoggingLevel.TRACE, "Rendering sample (render-ID ${body.renderId} @ [${body.filmPoint.x},${body.filmPoint.y}])")
+			.bean(integratorCachingHolder, "renderSample")
+			.log(LoggingLevel.TRACE, "Passing rendered sample along to film-queue")
+			.to("activemq:rays3d.film.samples");
 
 		//
 		//@formatter:on

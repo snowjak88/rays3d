@@ -39,22 +39,28 @@ public class RenderRouteBuilder extends RouteBuilder {
 			.inputType(RenderRequest.class)
 			.setExchangePattern(ExchangePattern.InOnly)
 			.log(LoggingLevel.INFO, "Received new rendering request (ID: ${body.id})")
+			.log(LoggingLevel.DEBUG, "Marking render-ID ${body.id} as IN-PROGRESS-RENDERING")
 			.bean(renderRequestService, "markAsRenderingInProgress")
-			.log(LoggingLevel.TRACE, "Marked rendering-request as in-progress (ID: ${body.id})")
 			.multicast()
 				.to("activemq:rays3d.transform.toSamplerRequest",
 					"activemq:rays3d.transform.toFilmRequest");
 		
+		//
+		// Transform a RenderRequest to a SamplerRequest, marking this render as SAMPLING-IN-PROGRESS on the way.
+		//
 		from("activemq:rays3d.transform.toSamplerRequest")
 			.bean(renderRequestService, "markAsSamplingInProgress")
-			.log(LoggingLevel.TRACE, "Marked sampling-request as in-progress (ID: ${body.id})")
+			.log(LoggingLevel.DEBUG, "Marking render-ID ${body.id} as IN-PROGRESS-SAMPLING")
 			.bean(renderRequestService, "toSamplerRequest")
 			.log(LoggingLevel.DEBUG,"Dispatched sampler-request for render-ID ${body.renderId}")
 			.to("activemq:rays3d.samples.samplerRequest");
 		
+		//
+		// Transform a RenderRequest to a FilmRequest, marking this render as FILM-IN-PROGRESS on the way.
+		//
 		from("activemq:rays3d.transform.toFilmRequest")
 			.bean(renderRequestService, "markAsFilmInProgress")
-			.log(LoggingLevel.TRACE, "Marked film-request as in-progress (ID: ${body.id})")
+			.log(LoggingLevel.DEBUG, "Marking render-ID ${body.id} as IN-PROGRESS-FILM")
 			.bean(renderRequestService, "toFilmRequest")
 			.log(LoggingLevel.DEBUG, "Dispatched film-request for render-ID ${body.renderId}")
 			.to("activemq:rays3d.film.filmRequest");
@@ -73,6 +79,8 @@ public class RenderRouteBuilder extends RouteBuilder {
 			.setExchangePattern(ExchangePattern.InOut)
 			.log(LoggingLevel.DEBUG, "Received request to refresh IntegratorRequest for render-id ${body}")
 			.bean(renderRequestService, "getByID")
+			.log(LoggingLevel.DEBUG, "Marking render-ID ${body.id} as IN-PROGRESS-INTEGRATOR")
+			.bean(renderRequestService, "markAsIntegrationInProgress")
 			.bean(renderRequestService, "toIntegratorRequest");
 		
 		//

@@ -10,6 +10,7 @@ import org.rays3d.integrator.integrators.NamedIntegratorScanner;
 import org.rays3d.message.IntegratorRequest;
 import org.rays3d.message.WorldDescriptorRequest;
 import org.rays3d.message.sample.Sample;
+import org.rays3d.spectrum.Spectrum;
 import org.rays3d.util.LRUCache;
 import org.rays3d.world.World;
 import org.slf4j.Logger;
@@ -111,7 +112,7 @@ public class IntegratorCachingHolder {
 				LOG.info("Inflated World instance for incoming Sample (render-ID {}).", renderId);
 
 				final IntegratorRequest integratorRequest = cache.get(renderId).getIntegratorRequest();
-				
+
 				LOG.debug("Inserting supplementary properties into inflated World ...");
 				LOG.trace("Inserting film-size ({}x{})", integratorRequest.getFilmWidth(),
 						integratorRequest.getFilmHeight());
@@ -144,6 +145,25 @@ public class IntegratorCachingHolder {
 
 			LOG.trace("Finished checking prerequisites for incoming Sample (render-ID {}).", renderId);
 		}
+	}
+
+	/**
+	 * Use the cached {@link AbstractIntegrator} implementation to render the
+	 * given {@link Sample} into a {@link Spectrum} (storing that result in the
+	 * same Sample instance as before).
+	 * 
+	 * @param sample
+	 */
+	public void renderSample(Sample sample) {
+
+		final long renderId = sample.getRenderId();
+		LOG.trace("Rendering a sample for render-ID {} at [{},{}]", renderId, sample.getFilmPoint().getX(),
+				sample.getFilmPoint().getY());
+
+		final Spectrum result = cache.get(renderId).getIntegrator().estimateRadiance(sample);
+
+		LOG.trace("Storing render-result in sample.");
+		sample.setRadiance(result);
 	}
 
 	/**
