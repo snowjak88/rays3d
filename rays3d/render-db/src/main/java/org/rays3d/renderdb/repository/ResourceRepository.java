@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository("renderedImageRepository")
 public interface ResourceRepository extends CrudRepository<Resource, Long> {
 
-	@Query("select r from Resource r where r.id in ( select d.renderedImages from RenderDescriptor d where d.id = ?1 ) order by r.created desc")
+	@Query("select d.renderedImages from RenderDescriptor d where d.id = ?1")
 	public List<Resource> findByRenderDescriptorId(Long id);
 
 }

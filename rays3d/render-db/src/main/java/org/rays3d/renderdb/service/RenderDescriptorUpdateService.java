@@ -6,13 +6,16 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.rays3d.message.RenderStatus;
+import org.rays3d.message.ResourceRequest;
 import org.rays3d.renderdb.model.RenderDescriptor;
 import org.rays3d.renderdb.model.Resource;
 import org.rays3d.renderdb.repository.RenderDescriptorRepository;
+import org.rays3d.renderdb.repository.ResourceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RenderDescriptorUpdateService {
@@ -25,6 +28,9 @@ public class RenderDescriptorUpdateService {
 	@Autowired
 	private RenderDescriptorRepository	renderDescriptorRepository;
 
+	@Autowired
+	private ResourceRepository			resourceRepository;
+
 	/**
 	 * Given a {@link RenderDescriptor}, scan over all fields and, if any are
 	 * not <code>null</code> (or <code>== 0</code>), update them on the
@@ -35,6 +41,7 @@ public class RenderDescriptorUpdateService {
 	 * @param renderDescriptor
 	 * @return
 	 */
+	@Transactional
 	public RenderDescriptor updateRenderDescriptor(RenderDescriptor renderDescriptor) {
 
 		LOG.debug("Updating a RenderDescriptor (given ID = " + renderDescriptor.getId() + ", version = "
@@ -131,6 +138,47 @@ public class RenderDescriptorUpdateService {
 		renderDescriptorUpdateLock.unlock();
 
 		return result;
+	}
+
+	/**
+	 * Add a new image (expressed as a {@link ResourceRequest}) to the given
+	 * RenderDescriptor (given by its ID).
+	 * 
+	 * @param renderId
+	 * @param newImage
+	 * @throws NullPointerException
+	 *             if no such RenderDescriptor exists with ID =
+	 *             <code>renderId</code>
+	 */
+	@Transactional
+	public void addNewImage(Long renderId, ResourceRequest newImage) {
+
+		LOG.info("Received new image to add to render-ID {}", renderId);
+
+		final RenderDescriptor render = renderDescriptorRepository.findOne(renderId);
+
+		if (render == null) {
+			final RuntimeException e = new NullPointerException("Cannot find RenderDescriptor with ID = " + renderId);
+			LOG.error("Problem adding image to RenderDescriptor.", e);
+			throw e;
+		}
+
+		LOG.debug("New image: {} bytes, of type \"{}\"", Integer.toString(newImage.getData().length),
+				newImage.getMimeType());
+
+		Resource resource = new Resource();
+		resource.setData(newImage.getData());
+		resource.setMimeType(newImage.getMimeType());
+
+		LOG.debug("Saving Resource ...");
+		resource = resourceRepository.save(resource);
+		LOG.debug("Image saved as new Resource (ID = {})", resource.getId());
+
+		LOG.debug("Updating RenderDescriptor ...");
+		render.getRenderedImages().add(resource);
+		renderDescriptorRepository.save(render);
+
+		LOG.info("Added image to RenderDescriptor (ID {})", renderId);
 	}
 
 }

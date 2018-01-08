@@ -36,49 +36,49 @@ public class RenderDescriptor {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long						id;
+	private long					id;
 
 	@Version
-	private int							version;
+	private int						version;
 
 	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	@CreatedDate
-	private Date						created;
+	private Date					created;
 
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
-	private WorldDescriptor				worldDescriptor			= null;
+	private WorldDescriptor			worldDescriptor			= null;
 
 	@Basic(optional = false)
-	private int							filmWidth				= 0;
+	private int						filmWidth				= 0;
 	@Basic(optional = false)
-	private int							filmHeight				= 0;
+	private int						filmHeight				= 0;
 
 	@Basic(optional = false)
-	private String						samplerName				= null;
+	private String					samplerName				= null;
 	@Basic(optional = false)
-	private int							samplesPerPixel			= 0;
+	private int						samplesPerPixel			= 0;
 
 	@Basic(optional = false)
-	private String						integratorName			= null;
+	private String					integratorName			= null;
 	@Basic
 	@Column(length = 2048)
-	private String						extraIntegratorConfig	= null;
+	private String					extraIntegratorConfig	= null;
 
 	@Enumerated(EnumType.STRING)
-	private RenderStatus				renderingStatus			= RenderStatus.NOT_STARTED;
+	private RenderStatus			renderingStatus			= RenderStatus.NOT_STARTED;
 
 	@Enumerated(EnumType.STRING)
-	private RenderStatus				samplingStatus			= RenderStatus.NOT_STARTED;
+	private RenderStatus			samplingStatus			= RenderStatus.NOT_STARTED;
 
 	@Enumerated(EnumType.STRING)
-	private RenderStatus				integrationStatus		= RenderStatus.NOT_STARTED;
+	private RenderStatus			integrationStatus		= RenderStatus.NOT_STARTED;
 
 	@Enumerated(EnumType.STRING)
-	private RenderStatus				filmStatus				= RenderStatus.NOT_STARTED;
+	private RenderStatus			filmStatus				= RenderStatus.NOT_STARTED;
 
 	@JsonIgnore
-	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+	@OneToMany(cascade = { CascadeType.ALL })
 	private Collection<Resource>	renderedImages			= new LinkedList<>();
 
 	public long getId() {

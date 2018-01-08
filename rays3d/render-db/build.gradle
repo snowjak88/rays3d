@@ -5,7 +5,7 @@ dependencies {
 	compile group: 'org.apache.camel', name: 'camel-jetty', version: '2.20.1'
 	compile group: 'org.apache.camel', name: 'camel-jackson-starter', version: '2.20.1'
 	
-	compile group: 'hsqldb', name: 'hsqldb', version: '1.8.0.10'
+	compile group: 'org.hsqldb', name: 'hsqldb', version: '2.4.0+'
 	
 	compile 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate4:2.4.4'
 }

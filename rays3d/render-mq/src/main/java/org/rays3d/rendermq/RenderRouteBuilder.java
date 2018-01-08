@@ -4,6 +4,7 @@ import org.apache.camel.ExchangePattern;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.rays3d.message.RenderRequest;
+import org.rays3d.message.ResourceRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -46,6 +47,14 @@ public class RenderRouteBuilder extends RouteBuilder {
 					"activemq:rays3d.transform.toFilmRequest");
 		
 		//
+		// Pick up all completed images and forward them to the database.
+		from("activemq:rays3d.render.newImages")
+			.inputType(ResourceRequest.class)
+			.setExchangePattern(ExchangePattern.InOnly)
+			.log(LoggingLevel.INFO, "Received new rendered-image for ${header.renderId}")
+			.bean(renderRequestService, "addNewImage(${header.renderId}, ${body})");
+		
+		//
 		// Transform a RenderRequest to a SamplerRequest, marking this render as SAMPLING-IN-PROGRESS on the way.
 		//
 		from("activemq:rays3d.transform.toSamplerRequest")
@@ -82,6 +91,17 @@ public class RenderRouteBuilder extends RouteBuilder {
 			.log(LoggingLevel.DEBUG, "Marking render-ID ${body.id} as IN-PROGRESS-INTEGRATOR")
 			.bean(renderRequestService, "markAsIntegrationInProgress")
 			.bean(renderRequestService, "toIntegratorRequest");
+		
+		//
+		// Upon request, grab a complete FilmRequest, by render-ID
+		//
+		from("activemq:rays3d.render.forID.filmRequest")
+			.setExchangePattern(ExchangePattern.InOut)
+			.log(LoggingLevel.DEBUG, "Received request to refresh FilmRequest for render-id ${body}")
+			.bean(renderRequestService, "getByID")
+			.log(LoggingLevel.DEBUG, "Marking render-ID ${body.id} as IN-PROGRESS-FILM")
+			.bean(renderRequestService, "markAsFilmInProgress")
+			.bean(renderRequestService, "toFilmRequest");
 		
 		//
 		// Upon request, grab a complete WorldDescriptor, by render-ID

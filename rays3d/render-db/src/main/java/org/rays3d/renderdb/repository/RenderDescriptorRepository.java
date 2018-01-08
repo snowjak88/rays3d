@@ -18,6 +18,6 @@ public interface RenderDescriptorRepository extends CrudRepository<RenderDescrip
 	@Query("select d from RenderDescriptor d where renderingStatus = 'NOT_STARTED'")
 	public Collection<RenderDescriptor> findNewDescriptors();
 	
-	@Query("select r from Resource r where r.id in ( select d.renderedImages from RenderDescriptor d where d.id = ?1 ) order by r.created desc")
+	@Query("select d.renderedImages from RenderDescriptor d where d.id = ?1")
 	public List<Resource> getRenderedImages(Long id);
 }

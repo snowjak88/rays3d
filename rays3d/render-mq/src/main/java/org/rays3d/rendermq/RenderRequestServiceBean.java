@@ -6,6 +6,7 @@ import org.rays3d.message.FilmRequest;
 import org.rays3d.message.IntegratorRequest;
 import org.rays3d.message.RenderRequest;
 import org.rays3d.message.RenderStatus;
+import org.rays3d.message.ResourceRequest;
 import org.rays3d.message.SamplerRequest;
 import org.rays3d.message.WorldDescriptorRequest;
 import org.rays3d.rendermq.rest.RenderDbRestBean;
@@ -111,6 +112,18 @@ public class RenderRequestServiceBean {
 
 		return renderDb.getWorldDescriptorByRenderId(render.getId());
 
+	}
+
+	/**
+	 * Add a new rendered-image (expressed as a {@link ResourceRequest}) to the
+	 * specified render.
+	 * 
+	 * @param renderId
+	 * @param newImage
+	 */
+	public void addNewImage(long renderId, ResourceRequest newImage) {
+
+		renderDb.postNewRenderedImage(renderId, newImage);
 	}
 
 	/**

@@ -40,6 +40,7 @@ public class WorldDescriptor {
 	private Date							created;
 
 	@Basic
+	@Column(length = 256)
 	private String							name;
 
 	@Basic
@@ -52,6 +53,7 @@ public class WorldDescriptor {
 
 	@Lob
 	@Basic(fetch = FetchType.LAZY, optional = false)
+	@Column(length = 1048576)
 	private String							text;
 
 	public long getId() {

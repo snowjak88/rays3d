@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.rays3d.message.RenderRequest;
+import org.rays3d.message.ResourceRequest;
 import org.rays3d.message.WorldDescriptorRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -59,6 +60,17 @@ public class RenderDbRestBean {
 	public RenderRequest patchRenderRequest(RenderRequest request) {
 
 		return restTemplate.patchForObject("/renders/{renderId}", request, RenderRequest.class, request.getId());
+	}
+
+	/**
+	 * POST a new rendered image to the specified render-ID.
+	 * 
+	 * @param renderId
+	 * @param newImage
+	 */
+	public void postNewRenderedImage(long renderId, ResourceRequest newImage) {
+
+		restTemplate.postForObject("/renders/{renderId}/images", newImage, Void.class, renderId);
 	}
 
 }
