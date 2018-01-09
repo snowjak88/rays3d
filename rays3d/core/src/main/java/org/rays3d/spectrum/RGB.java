@@ -132,11 +132,13 @@ public class RGB implements Serializable {
 	 */
 	public static int toPacked(RGB rgb) {
 
+		final double a = 1d;
 		final double r = max(min(rgb.getRed(), 1d), 0d);
 		final double g = max(min(rgb.getGreen(), 1d), 0d);
 		final double b = max(min(rgb.getBlue(), 1d), 0d);
 
-		return ( (int) ( r * 255d ) ) << 16 | ( (int) ( g * 255d ) ) << 8 | ( (int) ( b * 255d ) );
+		return ( (int) ( a * 255d ) ) << 24 | ( (int) ( r * 255d ) ) << 16 | ( (int) ( g * 255d ) ) << 8
+				| ( (int) ( b * 255d ) );
 	}
 
 	/**

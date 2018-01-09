@@ -1,6 +1,7 @@
 package org.rays3d.integrator.integrators;
 
 import org.rays3d.message.sample.Sample;
+import org.rays3d.spectrum.RGB;
 import org.rays3d.spectrum.RGBSpectrum;
 import org.rays3d.spectrum.Spectrum;
 import org.rays3d.world.World;
@@ -21,7 +22,7 @@ public class NoOpIntegrator extends AbstractIntegrator {
 	@Override
 	public Spectrum estimateRadiance(Sample sample) {
 
-		return RGBSpectrum.BLACK;
+		return new RGBSpectrum(RGB.RED);
 	}
 
 }
