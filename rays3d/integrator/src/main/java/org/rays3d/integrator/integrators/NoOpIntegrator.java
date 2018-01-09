@@ -8,7 +8,7 @@ import org.rays3d.world.World;
 
 /**
  * An {@link AbstractIntegrator} implementation that simply returns
- * {@link RGBSpectrum#BLACK} for all {@link Sample}s.
+ * {@link RGB#RED} for all {@link Sample}s.
  * 
  * @author snowjak88
  */
