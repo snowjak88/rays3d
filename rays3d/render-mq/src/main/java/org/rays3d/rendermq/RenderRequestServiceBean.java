@@ -127,67 +127,49 @@ public class RenderRequestServiceBean {
 	}
 
 	/**
-	 * Mark a given {@link RenderRequest} as rendering-in-progress.
+	 * Update the completion-status of the given {@link RenderRequest}.
+	 * <p>
+	 * <code>completion</code> is expected to be one of:
+	 * <ul>
+	 * <li>NOT_STARTED</li>
+	 * <li>STARTED</li>
+	 * <li>IN_PROGRESS</li>
+	 * <li>COMPLETE</li>
+	 * </ul>
+	 * </p>
 	 * 
 	 * @param request
+	 * @param phaseName
+	 * @param completion
 	 * @return
+	 * @throws IllegalArgumentException
+	 *             if <code>completion</code> takes a value not in the list of
+	 *             expected values
 	 */
-	public RenderRequest markAsRenderingInProgress(RenderRequest request) {
+	public RenderRequest updateCompletion(RenderRequest request, String completion) {
 
-		final RenderRequest updateRequest = new RenderRequest();
-		updateRequest.setId(request.getId());
-		updateRequest.setVersion(request.getVersion());
-		updateRequest.setRenderingStatus(RenderStatus.IN_PROGRESS);
+		RenderStatus completionStatus;
+		switch (completion) {
+		case "NOT_STARTED":
+			completionStatus = RenderStatus.NOT_STARTED;
+			break;
+		case "STARTED":
+			completionStatus = RenderStatus.STARTED;
+			break;
+		case "IN_PROGRESS":
+			completionStatus = RenderStatus.IN_PROGRESS;
+			break;
+		case "COMPLETE":
+			completionStatus = RenderStatus.COMPLETE;
+			break;
+		default:
+			throw new IllegalArgumentException("Cannot set completion-status of \"" + completion
+					+ "\" -- must be one of NOT_STARTED | STARTED | IN_PROGRESS | COMPLETE");
+		}
 
-		return renderDb.patchRenderRequest(updateRequest);
-	}
+		request.setRenderingStatus(completionStatus);
 
-	/**
-	 * Mark a given {@link RenderRequest} as sampling-in-progress.
-	 * 
-	 * @param request
-	 * @return
-	 */
-	public RenderRequest markAsSamplingInProgress(RenderRequest request) {
-
-		final RenderRequest updateRequest = new RenderRequest();
-		updateRequest.setId(request.getId());
-		updateRequest.setVersion(request.getVersion());
-		updateRequest.setSamplingStatus(RenderStatus.IN_PROGRESS);
-
-		return renderDb.patchRenderRequest(updateRequest);
-	}
-
-	/**
-	 * Mark a given {@link RenderRequest} as integration-in-progress.
-	 * 
-	 * @param request
-	 * @return
-	 */
-	public RenderRequest markAsIntegrationInProgress(RenderRequest request) {
-
-		final RenderRequest updateRequest = new RenderRequest();
-		updateRequest.setId(request.getId());
-		updateRequest.setVersion(request.getVersion());
-		updateRequest.setIntegrationStatus(RenderStatus.IN_PROGRESS);
-
-		return renderDb.patchRenderRequest(updateRequest);
-	}
-
-	/**
-	 * Mark a given {@link RenderRequest} as film-in-progress.
-	 * 
-	 * @param request
-	 * @return
-	 */
-	public RenderRequest markAsFilmInProgress(RenderRequest request) {
-
-		final RenderRequest updateRequest = new RenderRequest();
-		updateRequest.setId(request.getId());
-		updateRequest.setVersion(request.getVersion());
-		updateRequest.setFilmStatus(RenderStatus.IN_PROGRESS);
-
-		return renderDb.patchRenderRequest(updateRequest);
+		return renderDb.patchRenderRequest(request);
 	}
 
 }

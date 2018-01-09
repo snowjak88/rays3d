@@ -2,12 +2,13 @@ package org.rays3d.renderdb;
 
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestBindingMode;
-import org.rays3d.message.ResourceRequest;
 import org.rays3d.renderdb.model.RenderDescriptor;
+import org.rays3d.renderdb.model.Resource;
 import org.rays3d.renderdb.repository.RenderDescriptorRepository;
 import org.rays3d.renderdb.repository.ResourceRepository;
 import org.rays3d.renderdb.repository.WorldDescriptorRepository;
 import org.rays3d.renderdb.service.RenderDescriptorUpdateService;
+import org.rays3d.renderdb.service.ResourceUpdateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -35,6 +36,9 @@ public class RenderDbRouteBuilder extends RouteBuilder {
 
 	@Autowired
 	private RenderDescriptorUpdateService	renderDescriptorUpdateService;
+
+	@Autowired
+	private ResourceUpdateService			resourceUpdateService;
 
 	@Override
 	public void configure() throws Exception {
@@ -75,8 +79,12 @@ public class RenderDbRouteBuilder extends RouteBuilder {
 				.description("Update a single RenderDescriptor by ID")
 				.type(RenderDescriptor.class)
 				.route()
-					.filter(simple("${body.id} == ${header.renderId}"))
-					.bean(renderDescriptorUpdateService, "updateRenderDescriptor")
+					.choice()
+						.when(simple("${body.id} != ${header.renderId}"))
+							.throwException(IllegalArgumentException.class, "Cannot update a RenderDescriptor with contradictory IDs -- ${header.renderId} from URI, ${body.id} from message-body!")
+						.otherwise()
+							.bean(renderDescriptorUpdateService, "updateRenderDescriptor")
+					.endChoice()
 				.endRest()
 			.get("/world")
 				.description("Get a RenderDescriptor's associated WorldDescriptor")
@@ -92,7 +100,7 @@ public class RenderDbRouteBuilder extends RouteBuilder {
 				.endRest()
 			.post("/images")
 				.description("Add a new image to this RenderDescriptor")
-				.type(ResourceRequest.class)
+				.type(Resource.class)
 				.route()
 					.bean(renderDescriptorUpdateService, "addNewImage(${header.renderId}, ${body})")
 				.endRest();
@@ -102,7 +110,25 @@ public class RenderDbRouteBuilder extends RouteBuilder {
 			.get()
 				.description("Get all resources")
 				.route()
-					.bean(resourceRepository, "findAll");
+					.bean(resourceRepository, "findAll")
+				.endRest()
+			.post()
+				.description("Add a new Resource")
+				.type(Resource.class)
+				.route()
+					.bean(resourceUpdateService, "postNewResource")
+				.endRest()
+			.put("/{resourceId}")
+				.description("Update an existing Resource")
+				.type(Resource.class)
+				.route()
+					.choice()
+						.when(simple("${body.id} != ${header.resourceId}"))
+							.throwException(IllegalArgumentException.class, "Cannot update a Resource with contradictory IDs -- ${header.renderId} from URI, ${body.id} from message-body!")
+						.otherwise()
+							.bean(resourceUpdateService, "updateResource")
+					.endChoice()
+				.endRest();
 		
 		rest("resources/{resourceID}")
 			.produces("application/json")

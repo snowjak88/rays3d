@@ -32,12 +32,29 @@ public class FilmUpdateBean {
 	@EndpointInject(uri = "activemq:rays3d.render.forID.filmRequest")
 	private ProducerTemplate		refreshFilmRequestQueue;
 
+	@EndpointInject(uri = "activemq:rays3d.render.updateCompletion.forID")
+	private ProducerTemplate		updateCompletionStatusQueue;
+
 	@EndpointInject(uri = "activemq:rays3d.render.newImages")
 	private ProducerTemplate		postNewImagesQueue;
 
 	private Map<Long, FilmRequest>	filmRequests			= new HashMap<>();
 	private Map<Long, Film>			filmInstances			= new HashMap<>();
 	private Map<Long, Long>			remainingSampleCounts	= new HashMap<>();
+
+	public void initializeFilm(FilmRequest filmRequest) {
+
+		final long renderId = filmRequest.getRenderId();
+		LOG.debug("Initializing Film instance for render-ID {}", renderId);
+
+		LOG.trace("Inserting FilmRequest into the cache.");
+		filmRequests.put(renderId, filmRequest);
+
+		final long expectedSampleCount = (long) filmRequest.getFilmWidth() * (long) filmRequest.getFilmHeight()
+				* (long) filmRequest.getSamplesPerPixel();
+		LOG.info("Inserting expected sample-count for render-ID {} to {}", renderId, expectedSampleCount);
+		remainingSampleCounts.put(renderId, expectedSampleCount);
+	}
 
 	public void addSample(Sample sample) throws IOException {
 
@@ -78,7 +95,9 @@ public class FilmUpdateBean {
 		remainingSampleCounts.put(renderId, expectedSamplesRemaining);
 
 		if (expectedSamplesRemaining == 0) {
-			LOG.info("Expected-sample-count reached 0 for render-ID {} -- building and sending new image.", renderId);
+			LOG.info("Expected-sample-count reached 0 for render-ID {}.", renderId);
+
+			LOG.info("Building and sending a new image ...");
 
 			LOG.debug("Creating BufferedImage from the Film instance ...");
 			final BufferedImage image = film.getImage();
@@ -98,6 +117,11 @@ public class FilmUpdateBean {
 			resource.setMimeType("image/png");
 
 			postNewImagesQueue.sendBodyAndHeader(resource, "renderId", renderId);
+			
+			LOG.info("Marking this render-ID ({}) as COMPLETE.", renderId);
+			final Map<String, Object> completionHeaders = new HashMap<>();
+			completionHeaders.put("completion", "COMPLETE");
+			updateCompletionStatusQueue.sendBodyAndHeaders(renderId, completionHeaders);
 
 			LOG.debug("Dropping cached instances relating to render-ID {}", renderId);
 			filmRequests.remove(renderId);

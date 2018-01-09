@@ -68,15 +68,6 @@ public class RenderDescriptor {
 	@Enumerated(EnumType.STRING)
 	private RenderStatus			renderingStatus			= RenderStatus.NOT_STARTED;
 
-	@Enumerated(EnumType.STRING)
-	private RenderStatus			samplingStatus			= RenderStatus.NOT_STARTED;
-
-	@Enumerated(EnumType.STRING)
-	private RenderStatus			integrationStatus		= RenderStatus.NOT_STARTED;
-
-	@Enumerated(EnumType.STRING)
-	private RenderStatus			filmStatus				= RenderStatus.NOT_STARTED;
-
 	@JsonIgnore
 	@OneToMany(cascade = { CascadeType.ALL })
 	private Collection<Resource>	renderedImages			= new LinkedList<>();
@@ -189,36 +180,6 @@ public class RenderDescriptor {
 	public void setRenderingStatus(RenderStatus renderingStatus) {
 
 		this.renderingStatus = renderingStatus;
-	}
-
-	public RenderStatus getSamplingStatus() {
-
-		return samplingStatus;
-	}
-
-	public void setSamplingStatus(RenderStatus samplingStatus) {
-
-		this.samplingStatus = samplingStatus;
-	}
-
-	public RenderStatus getIntegrationStatus() {
-
-		return integrationStatus;
-	}
-
-	public void setIntegrationStatus(RenderStatus integrationStatus) {
-
-		this.integrationStatus = integrationStatus;
-	}
-
-	public RenderStatus getFilmStatus() {
-
-		return filmStatus;
-	}
-
-	public void setFilmStatus(RenderStatus filmStatus) {
-
-		this.filmStatus = filmStatus;
 	}
 
 	public Collection<Resource> getRenderedImages() {

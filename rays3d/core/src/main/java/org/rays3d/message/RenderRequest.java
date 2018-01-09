@@ -22,9 +22,6 @@ public class RenderRequest implements Serializable {
 	private String				extraIntegratorConfig;
 
 	private RenderStatus		renderingStatus;
-	private RenderStatus		samplingStatus;
-	private RenderStatus		integrationStatus;
-	private RenderStatus		filmStatus;
 
 	public long getId() {
 
@@ -114,36 +111,6 @@ public class RenderRequest implements Serializable {
 	public void setRenderingStatus(RenderStatus renderingStatus) {
 
 		this.renderingStatus = renderingStatus;
-	}
-
-	public RenderStatus getSamplingStatus() {
-
-		return samplingStatus;
-	}
-
-	public void setSamplingStatus(RenderStatus samplingStatus) {
-
-		this.samplingStatus = samplingStatus;
-	}
-
-	public RenderStatus getIntegrationStatus() {
-
-		return integrationStatus;
-	}
-
-	public void setIntegrationStatus(RenderStatus integrationStatus) {
-
-		this.integrationStatus = integrationStatus;
-	}
-
-	public RenderStatus getFilmStatus() {
-
-		return filmStatus;
-	}
-
-	public void setFilmStatus(RenderStatus filmStatus) {
-
-		this.filmStatus = filmStatus;
 	}
 
 }
