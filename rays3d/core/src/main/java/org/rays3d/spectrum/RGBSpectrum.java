@@ -12,15 +12,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class RGBSpectrum implements Spectrum {
 
+	@JsonIgnore
 	private static final long		serialVersionUID	= -4926041992553421158L;
 
 	/**
 	 * Represents a 0-energy Spectrum.
 	 */
+	@JsonIgnore
 	public static final RGBSpectrum	BLACK				= new RGBSpectrum(RGB.BLACK);
 	/**
 	 * Represents a 1.0-energy Spectrum. (i.e., equivalent to {@link RGB#WHITE})
 	 */
+	@JsonIgnore
 	public static final RGBSpectrum	WHITE				= new RGBSpectrum(RGB.WHITE);
 
 	@JsonProperty

@@ -7,6 +7,7 @@ import org.rays3d.message.RenderStatus;
 import org.rays3d.renderdb.model.RenderDescriptor;
 import org.rays3d.renderdb.model.Resource;
 import org.rays3d.renderdb.repository.RenderDescriptorRepository;
+import org.rays3d.renderdb.repository.ResourceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class RenderDescriptorUpdateService {
 
 	@Autowired
 	private RenderDescriptorRepository	renderDescriptorRepository;
+
+	@Autowired
+	private ResourceRepository			resourceRepository;
 
 	/**
 	 * Given a {@link RenderDescriptor}, scan over all fields and, if any are
@@ -133,6 +137,9 @@ public class RenderDescriptorUpdateService {
 
 		LOG.debug("New image: {} bytes, of type \"{}\"", Integer.toString(newImage.getData().length),
 				newImage.getMimeType());
+
+		LOG.debug("Persisting new image as a Resource ...");
+		newImage = resourceRepository.save(newImage);
 
 		LOG.debug("Updating RenderDescriptor ...");
 		LOG.trace("renderedImages << Resource ({} bytes, \"{}\")", newImage.getData().length, newImage.getMimeType());

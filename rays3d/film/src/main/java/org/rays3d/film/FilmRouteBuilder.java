@@ -23,7 +23,7 @@ public class FilmRouteBuilder extends RouteBuilder {
 		//
 		from("activemq:rays3d.film.filmRequest")
 			.inputType(FilmRequest.class)
-			.log(LoggingLevel.TRACE, "Received new FilmRequest (render-ID ${body.renderId})")
+			.log(LoggingLevel.DEBUG, "Received new FilmRequest (render-ID ${body.renderId})")
 			.bean(filmUpdateBean, "initializeFilm");
 		//
 		//

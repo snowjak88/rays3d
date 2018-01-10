@@ -32,6 +32,9 @@ public class SamplesRequestServiceBean {
 	 */
 	public Iterator<SampleRequest> splitSamplerRequest(SamplerRequest request) {
 
+		LOG.debug("Received new Sampler-Request ([{}x{}], {} spp) = {} total samples", request.getFilmWidth(),
+				request.getFilmHeight(), request.getSamplesPerPixel(),
+				(long) request.getFilmWidth() * (long) request.getFilmHeight() * (long) request.getSamplesPerPixel());
 		return new SampleRequestIterator(request);
 	}
 
@@ -43,8 +46,9 @@ public class SamplesRequestServiceBean {
 	 */
 	public Iterator<Sample> splitSampleRequestIntoSamples(SampleRequest request) {
 
+		LOG.trace("Received new Sample-Request ([{},{}], {} samples)", request.getFilmPoint().getX(),
+				request.getFilmPoint().getY(), request.getSamplesPerPixel());
 		final Sampler sampler = namedSamplerScanner.getSamplerByName(request.getSamplerName(), request);
-
 		LOG.trace("Found named sampler \"{}\": [{}].", request.getSamplerName(), sampler.getClass().getName());
 
 		return sampler;

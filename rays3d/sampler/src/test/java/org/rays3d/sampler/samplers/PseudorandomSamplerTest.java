@@ -24,7 +24,7 @@ public class PseudorandomSamplerTest {
 			final PseudorandomSampler sampler = new PseudorandomSampler(sampleRequest);
 
 			assertEquals("Sampler does not expect to generate a sufficient number of samples for this pixel!",
-					sampleRequest.getSamplesPerPixel(), sampler.getSamplesToGenerate());
+					sampleRequest.getSamplesPerPixel(), sampler.getSamplesPerPixel());
 
 			for (int spp = 0; spp < sampleRequest.getSamplesPerPixel(); spp++) {
 

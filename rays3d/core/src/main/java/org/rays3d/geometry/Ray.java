@@ -31,6 +31,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Ray implements Serializable {
 
+	@JsonIgnore
 	private static final long	serialVersionUID	= 8542616504681890448L;
 
 	private Point3D				origin;

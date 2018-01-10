@@ -1,11 +1,16 @@
 package org.rays3d.integrator.integrators;
 
+import static org.apache.commons.math3.util.FastMath.min;
+
 import java.util.Map;
 
+import org.codehaus.groovy.control.CompilationFailedException;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.rays3d.message.sample.Sample;
 import org.rays3d.spectrum.Spectrum;
 import org.rays3d.world.World;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
@@ -19,8 +24,10 @@ import groovy.lang.GroovyShell;
  */
 public abstract class AbstractIntegrator {
 
-	private World	world;
-	private String	extraConfiguration;
+	private final static Logger	LOG	= LoggerFactory.getLogger(AbstractIntegrator.class);
+
+	private World				world;
+	private String				extraConfiguration;
 
 	/**
 	 * Construct a new AbstractIntegrator, operating on the given {@link World}.
@@ -69,11 +76,24 @@ public abstract class AbstractIntegrator {
 	 * 
 	 * @param groovyMapText
 	 * @return
+	 * @throws CompilationFailedException
+	 *             if the given text cannot be successfully parsed as a Groovy
+	 *             Map
 	 */
 	@SuppressWarnings("unchecked")
-	public static Map<String, Object> parseStringAsGroovyMap(String groovyMapText) {
+	public static Map<String, Object> parseStringAsGroovyMap(String groovyMapText) throws CompilationFailedException {
 
-		final CompilerConfiguration config = CompilerConfiguration.DEFAULT;
-		return (Map<String, Object>) new GroovyShell(new Binding(), config).evaluate(groovyMapText);
+		try {
+
+			final CompilerConfiguration config = CompilerConfiguration.DEFAULT;
+			return (Map<String, Object>) new GroovyShell(new Binding(), config).evaluate(groovyMapText);
+
+		} catch (CompilationFailedException e) {
+
+			LOG.error("Cannot parse text \"" + groovyMapText.substring(0, min(32, groovyMapText.length()))
+					+ "\" as a Groovy Map!", e);
+			throw e;
+
+		}
 	}
 }

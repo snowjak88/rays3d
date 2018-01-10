@@ -11,6 +11,7 @@ import org.rays3d.geometry.Point3D;
 import org.rays3d.geometry.Ray;
 import org.rays3d.geometry.Vector3D;
 import org.rays3d.interact.SurfaceDescriptor;
+import org.rays3d.message.sample.Sample;
 import org.rays3d.transform.RotationTransform;
 import org.rays3d.transform.TranslationTransform;
 
@@ -34,7 +35,7 @@ public class ShapeTest {
 
 			@SuppressWarnings("unchecked")
 			@Override
-			public SurfaceDescriptor<Shape> sampleSurface() {
+			public SurfaceDescriptor<Shape> sampleSurface(Sample sample) {
 
 				// We don't care about this method for the purposes of this
 				// test.
@@ -43,7 +44,7 @@ public class ShapeTest {
 
 			@SuppressWarnings("unchecked")
 			@Override
-			public SurfaceDescriptor<Shape> sampleSurfaceFacing(Point3D neighbor) {
+			public SurfaceDescriptor<Shape> sampleSurfaceFacing(Point3D neighbor, Sample sample) {
 
 				// We don't care about this method for the purposes of this
 				// test.

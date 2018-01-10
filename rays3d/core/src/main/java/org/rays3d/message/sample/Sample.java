@@ -12,14 +12,21 @@ import org.rays3d.geometry.Point2D;
 import org.rays3d.geometry.Ray;
 import org.rays3d.spectrum.Spectrum;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonFormat(shape = Shape.OBJECT)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Sample implements Serializable {
 
+	@JsonIgnore
 	private static final long	serialVersionUID			= -7458382323573318480L;
+	
 	private long				renderId;
+
+	private int					samplesPerPixel;
 
 	private Point2D				filmPoint;
 	private Point2D				lensUV						= new Point2D(0.5, 0.5);
@@ -30,17 +37,19 @@ public class Sample implements Serializable {
 	private List<Point2D>		additional2DSamples			= new LinkedList<>();
 
 	@JsonIgnore
-	private List<Double>		shuffledAdditional1DSamples	= null;
+	private transient List<Double>		shuffledAdditional1DSamples	= null;
 	@JsonIgnore
-	private List<Point2D>		shuffledAdditional2DSamples	= null;
+	private transient List<Point2D>		shuffledAdditional2DSamples	= null;
 	@JsonIgnore
-	private Iterator<Double>	next1DSample				= null;
+	private transient Iterator<Double>	next1DSample				= null;
 	@JsonIgnore
-	private Iterator<Point2D>	next2DSample				= null;
+	private transient Iterator<Point2D>	next2DSample				= null;
 
-	public Sample(long renderId, Point2D filmPoint, Point2D lensUV, Ray cameraRay, Spectrum radiance) {
+	public Sample(long renderId, int samplesPerPixel, Point2D filmPoint, Point2D lensUV, Ray cameraRay,
+			Spectrum radiance) {
 
 		this.renderId = renderId;
+		this.samplesPerPixel = samplesPerPixel;
 		this.filmPoint = filmPoint;
 		this.lensUV = lensUV;
 		this.cameraRay = cameraRay;
@@ -58,6 +67,16 @@ public class Sample implements Serializable {
 	public void setRenderId(long renderId) {
 
 		this.renderId = renderId;
+	}
+
+	public int getSamplesPerPixel() {
+
+		return samplesPerPixel;
+	}
+
+	public void setSamplesPerPixel(int samplesPerPixel) {
+
+		this.samplesPerPixel = samplesPerPixel;
 	}
 
 	public Point2D getFilmPoint() {

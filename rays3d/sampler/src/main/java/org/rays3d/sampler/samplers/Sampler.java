@@ -19,16 +19,16 @@ public abstract class Sampler implements Iterator<Sample> {
 
 	private final long			renderId;
 	private final int			filmX, filmY;
-	private final int			samplesToGenerate;
+	private final int			samplesPerPixel;
 
 	public Sampler(SampleRequest sampleRequest) {
 
 		this.renderId = sampleRequest.getRenderId();
 		this.filmX = (int) sampleRequest.getFilmPoint().getX();
 		this.filmY = (int) sampleRequest.getFilmPoint().getY();
-		this.samplesToGenerate = sampleRequest.getSamplesPerPixel();
+		this.samplesPerPixel = sampleRequest.getSamplesPerPixel();
 
-		LOG.trace("Constructing new Sample generator [{},{}/{}]", filmX, filmY, samplesToGenerate);
+		LOG.trace("Constructing new Sample generator [{},{}/{}]", filmX, filmY, samplesPerPixel);
 	}
 
 	public long getRenderId() {
@@ -46,9 +46,9 @@ public abstract class Sampler implements Iterator<Sample> {
 		return filmY;
 	}
 
-	public int getSamplesToGenerate() {
+	public int getSamplesPerPixel() {
 
-		return samplesToGenerate;
+		return samplesPerPixel;
 	}
 
 }

@@ -37,7 +37,7 @@ public class LambertianBDRFTest {
 		final Spectrum emissive = RGBSpectrum.BLACK;
 		this.bdrf = new LambertianBRDF(texture, emissive);
 
-		sample = new Sample(1, new Point2D(8.5, 8.5), new Point2D(0.5, 0.5), null, null);
+		sample = new Sample(1, 1, new Point2D(8.5, 8.5), new Point2D(0.5, 0.5), null, null);
 		sample.setAdditional1DSamples(Arrays.asList(0.5));
 		sample.setAdditional2DSamples(Arrays.asList(new Point2D(0.5, 0.5)));
 

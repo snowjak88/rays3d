@@ -21,7 +21,7 @@ public class PseudorandomSampler extends Sampler {
 	@Override
 	public boolean hasNext() {
 
-		return ( currentSample < getSamplesToGenerate() );
+		return ( currentSample < getSamplesPerPixel() );
 	}
 
 	@Override
@@ -29,7 +29,7 @@ public class PseudorandomSampler extends Sampler {
 
 		currentSample++;
 
-		if (currentSample > getSamplesToGenerate())
+		if (currentSample > getSamplesPerPixel())
 			throw new RuntimeException("This PseudorandomSampler has no more Samples in this domain!");
 
 		final Sample sample = new Sample();
@@ -38,14 +38,15 @@ public class PseudorandomSampler extends Sampler {
 		final double jitterY = Global.RND.nextDouble();
 
 		sample.setRenderId(getRenderId());
+		sample.setSamplesPerPixel(getSamplesPerPixel());
 		sample.setFilmPoint(new Point2D((double) getFilmX() + jitterX, (double) getFilmY() + jitterY));
 
 		sample.setAdditional1DSamples(
-				IntStream.range(0, getSamplesToGenerate()).mapToObj(i -> Global.RND.nextDouble()).collect(
+				IntStream.range(0, getSamplesPerPixel()).mapToObj(i -> Global.RND.nextDouble()).collect(
 						Collectors.toCollection(LinkedList::new)));
 
 		sample.setAdditional2DSamples(IntStream
-				.range(0, getSamplesToGenerate())
+				.range(0, getSamplesPerPixel())
 					.mapToObj(i -> new Point2D(Global.RND.nextDouble(), Global.RND.nextDouble()))
 					.collect(Collectors.toCollection(LinkedList::new)));
 

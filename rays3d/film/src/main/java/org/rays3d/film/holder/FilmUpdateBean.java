@@ -59,7 +59,9 @@ public class FilmUpdateBean {
 	public void addSample(Sample sample) throws IOException {
 
 		final long renderId = sample.getRenderId();
-		LOG.trace("Receiving sample for render-ID {}", renderId);
+		LOG.debug("Receiving sample for render-ID {} at [{},{}] -- expected {} samples remaining", renderId,
+				Integer.toString((int) sample.getFilmPoint().getX()),
+				Integer.toString((int) sample.getFilmPoint().getY()), remainingSampleCounts.getOrDefault(renderId, 0l));
 
 		if (!filmRequests.containsKey(renderId)) {
 
@@ -117,7 +119,7 @@ public class FilmUpdateBean {
 			resource.setMimeType("image/png");
 
 			postNewImagesQueue.sendBodyAndHeader(resource, "renderId", renderId);
-			
+
 			LOG.info("Marking this render-ID ({}) as COMPLETE.", renderId);
 			final Map<String, Object> completionHeaders = new HashMap<>();
 			completionHeaders.put("completion", "COMPLETE");

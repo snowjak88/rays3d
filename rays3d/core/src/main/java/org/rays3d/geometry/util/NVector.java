@@ -18,6 +18,7 @@ public abstract class NVector<T extends NVector<?>> implements Serializable {
 
 	private static final long	serialVersionUID	= 2663668375502365368L;
 
+	@JsonIgnore
 	private final double[]		values;
 
 	public NVector(int n) {

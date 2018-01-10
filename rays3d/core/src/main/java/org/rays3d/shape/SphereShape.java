@@ -20,6 +20,7 @@ import org.rays3d.geometry.Ray;
 import org.rays3d.geometry.Vector3D;
 import org.rays3d.geometry.boundingvolume.AABB;
 import org.rays3d.interact.SurfaceDescriptor;
+import org.rays3d.message.sample.Sample;
 import org.rays3d.transform.Transform;
 
 public class SphereShape extends Shape {
@@ -125,14 +126,16 @@ public class SphereShape extends Shape {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public SurfaceDescriptor<SphereShape> sampleSurface() {
+	public SurfaceDescriptor<SphereShape> sampleSurface(Sample sample) {
 
-		final double sin2_theta = Global.RND.nextDouble();
+		final Point2D samplePoint = sample.getAdditional2DSample();
+
+		final double sin2_theta = samplePoint.getX();
 		final double cos2_theta = 1d - sin2_theta;
 		final double sin_theta = sqrt(sin2_theta);
 		final double cos_theta = sqrt(cos2_theta);
 
-		final double orientation = Global.RND.nextDouble() * 2d * PI;
+		final double orientation = samplePoint.getY() * 2d * PI;
 		//
 		final double x = sin_theta * cos(orientation);
 		final double y = cos_theta;
@@ -146,7 +149,7 @@ public class SphereShape extends Shape {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public SurfaceDescriptor<SphereShape> sampleSurfaceFacing(Point3D neighbor) {
+	public SurfaceDescriptor<SphereShape> sampleSurfaceFacing(Point3D neighbor, Sample sample) {
 
 		final Vector3D towardsV_local = Vector3D.from(worldToLocal(neighbor));
 
@@ -156,12 +159,14 @@ public class SphereShape extends Shape {
 		//
 		//
 		//
-		final double sin2_theta = Global.RND.nextDouble();
+		final Point2D samplePoint = sample.getAdditional2DSample();
+
+		final double sin2_theta = samplePoint.getX();
 		final double cos2_theta = 1d - sin2_theta;
 		final double sin_theta = sqrt(sin2_theta);
 		final double cos_theta = sqrt(cos2_theta);
 
-		final double orientation = Global.RND.nextDouble() * 2d * PI;
+		final double orientation = samplePoint.getY() * 2d * PI;
 		//
 		final double x = sin_theta * cos(orientation);
 		final double y = cos_theta;

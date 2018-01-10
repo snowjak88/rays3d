@@ -22,30 +22,37 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RGB implements Serializable {
-
+	
+	@JsonIgnore
 	private static final long	serialVersionUID	= 9081734196618975104L;
 
 	/**
 	 * <code>RGB(0,0,0)</code>
 	 */
+	@JsonIgnore
 	public static final RGB		BLACK				= new RGB(0d, 0d, 0d);
 	/**
 	 * <code>RGB(1,0,0)</code>
 	 */
+	@JsonIgnore
 	public static final RGB		RED					= new RGB(1d, 0d, 0d);
 	/**
 	 * <code>RGB(0,1,0)</code>
 	 */
+	@JsonIgnore
 	public static final RGB		GREEN				= new RGB(0d, 1d, 0d);
 	/**
 	 * <code>RGB(0,0,1)</code>
 	 */
+	@JsonIgnore
 	public static final RGB		BLUE				= new RGB(0d, 0d, 1d);
 	/**
 	 * <code>RGB(1,1,1)</code>
 	 */
+	@JsonIgnore
 	public static final RGB		WHITE				= new RGB(1d, 1d, 1d);
 
+	@JsonIgnore
 	private double[]			rgb;
 
 	/**

@@ -10,6 +10,7 @@ import org.rays3d.geometry.Vector3D;
 import org.rays3d.interact.Interactable;
 import org.rays3d.interact.Interaction;
 import org.rays3d.interact.SurfaceDescriptor;
+import org.rays3d.message.sample.Sample;
 import org.rays3d.shape.Shape;
 import org.rays3d.transform.Transform;
 import org.rays3d.transform.Transformable;
@@ -53,16 +54,16 @@ public class Primitive implements Interactable, Transformable {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public SurfaceDescriptor<Shape> sampleSurface() {
+	public SurfaceDescriptor<Shape> sampleSurface(Sample sample) {
 
-		return shape.sampleSurface();
+		return shape.sampleSurface(sample);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public SurfaceDescriptor<Shape> sampleSurfaceFacing(Point3D neighbor) {
+	public SurfaceDescriptor<Shape> sampleSurfaceFacing(Point3D neighbor, Sample sample) {
 
-		return shape.sampleSurfaceFacing(neighbor);
+		return shape.sampleSurfaceFacing(neighbor, sample);
 	}
 
 	@Override
@@ -100,6 +101,10 @@ public class Primitive implements Interactable, Transformable {
 	public Interaction<Primitive> getInteraction(Ray ray) {
 
 		final SurfaceDescriptor<Shape> surface = shape.getSurface(ray);
+
+		if (surface == null)
+			return null;
+
 		//
 		// Calculate the surface-point's distance from the ray origin, along the
 		// ray, in terms of multiples of the ray's direction's length.

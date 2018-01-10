@@ -2,11 +2,17 @@ package org.rays3d.world;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.rays3d.Primitive;
 import org.rays3d.camera.Camera;
+import org.rays3d.geometry.Ray;
+import org.rays3d.interact.Interaction;
 import org.rays3d.message.WorldDescriptorRequest;
+import org.rays3d.util.FlaggingCollectionDecorator;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -23,10 +29,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class World {
 
 	@JsonProperty
-	private Collection<Primitive>	primitives	= new LinkedList<>();
+	private FlaggingCollectionDecorator<Primitive>	primitives	= new FlaggingCollectionDecorator<>(LinkedList::new);
+
+	@JsonIgnore
+	private Collection<Primitive>					emissives	= null;
 
 	@JsonProperty
-	private Camera					camera;
+	private Camera									camera;
 
 	public Collection<Primitive> getPrimitives() {
 
@@ -35,7 +44,8 @@ public class World {
 
 	protected void setPrimitives(Collection<Primitive> primitives) {
 
-		this.primitives = primitives;
+		this.primitives.clear();
+		this.primitives.addAll(primitives);
 	}
 
 	public Camera getCamera() {
@@ -46,6 +56,26 @@ public class World {
 	public void setCamera(Camera camera) {
 
 		this.camera = camera;
+	}
+
+	public Collection<Primitive> getEmissives() {
+
+		if (emissives == null || primitives.readAndReset())
+			emissives = primitives.parallelStream().filter(p -> p.getBsdf().isEmissive()).collect(
+					Collectors.toCollection(LinkedList::new));
+
+		return emissives;
+	}
+
+	public Optional<Interaction<Primitive>> getClosestInteraction(Ray ray) {
+
+		return getPrimitives()
+				.parallelStream()
+					.filter(p -> p.isIntersectableWith(ray))
+					.map(p -> p.getInteraction(ray))
+					.filter(i -> i != null)
+					.sorted((i1, i2) -> Double.compare(i1.getInteractingRay().getT(), i2.getInteractingRay().getT()))
+					.findFirst();
 	}
 
 }

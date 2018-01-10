@@ -54,7 +54,7 @@ public class SimpleFilm implements Film {
 		LOG.info("Building new [{}x{}] image ...", getWidth(), getHeight());
 		for (int x = 0; x < getWidth(); x++)
 			for (int y = 0; y < getHeight(); y++)
-				image.setRGB(x, y, radiances[x][y].toPacked());
+				image.setRGB(x, getHeight() - y - 1, radiances[x][y].toPacked());
 
 		LOG.info("Image built!");
 

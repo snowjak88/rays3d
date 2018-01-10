@@ -11,10 +11,10 @@ import org.rays3d.texture.Texture
 
 class LambertianBRDFSpec {
 
-	private Texture texture
+	private Texture texture = new ConstantTexture(RGBSpectrum.BLACK)
 	private Texture emissive = null
 	private Spectrum emissivePower = RGBSpectrum.BLACK
-	
+
 	public static Spec = new Spec()
 	public static Txtr = new Txtr()
 

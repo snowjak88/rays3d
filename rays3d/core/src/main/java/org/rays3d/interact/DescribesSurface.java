@@ -3,6 +3,7 @@ package org.rays3d.interact;
 import org.rays3d.geometry.Point2D;
 import org.rays3d.geometry.Point3D;
 import org.rays3d.geometry.Ray;
+import org.rays3d.message.sample.Sample;
 import org.rays3d.transform.Transformable;
 
 /**
@@ -48,18 +49,20 @@ public interface DescribesSurface extends Transformable {
 	/**
 	 * Sample a point from the surface of this object.
 	 * 
+	 * @param sample
 	 * @return
 	 */
-	public <T extends DescribesSurface> SurfaceDescriptor<T> sampleSurface();
+	public <T extends DescribesSurface> SurfaceDescriptor<T> sampleSurface(Sample sample);
 
 	/**
 	 * Sample a point from the surface of this object such that the sampled
 	 * point is "near" the specified <code>neighbor</code>ing point.
 	 * 
 	 * @param neighbor
+	 * @param sample
 	 * @return
 	 */
-	public <T extends DescribesSurface> SurfaceDescriptor<T> sampleSurfaceFacing(Point3D neighbor);
+	public <T extends DescribesSurface> SurfaceDescriptor<T> sampleSurfaceFacing(Point3D neighbor, Sample sample);
 
 	/**
 	 * Given a neighboring point <code>viewedFrom</code>, compute the

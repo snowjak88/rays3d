@@ -200,7 +200,7 @@ public class IntegratorCachingHolder {
 	 * 
 	 * @param sample
 	 */
-	public void renderSample(Sample sample) {
+	public Sample renderSample(Sample sample) {
 
 		final long renderId = sample.getRenderId();
 		LOG.trace("Rendering a sample for render-ID {} at [{},{}]", renderId, sample.getFilmPoint().getX(),
@@ -210,6 +210,8 @@ public class IntegratorCachingHolder {
 
 		LOG.trace("Storing render-result in sample.");
 		sample.setRadiance(result);
+
+		return sample;
 	}
 
 	/**
