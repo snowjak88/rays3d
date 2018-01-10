@@ -34,8 +34,7 @@ public class SamplerRouteBuilder extends RouteBuilder {
 				.streaming()
 				.log(LoggingLevel.TRACE,"Generated a sample for [${body.filmPoint.x},${body.filmPoint.y}]")
 				.to("activemq:rays3d.samples")
-			.end()
-			.log(LoggingLevel.DEBUG, "Finished generating samples for render-ID ${body.renderId}");
+			.end();
 		//
 		//@formatter:on
 	}
