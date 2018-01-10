@@ -8,6 +8,7 @@ import org.rays3d.builder.groovy.bxdf.PerfectSpecularBRDFSpec
 import org.rays3d.builder.groovy.camera.PinholeCameraSpec
 import org.rays3d.builder.groovy.geometry.CoordPairSpec
 import org.rays3d.builder.groovy.geometry.CoordTrioSpec
+import org.rays3d.builder.groovy.shape.PlaneShapeSpec
 import org.rays3d.builder.groovy.shape.SphereShapeSpec
 import org.rays3d.builder.groovy.spectrum.RGBSpec
 import org.rays3d.builder.groovy.spectrum.RGBSpectrumSpec
@@ -25,6 +26,7 @@ import org.rays3d.geometry.Normal3D
 import org.rays3d.geometry.Point2D
 import org.rays3d.geometry.Point3D
 import org.rays3d.geometry.Vector3D
+import org.rays3d.shape.PlaneShape
 import org.rays3d.shape.SphereShape
 import org.rays3d.spectrum.RGB
 import org.rays3d.spectrum.RGBSpectrum
@@ -39,19 +41,19 @@ import org.rays3d.transform.TranslationTransform
 import org.rays3d.world.World
 
 class WorldBuilder {
-	
+
 	def static World parse(String worldScriptText) {
-		
+
 		CompilerConfiguration config = new CompilerConfiguration(CompilerConfiguration.DEFAULT)
 		config.setScriptBaseClass(DelegatingScript.class.getName())
-		
+
 		GroovyShell sh = new GroovyShell(WorldBuilder.class.getClassLoader(), new Binding(), config)
-		
+
 		DelegatingScript script = (DelegatingScript) sh.parse(worldScriptText)
 		script.setDelegate(new WorldBuilder())
 		script.run()
 	}
-	
+
 	def static World world(@DelegatesTo(WorldSpec) Closure cl) {
 		def spec = new WorldSpec()
 		def code = cl.rehydrate(spec, this, this)
@@ -146,6 +148,14 @@ class WorldBuilder {
 			code()
 			new SphereShape(spec.radius, spec.worldToLocalTransforms)
 		}
+
+		def static PlaneShape plane(@DelegatesTo(PlaneShapeSpec) Closure cl) {
+			def spec = new PlaneShapeSpec()
+			def code = cl.rehydrate(spec, this, this)
+			code.resolveStrategy = Closure.DELEGATE_ONLY
+			code()
+			new PlaneShape(spec.worldToLocalTransforms)
+		}
 	}
 
 	static class Spec {
@@ -232,5 +242,4 @@ class WorldBuilder {
 			}
 		}
 	}
-	
 }

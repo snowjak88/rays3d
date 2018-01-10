@@ -14,6 +14,7 @@ import org.rays3d.geometry.Normal3D
 import org.rays3d.geometry.Point2D
 import org.rays3d.geometry.Point3D
 import org.rays3d.geometry.Vector3D
+import org.rays3d.shape.PlaneShape
 import org.rays3d.shape.SphereShape
 import org.rays3d.spectrum.RGB
 import org.rays3d.spectrum.RGBSpectrum
@@ -273,6 +274,20 @@ class WorldBuilderTest {
 		assertEquals "Sphere does not have expected radius", 1.5, sphere.getRadius(), 0.00001
 		assertFalse "Sphere does not have any Transforms", sphere.getWorldToLocalTransforms().isEmpty()
 		assertEquals "Sphere does not have expected number of Transforms", 2, sphere.getWorldToLocalTransforms().size()
+	}
+
+	@Test
+	public void testPlane() {
+
+		final PlaneShape plane = Shape.plane {
+			transform Tfm.rotate {
+				axis { x 0.5; y 0.0; z (-0.5) }
+				degreesOfRotation (-30)
+			}
+		}
+
+		assertFalse "Sphere does not have any Transforms", plane.getWorldToLocalTransforms().isEmpty()
+		assertEquals "Sphere does not have expected number of Transforms", 1, plane.getWorldToLocalTransforms().size()
 	}
 
 	@Test
