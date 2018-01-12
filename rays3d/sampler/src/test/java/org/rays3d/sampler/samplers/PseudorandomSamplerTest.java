@@ -7,41 +7,41 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.rays3d.geometry.Point2D;
 import org.rays3d.message.sample.Sample;
-import org.rays3d.message.sample.SampleRequest;
+import org.rays3d.message.sample.SampleRequestMessage;
 
 public class PseudorandomSamplerTest {
 
 	@Test
 	public void testPseudorandomSampler() {
 
-		final SampleRequest sampleRequest = new SampleRequest();
-		sampleRequest.setId(1);
-		sampleRequest.setSamplerName("pseudorandom-sampler");
-		sampleRequest.setFilmPoint(new Point2D(1.0, 2.0));
-		sampleRequest.setSamplesPerPixel(4);
+		final SampleRequestMessage sampleRequestMessage = new SampleRequestMessage();
+		sampleRequestMessage.setId(1);
+		sampleRequestMessage.setSamplerName("pseudorandom-sampler");
+		sampleRequestMessage.setFilmPoint(new Point2D(1.0, 2.0));
+		sampleRequestMessage.setSamplesPerPixel(4);
 
 		for (int i = 0; i < 5; i++) {
-			final PseudorandomSampler sampler = new PseudorandomSampler(sampleRequest);
+			final PseudorandomSampler sampler = new PseudorandomSampler(sampleRequestMessage);
 
 			assertEquals("Sampler does not expect to generate a sufficient number of samples for this pixel!",
-					sampleRequest.getSamplesPerPixel(), sampler.getSamplesPerPixel());
+					sampleRequestMessage.getSamplesPerPixel(), sampler.getSamplesPerPixel());
 
-			for (int spp = 0; spp < sampleRequest.getSamplesPerPixel(); spp++) {
+			for (int spp = 0; spp < sampleRequestMessage.getSamplesPerPixel(); spp++) {
 
 				assertTrue("Sampler cannot generate expected sample!", sampler.hasNext());
 
 				final Sample sample = sampler.next();
 				assertTrue("Sample film-point-X is not near pixel-X!",
-						( sample.getFilmPoint().getX() >= sampleRequest.getFilmPoint().getX()
-								&& sample.getFilmPoint().getX() <= sampleRequest.getFilmPoint().getX() + 1.0 ));
+						( sample.getFilmPoint().getX() >= sampleRequestMessage.getFilmPoint().getX()
+								&& sample.getFilmPoint().getX() <= sampleRequestMessage.getFilmPoint().getX() + 1.0 ));
 				assertTrue("Sample film-point-Y is not near pixel-Y!",
-						( sample.getFilmPoint().getY() >= sampleRequest.getFilmPoint().getY()
-								&& sample.getFilmPoint().getY() <= sampleRequest.getFilmPoint().getY() + 1.0 ));
+						( sample.getFilmPoint().getY() >= sampleRequestMessage.getFilmPoint().getY()
+								&& sample.getFilmPoint().getY() <= sampleRequestMessage.getFilmPoint().getY() + 1.0 ));
 
 				assertEquals("Sample does not have expected number of additional 1-D samples!",
-						sampleRequest.getSamplesPerPixel(), sample.getAdditional1DSamples().size());
+						sampleRequestMessage.getSamplesPerPixel(), sample.getAdditional1DSamples().size());
 
-				for (int as = 0; as < sampleRequest.getSamplesPerPixel(); as++) {
+				for (int as = 0; as < sampleRequestMessage.getSamplesPerPixel(); as++) {
 					final Double additionalSample = sample.getAdditional1DSample();
 					assertTrue(
 							"Additional 1-D sample should be in range [0,1] -- actually " + additionalSample.toString(),
@@ -49,9 +49,9 @@ public class PseudorandomSamplerTest {
 				}
 
 				assertEquals("Sample does not have expected number of additional 2-D samples!",
-						sampleRequest.getSamplesPerPixel(), sample.getAdditional2DSamples().size());
+						sampleRequestMessage.getSamplesPerPixel(), sample.getAdditional2DSamples().size());
 
-				for (int as = 0; as < sampleRequest.getSamplesPerPixel(); as++) {
+				for (int as = 0; as < sampleRequestMessage.getSamplesPerPixel(); as++) {
 					final Point2D additionalSample = sample.getAdditional2DSample();
 					assertTrue(
 							"Additional 2-D sample-X should be in range [0,1] -- actually "

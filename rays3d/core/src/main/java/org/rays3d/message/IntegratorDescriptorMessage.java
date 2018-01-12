@@ -2,7 +2,7 @@ package org.rays3d.message;
 
 import java.io.Serializable;
 
-public class IntegratorRequest implements Serializable {
+public class IntegratorDescriptorMessage implements Serializable {
 
 	private static final long	serialVersionUID	= 7795015581119478084L;
 

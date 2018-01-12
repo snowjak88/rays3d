@@ -3,7 +3,7 @@ package org.rays3d.sampler.samplers;
 import java.util.Iterator;
 
 import org.rays3d.message.sample.Sample;
-import org.rays3d.message.sample.SampleRequest;
+import org.rays3d.message.sample.SampleRequestMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,12 +21,12 @@ public abstract class Sampler implements Iterator<Sample> {
 	private final int			filmX, filmY;
 	private final int			samplesPerPixel;
 
-	public Sampler(SampleRequest sampleRequest) {
+	public Sampler(SampleRequestMessage sampleRequestMessage) {
 
-		this.renderId = sampleRequest.getRenderId();
-		this.filmX = (int) sampleRequest.getFilmPoint().getX();
-		this.filmY = (int) sampleRequest.getFilmPoint().getY();
-		this.samplesPerPixel = sampleRequest.getSamplesPerPixel();
+		this.renderId = sampleRequestMessage.getRenderId();
+		this.filmX = (int) sampleRequestMessage.getFilmPoint().getX();
+		this.filmY = (int) sampleRequestMessage.getFilmPoint().getY();
+		this.samplesPerPixel = sampleRequestMessage.getSamplesPerPixel();
 
 		LOG.trace("Constructing new Sample generator [{},{}/{}]", filmX, filmY, samplesPerPixel);
 	}

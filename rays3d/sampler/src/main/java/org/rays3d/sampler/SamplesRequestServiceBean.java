@@ -4,9 +4,9 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import org.rays3d.geometry.Point2D;
-import org.rays3d.message.SamplerRequest;
+import org.rays3d.message.SamplerRequestMessage;
 import org.rays3d.message.sample.Sample;
-import org.rays3d.message.sample.SampleRequest;
+import org.rays3d.message.sample.SampleRequestMessage;
 import org.rays3d.sampler.samplers.NamedSamplerScanner;
 import org.rays3d.sampler.samplers.Sampler;
 import org.slf4j.Logger;
@@ -23,14 +23,14 @@ public class SamplesRequestServiceBean {
 	private NamedSamplerScanner	namedSamplerScanner;
 
 	/**
-	 * Split a single {@link SamplerRequest} into a whole bunch of
-	 * {@link SampleRequest}s (each representing a single pixel's worth of
+	 * Split a single {@link SamplerRequestMessage} into a whole bunch of
+	 * {@link SampleRequestMessage}s (each representing a single pixel's worth of
 	 * samples).
 	 * 
 	 * @param request
 	 * @return
 	 */
-	public Iterator<SampleRequest> splitSamplerRequest(SamplerRequest request) {
+	public Iterator<SampleRequestMessage> splitSamplerRequest(SamplerRequestMessage request) {
 
 		LOG.debug("Received new Sampler-Request ([{}x{}], {} spp) = {} total samples", request.getFilmWidth(),
 				request.getFilmHeight(), request.getSamplesPerPixel(),
@@ -39,12 +39,12 @@ public class SamplesRequestServiceBean {
 	}
 
 	/**
-	 * For the given {@link SampleRequest}, split it into individual
+	 * For the given {@link SampleRequestMessage}, split it into individual
 	 * {@link Sample}s.
 	 * 
 	 * @param request
 	 */
-	public Iterator<Sample> splitSampleRequestIntoSamples(SampleRequest request) {
+	public Iterator<Sample> splitSampleRequestIntoSamples(SampleRequestMessage request) {
 
 		LOG.trace("Received new Sample-Request ([{},{}], {} samples)", request.getFilmPoint().getX(),
 				request.getFilmPoint().getY(), request.getSamplesPerPixel());
@@ -55,18 +55,18 @@ public class SamplesRequestServiceBean {
 
 	}
 
-	public static class SampleRequestIterator implements Iterator<SampleRequest> {
+	public static class SampleRequestIterator implements Iterator<SampleRequestMessage> {
 
-		private final SamplerRequest	samplerRequest;
+		private final SamplerRequestMessage	samplerRequestMessage;
 		private final int				minX, minY, maxX, maxY;
 		private int						currentX, currentY;
 
-		public SampleRequestIterator(SamplerRequest samplerRequest) {
-			this.samplerRequest = samplerRequest;
+		public SampleRequestIterator(SamplerRequestMessage samplerRequestMessage) {
+			this.samplerRequestMessage = samplerRequestMessage;
 			this.minX = 0;
 			this.minY = 0;
-			this.maxX = samplerRequest.getFilmWidth() - 1;
-			this.maxY = samplerRequest.getFilmHeight() - 1;
+			this.maxX = samplerRequestMessage.getFilmWidth() - 1;
+			this.maxY = samplerRequestMessage.getFilmHeight() - 1;
 
 			this.currentX = minX;
 			this.currentY = minY - 1;
@@ -83,7 +83,7 @@ public class SamplesRequestServiceBean {
 		}
 
 		@Override
-		public SampleRequest next() {
+		public SampleRequestMessage next() {
 
 			if (!hasNext())
 				throw new NoSuchElementException();
@@ -97,11 +97,11 @@ public class SamplesRequestServiceBean {
 
 			}
 
-			final SampleRequest sample = new SampleRequest();
+			final SampleRequestMessage sample = new SampleRequestMessage();
 
-			sample.setId(samplerRequest.getRenderId());
-			sample.setSamplerName(samplerRequest.getSamplerName());
-			sample.setSamplesPerPixel(samplerRequest.getSamplesPerPixel());
+			sample.setId(samplerRequestMessage.getRenderId());
+			sample.setSamplerName(samplerRequestMessage.getSamplerName());
+			sample.setSamplesPerPixel(samplerRequestMessage.getSamplesPerPixel());
 			sample.setFilmPoint(new Point2D(currentX, currentY));
 
 			return sample;

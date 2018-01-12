@@ -2,13 +2,13 @@ package org.rays3d.rendermq;
 
 import java.util.Collection;
 
-import org.rays3d.message.FilmRequest;
-import org.rays3d.message.IntegratorRequest;
-import org.rays3d.message.RenderRequest;
+import org.rays3d.message.FilmDescriptorMessage;
+import org.rays3d.message.IntegratorDescriptorMessage;
+import org.rays3d.message.RenderDescriptorMessage;
 import org.rays3d.message.RenderStatus;
-import org.rays3d.message.ResourceRequest;
-import org.rays3d.message.SamplerRequest;
-import org.rays3d.message.WorldDescriptorRequest;
+import org.rays3d.message.ResourceDescriptorMessage;
+import org.rays3d.message.SamplerRequestMessage;
+import org.rays3d.message.WorldDescriptorMessage;
 import org.rays3d.rendermq.rest.RenderDbRestBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,37 +20,37 @@ public class RenderRequestServiceBean {
 	private RenderDbRestBean renderDb;
 
 	/**
-	 * GET a single {@link RenderRequest} by ID.
+	 * GET a single {@link RenderDescriptorMessage} by ID.
 	 * 
 	 * @param id
 	 * @return
 	 */
-	public RenderRequest getByID(Long id) {
+	public RenderDescriptorMessage getByID(Long id) {
 
 		return renderDb.getById(id);
 	}
 
 	/**
-	 * GET the first new {@link RenderRequest} found on the Render-DB
+	 * GET the first new {@link RenderDescriptorMessage} found on the Render-DB
 	 * 
 	 * @return
 	 */
-	public Collection<RenderRequest> getNewRenderRequests() {
+	public Collection<RenderDescriptorMessage> getNewRenderRequests() {
 
 		return renderDb.getNewRenderRequests();
 
 	}
 
 	/**
-	 * Convert the given {@link RenderRequest} to a corresponding
-	 * {@link SamplerRequest}.
+	 * Convert the given {@link RenderDescriptorMessage} to a corresponding
+	 * {@link SamplerRequestMessage}.
 	 * 
 	 * @param render
 	 * @return
 	 */
-	public SamplerRequest toSamplerRequest(RenderRequest render) {
+	public SamplerRequestMessage toSamplerRequest(RenderDescriptorMessage render) {
 
-		final SamplerRequest sampler = new SamplerRequest();
+		final SamplerRequestMessage sampler = new SamplerRequestMessage();
 
 		sampler.setRenderId(render.getId());
 		sampler.setFilmWidth(render.getFilmWidth());
@@ -62,15 +62,15 @@ public class RenderRequestServiceBean {
 	}
 
 	/**
-	 * Convert the given {@link RenderRequest} to a corresponding
-	 * {@link IntegratorRequest}.
+	 * Convert the given {@link RenderDescriptorMessage} to a corresponding
+	 * {@link IntegratorDescriptorMessage}.
 	 * 
 	 * @param render
 	 * @return
 	 */
-	public IntegratorRequest toIntegratorRequest(RenderRequest render) {
+	public IntegratorDescriptorMessage toIntegratorDescriptor(RenderDescriptorMessage render) {
 
-		final IntegratorRequest integrator = new IntegratorRequest();
+		final IntegratorDescriptorMessage integrator = new IntegratorDescriptorMessage();
 
 		integrator.setRenderId(render.getId());
 		integrator.setFilmWidth(render.getFilmWidth());
@@ -83,15 +83,15 @@ public class RenderRequestServiceBean {
 	}
 
 	/**
-	 * Convert the given {@link RenderRequest} to a corresponding
-	 * {@link FilmRequest}.
+	 * Convert the given {@link RenderDescriptorMessage} to a corresponding
+	 * {@link FilmDescriptorMessage}.
 	 * 
 	 * @param render
 	 * @return
 	 */
-	public FilmRequest toFilmRequest(RenderRequest render) {
+	public FilmDescriptorMessage toFilmDescriptor(RenderDescriptorMessage render) {
 
-		final FilmRequest film = new FilmRequest();
+		final FilmDescriptorMessage film = new FilmDescriptorMessage();
 
 		film.setRenderId(render.getId());
 		film.setFilmWidth(render.getFilmWidth());
@@ -102,32 +102,32 @@ public class RenderRequestServiceBean {
 	}
 
 	/**
-	 * Get the {@link WorldDescriptorRequest} corresponding to the given
-	 * {@link RenderRequest}.
+	 * Get the {@link WorldDescriptorMessage} corresponding to the given
+	 * {@link RenderDescriptorMessage}.
 	 * 
 	 * @param render
 	 * @return
 	 */
-	public WorldDescriptorRequest toWorldDescriptor(RenderRequest render) {
+	public WorldDescriptorMessage toWorldDescriptor(RenderDescriptorMessage render) {
 
 		return renderDb.getWorldDescriptorByRenderId(render.getId());
 
 	}
 
 	/**
-	 * Add a new rendered-image (expressed as a {@link ResourceRequest}) to the
+	 * Add a new rendered-image (expressed as a {@link ResourceDescriptorMessage}) to the
 	 * specified render.
 	 * 
 	 * @param renderId
 	 * @param newImage
 	 */
-	public void addNewImage(long renderId, ResourceRequest newImage) {
+	public void addNewImage(long renderId, ResourceDescriptorMessage newImage) {
 
 		renderDb.postNewRenderedImage(renderId, newImage);
 	}
 
 	/**
-	 * Update the completion-status of the given {@link RenderRequest}.
+	 * Update the completion-status of the given {@link RenderDescriptorMessage}.
 	 * <p>
 	 * <code>completion</code> is expected to be one of:
 	 * <ul>
@@ -146,7 +146,7 @@ public class RenderRequestServiceBean {
 	 *             if <code>completion</code> takes a value not in the list of
 	 *             expected values
 	 */
-	public RenderRequest updateCompletion(RenderRequest request, String completion) {
+	public RenderDescriptorMessage updateCompletion(RenderDescriptorMessage request, String completion) {
 
 		RenderStatus completionStatus;
 		switch (completion) {

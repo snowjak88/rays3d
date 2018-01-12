@@ -12,8 +12,8 @@ import org.apache.camel.EndpointInject;
 import org.apache.camel.ProducerTemplate;
 import org.rays3d.film.films.Film;
 import org.rays3d.film.films.SimpleFilm;
-import org.rays3d.message.FilmRequest;
-import org.rays3d.message.ResourceRequest;
+import org.rays3d.message.FilmDescriptorMessage;
+import org.rays3d.message.ResourceDescriptorMessage;
 import org.rays3d.message.sample.Sample;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,20 +38,20 @@ public class FilmUpdateBean {
 	@EndpointInject(uri = "activemq:rays3d.render.newImages")
 	private ProducerTemplate		postNewImagesQueue;
 
-	private Map<Long, FilmRequest>	filmRequests			= new HashMap<>();
+	private Map<Long, FilmDescriptorMessage>	filmDescriptorMessages			= new HashMap<>();
 	private Map<Long, Film>			filmInstances			= new HashMap<>();
 	private Map<Long, Long>			remainingSampleCounts	= new HashMap<>();
 
-	public void initializeFilm(FilmRequest filmRequest) {
+	public void initializeFilm(FilmDescriptorMessage filmDescriptorMessage) {
 
-		final long renderId = filmRequest.getRenderId();
+		final long renderId = filmDescriptorMessage.getRenderId();
 		LOG.debug("Initializing Film instance for render-ID {}", renderId);
 
-		LOG.trace("Inserting FilmRequest into the cache.");
-		filmRequests.put(renderId, filmRequest);
+		LOG.trace("Inserting FilmDescriptorMessage into the cache.");
+		filmDescriptorMessages.put(renderId, filmDescriptorMessage);
 
-		final long expectedSampleCount = (long) filmRequest.getFilmWidth() * (long) filmRequest.getFilmHeight()
-				* (long) filmRequest.getSamplesPerPixel();
+		final long expectedSampleCount = (long) filmDescriptorMessage.getFilmWidth() * (long) filmDescriptorMessage.getFilmHeight()
+				* (long) filmDescriptorMessage.getSamplesPerPixel();
 		LOG.info("Inserting expected sample-count for render-ID {} to {}", renderId, expectedSampleCount);
 		remainingSampleCounts.put(renderId, expectedSampleCount);
 	}
@@ -63,22 +63,22 @@ public class FilmUpdateBean {
 				Integer.toString((int) sample.getFilmPoint().getX()),
 				Integer.toString((int) sample.getFilmPoint().getY()), remainingSampleCounts.getOrDefault(renderId, 0l));
 
-		if (!filmRequests.containsKey(renderId)) {
+		if (!filmDescriptorMessages.containsKey(renderId)) {
 
-			LOG.info("Cache-miss for FilmRequest for render-ID {} -- refreshing ...", renderId);
-			final FilmRequest filmRequest = refreshFilmRequestQueue.requestBody(renderId, FilmRequest.class);
+			LOG.info("Cache-miss for FilmDescriptorMessage for render-ID {} -- refreshing ...", renderId);
+			final FilmDescriptorMessage filmDescriptorMessage = refreshFilmRequestQueue.requestBody(renderId, FilmDescriptorMessage.class);
 
-			filmRequests.put(renderId, filmRequest);
+			filmDescriptorMessages.put(renderId, filmDescriptorMessage);
 
-			final long expectedSampleCount = (long) filmRequest.getFilmWidth() * (long) filmRequest.getFilmHeight()
-					* (long) filmRequest.getSamplesPerPixel();
+			final long expectedSampleCount = (long) filmDescriptorMessage.getFilmWidth() * (long) filmDescriptorMessage.getFilmHeight()
+					* (long) filmDescriptorMessage.getSamplesPerPixel();
 			LOG.info("Resetting expected sample-count for render-ID {} to {}", renderId, expectedSampleCount);
 			remainingSampleCounts.put(renderId, expectedSampleCount);
 		}
 
 		if (!filmInstances.containsKey(renderId)) {
 
-			final FilmRequest request = filmRequests.get(renderId);
+			final FilmDescriptorMessage request = filmDescriptorMessages.get(renderId);
 			final int width = request.getFilmWidth();
 			final int height = request.getFilmHeight();
 
@@ -113,8 +113,8 @@ public class FilmUpdateBean {
 				throw e;
 			}
 
-			LOG.debug("Converting byte-buffer to a ResourceRequest and sending ...");
-			final ResourceRequest resource = new ResourceRequest();
+			LOG.debug("Converting byte-buffer to a ResourceDescriptorMessage and sending ...");
+			final ResourceDescriptorMessage resource = new ResourceDescriptorMessage();
 			resource.setData(byteOutputStream.toByteArray());
 			resource.setMimeType("image/png");
 
@@ -126,7 +126,7 @@ public class FilmUpdateBean {
 			updateCompletionStatusQueue.sendBodyAndHeaders(renderId, completionHeaders);
 
 			LOG.debug("Dropping cached instances relating to render-ID {}", renderId);
-			filmRequests.remove(renderId);
+			filmDescriptorMessages.remove(renderId);
 			filmInstances.remove(renderId);
 			remainingSampleCounts.remove(renderId);
 		}

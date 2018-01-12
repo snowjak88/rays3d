@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.rays3d.geometry.Point2D;
 
-public class SampleRequest implements Serializable {
+public class SampleRequestMessage implements Serializable {
 
 	private static final long	serialVersionUID	= -5532500614275211500L;
 

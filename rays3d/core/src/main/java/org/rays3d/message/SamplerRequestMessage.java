@@ -2,7 +2,7 @@ package org.rays3d.message;
 
 import java.io.Serializable;
 
-public class SamplerRequest implements Serializable {
+public class SamplerRequestMessage implements Serializable {
 
 	private static final long	serialVersionUID	= 2458491555780152549L;
 

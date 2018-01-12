@@ -2,7 +2,7 @@ package org.rays3d.message;
 
 import java.io.Serializable;
 
-public class FilmRequest implements Serializable {
+public class FilmDescriptorMessage implements Serializable {
 
 	private static final long	serialVersionUID	= 1980152642044784895L;
 

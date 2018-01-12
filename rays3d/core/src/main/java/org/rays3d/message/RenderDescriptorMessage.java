@@ -5,7 +5,7 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RenderRequest implements Serializable {
+public class RenderDescriptorMessage implements Serializable {
 
 	private static final long	serialVersionUID	= -7640200357002241967L;
 

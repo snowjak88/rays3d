@@ -7,15 +7,15 @@ import java.util.stream.IntStream;
 import org.rays3d.Global;
 import org.rays3d.geometry.Point2D;
 import org.rays3d.message.sample.Sample;
-import org.rays3d.message.sample.SampleRequest;
+import org.rays3d.message.sample.SampleRequestMessage;
 
 @Named("pseudorandom-sampler")
 public class PseudorandomSampler extends Sampler {
 
 	private int currentSample = 0;
 
-	public PseudorandomSampler(SampleRequest sampleRequest) {
-		super(sampleRequest);
+	public PseudorandomSampler(SampleRequestMessage sampleRequestMessage) {
+		super(sampleRequestMessage);
 	}
 
 	@Override

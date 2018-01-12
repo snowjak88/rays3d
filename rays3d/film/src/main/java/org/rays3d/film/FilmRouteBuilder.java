@@ -3,7 +3,7 @@ package org.rays3d.film;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.rays3d.film.holder.FilmUpdateBean;
-import org.rays3d.message.FilmRequest;
+import org.rays3d.message.FilmDescriptorMessage;
 import org.rays3d.message.sample.Sample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,8 +22,8 @@ public class FilmRouteBuilder extends RouteBuilder {
 		//
 		//
 		from("activemq:rays3d.film.filmRequest")
-			.inputType(FilmRequest.class)
-			.log(LoggingLevel.DEBUG, "Received new FilmRequest (render-ID ${body.renderId})")
+			.inputType(FilmDescriptorMessage.class)
+			.log(LoggingLevel.DEBUG, "Received new FilmDescriptorMessage (render-ID ${body.renderId})")
 			.bean(filmUpdateBean, "initializeFilm");
 		//
 		//

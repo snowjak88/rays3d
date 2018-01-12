@@ -93,7 +93,7 @@ public class RenderDbRouteBuilder extends RouteBuilder {
 					.bean(worldDescriptorRepository, "findByRenderDescriptorsId")
 				.endRest()
 			.get("/images")
-				.description("Get a RenderDescriptor's associated ResourceRequest collection")
+				.description("Get a RenderDescriptor's associated ResourceDescriptorMessage collection")
 				.route()
 					.process(e -> e.getIn().setBody(e.getIn().getHeader("renderId"), Long.class))
 					.bean(resourceRepository, "findByRenderDescriptorId")

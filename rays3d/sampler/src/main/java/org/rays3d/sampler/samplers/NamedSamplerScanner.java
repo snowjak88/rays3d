@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import org.rays3d.message.sample.SampleRequest;
+import org.rays3d.message.sample.SampleRequestMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +52,7 @@ public class NamedSamplerScanner implements ApplicationListener<ApplicationReady
 
 				final String samplerName = samplerClass.getAnnotation(Named.class).value();
 				final Constructor<Sampler> samplerConstructor = (Constructor<Sampler>) samplerClass
-						.getConstructor(SampleRequest.class);
+						.getConstructor(SampleRequestMessage.class);
 
 				LOG.info("Detected Sampler: \"" + samplerName + "\" [" + samplerClass.getName() + "]");
 				samplerConstructors.put(samplerName, samplerConstructor);
@@ -71,7 +71,7 @@ public class NamedSamplerScanner implements ApplicationListener<ApplicationReady
 	 * @param sampleRequest
 	 * @return
 	 */
-	public Sampler getSamplerByName(String name, SampleRequest samplerRequest) {
+	public Sampler getSamplerByName(String name, SampleRequestMessage samplerRequest) {
 
 		if (!samplerConstructors.containsKey(name))
 			throw new NoSuchElementException("No such Sampler detected with name \"" + name + "\".");

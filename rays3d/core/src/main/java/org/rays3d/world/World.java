@@ -9,7 +9,7 @@ import org.rays3d.Primitive;
 import org.rays3d.camera.Camera;
 import org.rays3d.geometry.Ray;
 import org.rays3d.interact.Interaction;
-import org.rays3d.message.WorldDescriptorRequest;
+import org.rays3d.message.WorldDescriptorMessage;
 import org.rays3d.util.FlaggingCollectionDecorator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * associated with a render.
  * <p>
  * <strong>Note</strong> that a World is distinct from a "world descriptor"
- * (c.f. {@link WorldDescriptorRequest}). A "world descriptor" is responsible
+ * (c.f. {@link WorldDescriptorMessage}). A "world descriptor" is responsible
  * for storing the textual equivalent of a World instance.
  * </p>
  * 

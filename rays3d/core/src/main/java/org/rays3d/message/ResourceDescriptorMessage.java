@@ -7,7 +7,7 @@ import java.io.Serializable;
  * 
  * @author snowjak88
  */
-public class ResourceRequest implements Serializable {
+public class ResourceDescriptorMessage implements Serializable {
 
 	private static final long	serialVersionUID	= 3265949836364331146L;
 

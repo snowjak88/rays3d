@@ -7,8 +7,8 @@ import org.apache.camel.ProducerTemplate;
 import org.rays3d.builder.groovy.WorldBuilder;
 import org.rays3d.integrator.integrators.AbstractIntegrator;
 import org.rays3d.integrator.integrators.NamedIntegratorScanner;
-import org.rays3d.message.IntegratorRequest;
-import org.rays3d.message.WorldDescriptorRequest;
+import org.rays3d.message.IntegratorDescriptorMessage;
+import org.rays3d.message.WorldDescriptorMessage;
 import org.rays3d.message.sample.Sample;
 import org.rays3d.spectrum.Spectrum;
 import org.rays3d.util.LRUCache;
@@ -47,30 +47,30 @@ public class IntegratorCachingHolder {
 	}
 
 	/**
-	 * Given an incoming {@link IntegratorRequest}, initialize a new
+	 * Given an incoming {@link IntegratorDescriptorMessage}, initialize a new
 	 * {@link IntegratorEntry} in the cache.
 	 * 
 	 * @param request
 	 */
-	public void initializeIntegrator(IntegratorRequest request) {
+	public void initializeIntegrator(IntegratorDescriptorMessage request) {
 
 		synchronized (cache) {
 			final long renderId = request.getRenderId();
 
-			LOG.debug("Initializing a cache-entry for incoming IntegratorRequest (render-ID {})", renderId);
+			LOG.debug("Initializing a cache-entry for incoming IntegratorDescriptorMessage (render-ID {})", renderId);
 
 			final IntegratorEntry entry = new IntegratorEntry();
 
 			LOG.trace("Setting cache.IntegratorRequest ...");
 			entry.setIntegratorRequest(request);
 
-			LOG.trace("Retrieving WorldDescriptorRequest for cache ...");
+			LOG.trace("Retrieving WorldDescriptorMessage for cache ...");
 			entry.setWorldDescriptor(retrieveWorldDescriptor(renderId));
 
-			LOG.trace("Inflating World from WorldDescriptorRequest & IntegratorRequest for cache ...");
+			LOG.trace("Inflating World from WorldDescriptorMessage & IntegratorDescriptorMessage for cache ...");
 			entry.setWorld(inflateWorld(entry.getWorldDescriptor(), entry.getIntegratorRequest()));
 
-			LOG.trace("Instantiating AbstractIntegrator instance from IntegratorRequest & World for cache ...");
+			LOG.trace("Instantiating AbstractIntegrator instance from IntegratorDescriptorMessage & World for cache ...");
 			entry.setIntegrator(getIntegratorInstance(entry.getIntegratorRequest(), entry.getWorld()));
 
 			cache.put(renderId, entry);
@@ -81,8 +81,8 @@ public class IntegratorCachingHolder {
 	 * Given an incoming {@link Sample}, check that this IntegratorCachingHolder
 	 * has all that Sample's prerequisites:
 	 * <ul>
-	 * <li>{@link IntegratorRequest}</li>
-	 * <li>{@link WorldDescriptorRequest}</li>
+	 * <li>{@link IntegratorDescriptorMessage}</li>
+	 * <li>{@link WorldDescriptorMessage}</li>
 	 * <li>{@link World}</li>
 	 * <li>{@link AbstractIntegrator} implementation</li>
 	 * </ul>
@@ -104,33 +104,33 @@ public class IntegratorCachingHolder {
 				cache.putIfAbsent(renderId, new IntegratorEntry());
 			}
 
-			LOG.trace("Checking for cache-miss on IntegratorRequest ...");
+			LOG.trace("Checking for cache-miss on IntegratorDescriptorMessage ...");
 			if (cache.get(renderId).getIntegratorRequest() == null) {
-				LOG.info("Cache miss for IntegratorRequest for incoming Sample (render-ID {}). Retrieving ...",
+				LOG.info("Cache miss for IntegratorDescriptorMessage for incoming Sample (render-ID {}). Retrieving ...",
 						renderId);
 
-				final IntegratorRequest integratorRequest = integratorRequestQueue.requestBody(renderId,
-						IntegratorRequest.class);
-				LOG.info("Retrieved IntegratorRequest (integrator \"{}\") for incoming Sample (render-ID {}).",
-						integratorRequest.getIntegratorName(), renderId);
+				final IntegratorDescriptorMessage integratorDescriptorMessage = integratorRequestQueue.requestBody(renderId,
+						IntegratorDescriptorMessage.class);
+				LOG.info("Retrieved IntegratorDescriptorMessage (integrator \"{}\") for incoming Sample (render-ID {}).",
+						integratorDescriptorMessage.getIntegratorName(), renderId);
 
-				LOG.trace("Storing IntegratorRequest in the cache ...");
-				cache.get(renderId).setIntegratorRequest(integratorRequest);
+				LOG.trace("Storing IntegratorDescriptorMessage in the cache ...");
+				cache.get(renderId).setIntegratorRequest(integratorDescriptorMessage);
 			}
 
-			LOG.trace("Checking for cache-miss on WorldDescriptorRequest ...");
+			LOG.trace("Checking for cache-miss on WorldDescriptorMessage ...");
 			if (cache.get(renderId).getWorldDescriptor() == null) {
-				LOG.info("Cache miss for WorldDescriptorRequest for incoming Sample (render-ID {}). Retrieving ...",
+				LOG.info("Cache miss for WorldDescriptorMessage for incoming Sample (render-ID {}). Retrieving ...",
 						renderId);
 
-				LOG.trace("Storing WorldDescriptorRequest in the cache ...");
+				LOG.trace("Storing WorldDescriptorMessage in the cache ...");
 				cache.get(renderId).setWorldDescriptor(retrieveWorldDescriptor(renderId));
 			}
 
 			LOG.trace("Checking for cache-miss on World ...");
 			if (cache.get(renderId).getWorld() == null) {
 				LOG.info(
-						"Cache miss for World for incoming Sample (render-ID {}). Inflating from WorldDescriptorRequest & IntegratorRequest ...",
+						"Cache miss for World for incoming Sample (render-ID {}). Inflating from WorldDescriptorMessage & IntegratorDescriptorMessage ...",
 						renderId);
 
 				LOG.trace("Storing World in the cache ...");
@@ -158,36 +158,36 @@ public class IntegratorCachingHolder {
 		}
 	}
 
-	private AbstractIntegrator getIntegratorInstance(IntegratorRequest integratorRequest, World world) {
+	private AbstractIntegrator getIntegratorInstance(IntegratorDescriptorMessage integratorDescriptorMessage, World world) {
 
 		final AbstractIntegrator integrator = integratorScanner.getIntegratorByRenderId(
-				integratorRequest.getIntegratorName(), world, integratorRequest.getExtraIntegratorConfig());
-		LOG.info("Instantiated AbstractIntegrator \"{}\" [{}].", integratorRequest.getIntegratorName(),
+				integratorDescriptorMessage.getIntegratorName(), world, integratorDescriptorMessage.getExtraIntegratorConfig());
+		LOG.info("Instantiated AbstractIntegrator \"{}\" [{}].", integratorDescriptorMessage.getIntegratorName(),
 				integrator.getClass().getName());
 
 		return integrator;
 	}
 
-	private World inflateWorld(WorldDescriptorRequest worldDescriptor, IntegratorRequest integratorRequest) {
+	private World inflateWorld(WorldDescriptorMessage worldDescriptor, IntegratorDescriptorMessage integratorDescriptorMessage) {
 
 		final World world = WorldBuilder.parse(worldDescriptor.getText());
-		LOG.debug("Inflated World from WorldDescriptorRequest.text");
+		LOG.debug("Inflated World from WorldDescriptorMessage.text");
 
 		LOG.debug("Inserting supplementary properties into inflated World ...");
-		LOG.trace("Inserting film-size ({}x{})", integratorRequest.getFilmWidth(), integratorRequest.getFilmHeight());
-		world.getCamera().setFilmSizeX(integratorRequest.getFilmWidth());
-		world.getCamera().setFilmSizeY(integratorRequest.getFilmHeight());
+		LOG.trace("Inserting film-size ({}x{})", integratorDescriptorMessage.getFilmWidth(), integratorDescriptorMessage.getFilmHeight());
+		world.getCamera().setFilmSizeX(integratorDescriptorMessage.getFilmWidth());
+		world.getCamera().setFilmSizeY(integratorDescriptorMessage.getFilmHeight());
 
-		LOG.info("Inflated World instance for WorldDescriptorRequest (ID {}).", worldDescriptor.getId());
+		LOG.info("Inflated World instance for WorldDescriptorMessage (ID {}).", worldDescriptor.getId());
 
 		return world;
 	}
 
-	private WorldDescriptorRequest retrieveWorldDescriptor(long renderId) {
+	private WorldDescriptorMessage retrieveWorldDescriptor(long renderId) {
 
-		final WorldDescriptorRequest worldDescriptor = worldDescriptorRequestQueue.requestBody(renderId,
-				WorldDescriptorRequest.class);
-		LOG.info("Retrieved WorldDescriptorRequest (ID {}) for incoming Sample (render-ID {}).",
+		final WorldDescriptorMessage worldDescriptor = worldDescriptorRequestQueue.requestBody(renderId,
+				WorldDescriptorMessage.class);
+		LOG.info("Retrieved WorldDescriptorMessage (ID {}) for incoming Sample (render-ID {}).",
 				worldDescriptor.getId(), renderId);
 
 		return worldDescriptor;
@@ -232,14 +232,14 @@ public class IntegratorCachingHolder {
 	}
 
 	/**
-	 * Returns the {@link IntegratorRequest} associated with the given
-	 * render-ID, or <code>null</code> if that IntegratorRequest is not
+	 * Returns the {@link IntegratorDescriptorMessage} associated with the given
+	 * render-ID, or <code>null</code> if that IntegratorDescriptorMessage is not
 	 * contained by this IntegratorCachingHolder.
 	 * 
 	 * @param renderId
 	 * @return
 	 */
-	public IntegratorRequest getIntegratorRequest(Long renderId) {
+	public IntegratorDescriptorMessage getIntegratorRequest(Long renderId) {
 
 		final IntegratorEntry result;
 		synchronized (cache) {
@@ -273,7 +273,7 @@ public class IntegratorCachingHolder {
 	 * @param renderId
 	 * @return
 	 */
-	public WorldDescriptorRequest getWorldDescriptor(Long renderId) {
+	public WorldDescriptorMessage getWorldDescriptor(Long renderId) {
 
 		final IntegratorEntry result;
 		synchronized (cache) {
@@ -300,18 +300,18 @@ public class IntegratorCachingHolder {
 	}
 
 	/**
-	 * Store the given {@link IntegratorRequest} in this IntegratorCachingHolder
+	 * Store the given {@link IntegratorDescriptorMessage} in this IntegratorCachingHolder
 	 * (indexed by its configured ID), overwriting any previous
-	 * IntegratorRequest stored under that ID.
+	 * IntegratorDescriptorMessage stored under that ID.
 	 * 
-	 * @param integratorRequest
+	 * @param integratorDescriptorMessage
 	 */
-	public void put(Long renderId, IntegratorRequest integratorRequest) {
+	public void put(Long renderId, IntegratorDescriptorMessage integratorDescriptorMessage) {
 
 		synchronized (cache) {
-			LOG.trace("Putting an IntegratorRequest (for ID {}) into the store", renderId);
+			LOG.trace("Putting an IntegratorDescriptorMessage (for ID {}) into the store", renderId);
 			cache.putIfAbsent(renderId, new IntegratorEntry());
-			cache.get(renderId).setIntegratorRequest(integratorRequest);
+			cache.get(renderId).setIntegratorRequest(integratorDescriptorMessage);
 		}
 	}
 
@@ -332,13 +332,13 @@ public class IntegratorCachingHolder {
 	}
 
 	/**
-	 * Store the given {@link WorldDescriptorRequest} in this
+	 * Store the given {@link WorldDescriptorMessage} in this
 	 * IntegratorCachingHolder (indexed by its configured ID), overwriting any
-	 * previous WorldDescriptorRequest stored under that ID.
+	 * previous WorldDescriptorMessage stored under that ID.
 	 * 
 	 * @param worldDescriptor
 	 */
-	public void put(Long renderId, WorldDescriptorRequest worldDescriptor) {
+	public void put(Long renderId, WorldDescriptorMessage worldDescriptor) {
 
 		synchronized (cache) {
 			LOG.trace("Putting a world-descriptor (for ID {}) into the store", renderId);
@@ -364,19 +364,19 @@ public class IntegratorCachingHolder {
 
 	private static class IntegratorEntry {
 
-		private IntegratorRequest		integratorRequest;
+		private IntegratorDescriptorMessage		integratorDescriptorMessage;
 		private AbstractIntegrator		integrator;
-		private WorldDescriptorRequest	worldDescriptor;
+		private WorldDescriptorMessage	worldDescriptor;
 		private World					world;
 
-		public IntegratorRequest getIntegratorRequest() {
+		public IntegratorDescriptorMessage getIntegratorRequest() {
 
-			return integratorRequest;
+			return integratorDescriptorMessage;
 		}
 
-		public void setIntegratorRequest(IntegratorRequest integratorRequest) {
+		public void setIntegratorRequest(IntegratorDescriptorMessage integratorDescriptorMessage) {
 
-			this.integratorRequest = integratorRequest;
+			this.integratorDescriptorMessage = integratorDescriptorMessage;
 		}
 
 		public AbstractIntegrator getIntegrator() {
@@ -389,12 +389,12 @@ public class IntegratorCachingHolder {
 			this.integrator = integrator;
 		}
 
-		public WorldDescriptorRequest getWorldDescriptor() {
+		public WorldDescriptorMessage getWorldDescriptor() {
 
 			return worldDescriptor;
 		}
 
-		public void setWorldDescriptor(WorldDescriptorRequest worldDescriptor) {
+		public void setWorldDescriptor(WorldDescriptorMessage worldDescriptor) {
 
 			this.worldDescriptor = worldDescriptor;
 		}

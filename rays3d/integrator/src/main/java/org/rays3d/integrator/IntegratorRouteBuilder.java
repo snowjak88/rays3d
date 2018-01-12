@@ -5,7 +5,7 @@ import org.apache.camel.ExchangePattern;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.rays3d.integrator.holder.IntegratorCachingHolder;
-import org.rays3d.message.IntegratorRequest;
+import org.rays3d.message.IntegratorDescriptorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,8 +27,8 @@ public class IntegratorRouteBuilder extends RouteBuilder {
 		// Receive incoming IntegratorRequests and allocate Integrators in the cache.
 		from("activemq:rays3d.integrator.integratorRequest")
 			.setExchangePattern(ExchangePattern.InOnly)
-			.inputType(IntegratorRequest.class)
-			.log(LoggingLevel.TRACE, "Received IntegratorRequest for render-ID ${body.renderId}, integrator \"${body.integratorName}\".")
+			.inputType(IntegratorDescriptorMessage.class)
+			.log(LoggingLevel.TRACE, "Received IntegratorDescriptorMessage for render-ID ${body.renderId}, integrator \"${body.integratorName}\".")
 			.bean(integratorCachingHolder, "initializeIntegrator");
 		//
 		// Receive incoming Samples, render them, and pass them to the film-queue

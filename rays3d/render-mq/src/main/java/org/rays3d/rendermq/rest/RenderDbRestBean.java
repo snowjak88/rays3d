@@ -3,9 +3,9 @@ package org.rays3d.rendermq.rest;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.rays3d.message.RenderRequest;
-import org.rays3d.message.ResourceRequest;
-import org.rays3d.message.WorldDescriptorRequest;
+import org.rays3d.message.RenderDescriptorMessage;
+import org.rays3d.message.ResourceDescriptorMessage;
+import org.rays3d.message.WorldDescriptorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -19,47 +19,47 @@ public class RenderDbRestBean {
 	private RestTemplate restTemplate;
 
 	/**
-	 * GET a single {@link RenderRequest} by ID.
+	 * GET a single {@link RenderDescriptorMessage} by ID.
 	 * 
 	 * @param id
 	 * @return
 	 */
-	public RenderRequest getById(Long id) {
+	public RenderDescriptorMessage getById(Long id) {
 
-		return restTemplate.getForObject("/renders/{renderId}", RenderRequest.class, id);
+		return restTemplate.getForObject("/renders/{renderId}", RenderDescriptorMessage.class, id);
 	}
 
 	/**
-	 * GET the WorldDescriptorRequest associated with a render (by ID).
+	 * GET the WorldDescriptorMessage associated with a render (by ID).
 	 * 
 	 * @param renderId
 	 * @return
 	 */
-	public WorldDescriptorRequest getWorldDescriptorByRenderId(Long renderId) {
+	public WorldDescriptorMessage getWorldDescriptorByRenderId(Long renderId) {
 
-		return restTemplate.getForObject("/renders/{renderId}/world", WorldDescriptorRequest.class, renderId);
+		return restTemplate.getForObject("/renders/{renderId}/world", WorldDescriptorMessage.class, renderId);
 	}
 
 	/**
-	 * GET all new {@link RenderRequest}s found on the Render-DB
+	 * GET all new {@link RenderDescriptorMessage}s found on the Render-DB
 	 * 
 	 * @return
 	 */
-	public Collection<RenderRequest> getNewRenderRequests() {
+	public Collection<RenderDescriptorMessage> getNewRenderRequests() {
 
-		return Arrays.asList(restTemplate.getForEntity("/renders/new", RenderRequest[].class).getBody());
+		return Arrays.asList(restTemplate.getForEntity("/renders/new", RenderDescriptorMessage[].class).getBody());
 	}
 
 	/**
-	 * PATCH an existing {@link RenderRequest} back to the Render-DB (updating
-	 * it) and returning the now-current RenderRequest instance.
+	 * PATCH an existing {@link RenderDescriptorMessage} back to the Render-DB (updating
+	 * it) and returning the now-current RenderDescriptorMessage instance.
 	 * 
 	 * @param request
 	 * @return
 	 */
-	public RenderRequest patchRenderRequest(RenderRequest request) {
+	public RenderDescriptorMessage patchRenderRequest(RenderDescriptorMessage request) {
 
-		return restTemplate.patchForObject("/renders/{renderId}", request, RenderRequest.class, request.getId());
+		return restTemplate.patchForObject("/renders/{renderId}", request, RenderDescriptorMessage.class, request.getId());
 	}
 
 	/**
@@ -68,7 +68,7 @@ public class RenderDbRestBean {
 	 * @param renderId
 	 * @param newImage
 	 */
-	public void postNewRenderedImage(long renderId, ResourceRequest newImage) {
+	public void postNewRenderedImage(long renderId, ResourceDescriptorMessage newImage) {
 
 		restTemplate.postForObject("/renders/{renderId}/images", newImage, Void.class, renderId);
 	}
