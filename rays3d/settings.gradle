@@ -23,4 +23,4 @@ include ':render-mq'
 include ':sampler'
 include ':integrator'
 include ':film'
-
+include ':console'

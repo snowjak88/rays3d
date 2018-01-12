@@ -1,5 +1,7 @@
 package org.rays3d.renderdb.service;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -11,6 +13,12 @@ import org.rays3d.renderdb.repository.ResourceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,11 +27,63 @@ public class RenderDescriptorUpdateService {
 
 	private static final Logger			LOG	= LoggerFactory.getLogger(RenderDescriptorUpdateService.class);
 
+	@Value("${org.rays3d.renderdb.renderDescriptor.pageSize}")
+	private int							renderDescriptorPageSize;
+
 	@Autowired
 	private RenderDescriptorRepository	renderDescriptorRepository;
 
 	@Autowired
 	private ResourceRepository			resourceRepository;
+
+	/**
+	 * Add a new {@link RenderDescriptor} to the database.
+	 * 
+	 * @param renderDescriptor
+	 * @return
+	 */
+	public RenderDescriptor createNewDescriptor(RenderDescriptor renderDescriptor) {
+
+		LOG.info("Creating a new RenderDescriptor ...");
+
+		final RenderDescriptor created = renderDescriptorRepository.save(renderDescriptor);
+
+		LOG.debug("New RenderDescriptor has ID = {}", created.getId());
+
+		return created;
+	}
+
+	/**
+	 * Get all {@link RenderDescriptor}s, sorted by "created-date" (descending).
+	 * 
+	 * @return
+	 */
+	public List<RenderDescriptor> getDescriptors() {
+
+		final List<RenderDescriptor> result = new LinkedList<>();
+		renderDescriptorRepository.findAll(new Sort(new Order(Direction.DESC, "created"))).forEach(result::add);
+		return result;
+	}
+
+	/**
+	 * Get the {@link RenderDescriptor}s occupying the Nth page (where
+	 * <code>pageNumber</code> is in <code>0..N</code>). RenderDescriptors are
+	 * sorted by "created-date" (descending).
+	 * <p>
+	 * Page-sizes are dictated by the property
+	 * <code>org.rays3d.renderdb.renderDescriptor.pageSize</code>.
+	 * </p>
+	 * 
+	 * @param pageNumber
+	 * @return
+	 */
+	public List<RenderDescriptor> getDescriptorsNthPage(int pageNumber) {
+
+		final Sort sort = new Sort(new Order(Direction.DESC, "created"));
+		final Pageable pageable = new PageRequest(pageNumber, renderDescriptorPageSize, sort);
+
+		return renderDescriptorRepository.findAll(pageable).getContent();
+	}
 
 	/**
 	 * Given a {@link RenderDescriptor}, scan over all fields and, if any are

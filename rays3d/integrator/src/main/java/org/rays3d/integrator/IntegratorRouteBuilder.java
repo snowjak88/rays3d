@@ -7,13 +7,17 @@ import org.apache.camel.builder.RouteBuilder;
 import org.rays3d.integrator.holder.IntegratorCachingHolder;
 import org.rays3d.message.IntegratorDescriptorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class IntegratorRouteBuilder extends RouteBuilder {
 
 	@Autowired
-	private IntegratorCachingHolder integratorCachingHolder;
+	private IntegratorCachingHolder	integratorCachingHolder;
+
+	@Value("${org.rays3d.integrator.maximumIntegratorThreads}")
+	private int						maximumIntegratorThreads;
 
 	public IntegratorRouteBuilder(CamelContext context) {
 		super(context);
@@ -32,7 +36,7 @@ public class IntegratorRouteBuilder extends RouteBuilder {
 			.bean(integratorCachingHolder, "initializeIntegrator");
 		//
 		// Receive incoming Samples, render them, and pass them to the film-queue
-		from("activemq:rays3d.samples")
+		fromF("activemq:rays3d.samples?maxConcurrentConsumers=%d&asyncConsumer=true", maximumIntegratorThreads)
 			.setExchangePattern(ExchangePattern.InOnly)
 			.log(LoggingLevel.TRACE, "Checking pre-requisites for incoming sample (for render-ID ${body.renderId})")
 			.bean(integratorCachingHolder, "getSamplePrerequisites")

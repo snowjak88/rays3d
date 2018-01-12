@@ -1,5 +1,6 @@
 package org.rays3d.renderdb;
 
+import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.rays3d.renderdb.model.RenderDescriptor;
@@ -59,15 +60,34 @@ public class RenderDbRouteBuilder extends RouteBuilder {
 			.get()
 				.description("Get all render descriptors")
 				.route()
-					.bean(renderDescriptorRepository, "findAllDescriptors")
+					.bean(renderDescriptorUpdateService, "getDescriptors")
 				.endRest()
 			.get("/new")
 				.description("Get all new (not in-progress) render descriptors")
 				.route()
 					.bean(renderDescriptorRepository, "findNewDescriptors")
+				.endRest()
+			.get("/page/{pageNumber}")
+				.description("Get the Nth page of render-descriptors")
+				.route()
+					.choice()
+						.when(simple("${header.pageNumber} == null"))
+							.log(LoggingLevel.DEBUG, "No page-number supplied, using default page-number of 0")
+							.setHeader("pageNumber", simple("0", Integer.class))
+					.end()
+					.bean(renderDescriptorUpdateService, "getDescriptorsNthPage(${header.pageNumber})")
 				.endRest();
 		
-		rest("/renders/{renderId}")
+		rest("/renders/single")
+			.post()
+				.description("Create a new RenderDescriptor")
+				.type(RenderDescriptor.class)
+				.route()
+					.bean(renderDescriptorUpdateService, "createNewDescriptor")
+					.log(LoggingLevel.INFO, "Created a new RenderDescriptor -- new ID = ${body.id}")
+				.endRest();
+		
+		rest("/renders/single/{renderId}")
 			.produces("application/json")
 			.get()
 				.description("Get a single RenderDescriptor by ID")

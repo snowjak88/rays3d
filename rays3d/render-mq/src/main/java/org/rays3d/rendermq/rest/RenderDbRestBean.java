@@ -26,7 +26,7 @@ public class RenderDbRestBean {
 	 */
 	public RenderDescriptorMessage getById(Long id) {
 
-		return restTemplate.getForObject("/renders/{renderId}", RenderDescriptorMessage.class, id);
+		return restTemplate.getForObject("/renders/single/{renderId}", RenderDescriptorMessage.class, id);
 	}
 
 	/**
@@ -37,7 +37,7 @@ public class RenderDbRestBean {
 	 */
 	public WorldDescriptorMessage getWorldDescriptorByRenderId(Long renderId) {
 
-		return restTemplate.getForObject("/renders/{renderId}/world", WorldDescriptorMessage.class, renderId);
+		return restTemplate.getForObject("/renders/single/{renderId}/world", WorldDescriptorMessage.class, renderId);
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class RenderDbRestBean {
 	 */
 	public RenderDescriptorMessage patchRenderRequest(RenderDescriptorMessage request) {
 
-		return restTemplate.patchForObject("/renders/{renderId}", request, RenderDescriptorMessage.class, request.getId());
+		return restTemplate.patchForObject("/renders/single/{renderId}", request, RenderDescriptorMessage.class, request.getId());
 	}
 
 	/**
@@ -70,7 +70,7 @@ public class RenderDbRestBean {
 	 */
 	public void postNewRenderedImage(long renderId, ResourceDescriptorMessage newImage) {
 
-		restTemplate.postForObject("/renders/{renderId}/images", newImage, Void.class, renderId);
+		restTemplate.postForObject("/renders/single/{renderId}/images", newImage, Void.class, renderId);
 	}
 
 }
