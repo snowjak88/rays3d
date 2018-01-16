@@ -2,6 +2,7 @@ package org.rays3d.renderdb.service;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -76,8 +77,15 @@ public class RenderDescriptorUpdateService {
 	 * 
 	 * @param pageNumber
 	 * @return
+	 * @throws NoSuchElementException
+	 *             if the given page-number is past the total count of
+	 *             RenderDescriptors in the database
 	 */
 	public List<RenderDescriptor> getDescriptorsNthPage(int pageNumber) {
+
+		if (pageNumber > renderDescriptorRepository.count() / renderDescriptorPageSize)
+			throw new NoSuchElementException("Cannot get " + pageNumber + "th page of size " + renderDescriptorPageSize
+					+ " -- not enough RenderDescriptors in the database.");
 
 		final Sort sort = new Sort(new Order(Direction.DESC, "created"));
 		final Pageable pageable = new PageRequest(pageNumber, renderDescriptorPageSize, sort);

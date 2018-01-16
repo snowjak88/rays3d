@@ -117,7 +117,7 @@ class RenderDescriptorList extends React.Component {
 			<table className="table">
 				<thead>
 					<tr>
-						<td onClick={() => this.pageLeft()}>&lt;==</td>
+						<td><button onClick={() => this.pageLeft()} className="btn btn-outline-primary btn-sm">&lt;==</button></td>
 						<td></td>
 						<td></td>
 						<td></td>
@@ -125,7 +125,7 @@ class RenderDescriptorList extends React.Component {
 						<td></td>
 						<td></td>
 						<td></td>
-						<td onClick={() => this.pageRight()}>==&gt;</td>
+						<td><button onClick={() => this.pageRight()} className="btn btn-outline-primary btn-sm">==&gt;</button></td>
 					</tr>
 					<tr>
 						<th>ID</th>
@@ -136,7 +136,7 @@ class RenderDescriptorList extends React.Component {
 						<th>Integrator</th>
 						<th>Integrator Config</th>
 						<th>Render Status</th>
-						<th onClick={() => this.refreshDescriptors()} className="btn btn-outline-primary btn-sm" role="button">Refresh</th>
+						<th><button onClick={() => this.refreshDescriptors()} className="btn btn-outline-info btn-sm" role="button">Refresh</button></th>
 					</tr>
 				</thead>
 				<tbody>

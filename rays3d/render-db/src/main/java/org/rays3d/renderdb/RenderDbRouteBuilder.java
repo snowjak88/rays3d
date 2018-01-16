@@ -1,5 +1,8 @@
 package org.rays3d.renderdb;
 
+import java.util.NoSuchElementException;
+
+import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestBindingMode;
@@ -70,6 +73,12 @@ public class RenderDbRouteBuilder extends RouteBuilder {
 			.get("/page/{pageNumber}")
 				.description("Get the Nth page of render-descriptors")
 				.route()
+					.onException(NoSuchElementException.class)
+						.setBody(simple("Cannot get ${header.pageNumber}th page -- not enough pages."))
+						.setHeader(Exchange.CONTENT_TYPE, simple("text/plain"))
+						.setHeader(Exchange.HTTP_RESPONSE_CODE, simple("400", Integer.class))
+						.handled(true)
+					.end()
 					.choice()
 						.when(simple("${header.pageNumber} == null"))
 							.log(LoggingLevel.DEBUG, "No page-number supplied, using default page-number of 0")
